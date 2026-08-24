@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block footer %}
+{{ super() }}
+<div style="text-align:center; padding:10px;">
+  <img src="{{ base_url }}/img/mooc.png" alt="SEA-FORWARD Footer Logo" height="40">
+  <p>© {{ config.extra.year }} SEA-FORWARD — Documentation generated with MkDocs</p>
+</div>
+{% endblock %}
+
+{% block libs %}
+{{ super() }}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+  var currentPath = window.location.pathname.replace(/index\.html$/, '').replace(/\/$/, '');
+  var activeLink = null;
+
+  document.querySelectorAll('.navtree a[href]').forEach(function (a) {
+    var linkPath = new URL(a.getAttribute('href'), window.location.href).pathname
+      .replace(/index\.html$/, '')
+      .replace(/\/$/, '');
+    if (linkPath === currentPath) {
+      activeLink = a;
+    }
+  });
+
+  if (activeLink) {
+    var el = activeLink.parentElement;
+    while (el) {
+      if (el.tagName === 'UL' && el.classList.contains('navtree')) {
+        el.classList.add('js-open');
+
+        // Marque le titre (label) juste avant ce sous-menu comme "phase active"
+        var groupLi = el.closest('li.navtree.group');
+        if (groupLi) {
+          var label = groupLi.previousElementSibling;
+          if (label && label.classList.contains('label')) {
+            label.classList.add('active-phase');
+          }
+        }
+      }
+      el = el.parentElement;
+    }
+  }
+
+  document.querySelectorAll('li.navtree.label').forEach(function (label) {
+    var groupLi = label.nextElementSibling;
+    if (!groupLi || !groupLi.classList.contains('group')) return;
+
+    var submenu = groupLi.querySelector(':scope > ul.navtree');
+    if (!submenu) return;
+
+    label.addEventListener('click', function () {
+      var isTopLevelPhase = groupLi.classList.contains('toctree-l1');
+      var willOpen = !submenu.classList.contains('js-open');
+
+      if (isTopLevelPhase) {
+        document.querySelectorAll('li.navtree.group.toctree-l1 > ul.navtree.js-open').forEach(function (openSubmenu) {
+          if (openSubmenu !== submenu) {
+            openSubmenu.classList.remove('js-open');
+          }
+        });
+      }
+
+      submenu.classList.toggle('js-open', willOpen);
+    });
+  });
+});
+</script>
+{% endblock %}

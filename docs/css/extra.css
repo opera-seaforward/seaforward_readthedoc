@@ -1,0 +1,422 @@
+/* =========================================================
+   Global Typography
+   ========================================================= */
+body, h1, h2, h3, h4, h5, h6, .wy-menu, .wy-nav-content, p, a, li, span {
+    font-family: 'Lexend', sans-serif !important;
+}
+
+/* =========================================================
+   Sidebar — Indentation et Menu Déroulant (Dropdown/Accordion)
+   ========================================================= */
+
+/* Annuler la mise en majuscule forcée du thème sur les grands titres */
+.wy-menu-vertical p.caption,
+.wy-menu-vertical .caption,
+.wy-menu-vertical a {
+    text-transform: none !important;
+}
+
+/* 1. Indentation (Décalage) des sous-sections
+   Utilise padding-left plutôt que margin-left : le padding n'agit que sur
+   l'espace intérieur, il ne rétrécit jamais la largeur totale de l'élément
+   ni de son fond — contrairement à margin-left, qui obligeait à compenser
+   la largeur "à la main" à chaque niveau imbriqué. */
+.wy-menu-vertical ul.subnav-l1,
+.wy-menu-vertical ul.subnav-l2,
+.wy-menu-vertical ul.subnav-l3 {
+    margin-left: 0 !important;
+    padding-left: 1.5rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* 2. Cacher TOUS les conteneurs de sous-menus identifiés par le JS */
+.wy-menu-vertical li.nav-collapsible-container,
+.wy-menu-vertical ul.nav-collapsible {
+    display: none !important;
+}
+
+/* 3. Afficher UNIQUEMENT si ouvert via JS (.js-open) */
+.wy-menu-vertical li.nav-collapsible-container.js-open,
+.wy-menu-vertical ul.nav-collapsible.js-open,
+.wy-menu-vertical li.nav-collapsible-container.js-open > ul {
+    display: block !important;
+    visibility: visible !important;
+    height: auto !important;
+    opacity: 1 !important;
+}
+
+/* 4. Indicateurs visuels (Flèches) */
+
+/* Type A : Les sous-menus internes (toctree-expand généré par le thème) */
+.wy-menu-vertical .toctree-expand {
+    display: inline-block !important;
+    /*float: left;*/
+    margin-right: 8px;
+    font-size: 0.8em;
+    transition: transform 0.2s ease;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+.wy-menu-vertical .toctree-expand::before {
+    content: "▶" !important;
+    display: inline-block;
+}
+.wy-menu-vertical .toctree-expand::after {
+    content: none !important;
+}
+.wy-menu-vertical li.with-children.js-open .toctree-expand {
+    transform: rotate(90deg);
+}
+
+/* Type B : Les grandes Phases (caption) */
+.wy-menu-vertical .caption.is-collapsible::before {
+    content: "▶";
+    display: inline-block;
+    font-size: 0.7em;
+    margin-right: 8px;
+    transition: transform 0.2s ease;
+}
+.wy-menu-vertical .caption.js-open::before {
+    transform: rotate(90deg);
+}
+
+/* Titres de phase (affichage normal, pas de majuscule forcée) */
+
+.wy-menu-vertical a.current {
+    color: #2980b9 !important;
+}
+
+.wy-side-nav-search {
+    display: flex;
+    flex-direction: column;
+}
+
+img,
+video,
+iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+div.highlight, div.codehilite, pre {
+    max-width: 100%;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+.wy-content-wrap,
+.wy-nav-content,
+.wy-nav-content-wrap {
+    min-width: 0;
+}
+
+.wy-side-nav-search > a.icon-home {
+    order: 1;
+}
+
+.wy-side-nav-search > div[role="search"] {
+    order: 3;
+    margin-top: 5px;
+}
+
+.wy-side-nav-search::after {
+    content: "";
+    order: 2;
+    display: block;
+    width: 80px;
+    height: 80px;                              /* ajuste selon la taille voulue */
+    margin: 10px auto 5px auto;               /* centre l'image et ajoute une petite marge en bas */
+    background-image: url('../assets/sf.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+}
+
+/* Réserve toujours l'espace de la scrollbar du navigateur,
+   pour que la largeur totale ne bouge jamais selon le contenu affiché */
+html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+}
+
+/* (Signe + géré plus haut avec la flèche) */
+
+/* Liens de premier niveau qui ne sont pas des catégories (Home, Hands-on Documentation) */
+.wy-menu-vertical li.toctree-l1 > a,
+.navtree.toctree-l1 > a,
+.navtree.toctree-l1.page > a {
+    color: #2980B9 !important;
+    font-size: 1.05rem;
+}
+
+.wy-menu-vertical li.toctree-l1 > a:hover,
+.navtree.toctree-l1 > a:hover,
+.navtree.toctree-l1.page > a:hover {
+    color: #1996f5 !important;
+}
+
+/* Titres de phase en bleu */
+.navtree.toctree-l1.label .caption {
+    color: #2980b9;   /* ajuste la teinte de bleu selon ton goût */
+    font-size: 0.85rem;
+}
+
+.navtree.toctree-l1.label:hover .caption {
+    color: #1996f5;   /* un bleu plus foncé au survol */
+}
+
+/* Élément de la page actuellement affichée */
+.wy-menu-vertical li.toctree-l1.current > a,
+.navtree.active > a {
+    color: #1996f5 !important;      /* couleur au choix, ex: orange pour bien la distinguer du bleu des phases */
+    font-weight: 600;
+}
+
+/* Couleur du titre de phase correspondant à la page actuellement consultée */
+.navtree.label.active-phase .caption {
+    color: #1996f5;   /* couleur au choix */
+    font-weight: 600;
+}
+
+/* Indenter les liens de sommaire interne (TOC) pour éviter la confusion avec les pages principales */
+.wy-menu-vertical a[href^="#"] {
+    margin-left: 1.5rem !important;
+}
+.wy-menu-vertical li.with-children > a[href^="#"] {
+    margin-left: 0 !important;
+    padding-left: 3rem !important;
+}
+
+.wy-menu-vertical a,
+.wy-menu-vertical .caption {
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    overflow: visible !important;
+}
+
+/* Corrige la hauteur figée (30px, calculée pour une seule ligne) qui recouvre
+   le texte au lieu de le laisser passer sur 2 lignes ou plus. */
+.wy-menu-vertical li.navtree.toctree-l2.page.current,
+.wy-menu-vertical li.navtree.toctree-l2.page.current > a,
+.wy-menu-vertical li.toctree-l2,
+.wy-menu-vertical li.toctree-l2 > a,
+.wy-menu-vertical li.toctree-l3,
+.wy-menu-vertical li.toctree-l3 > a {
+    height: auto !important;
+    min-height: 30px !important;
+}
+
+/* =========================================================
+   Ajustements de la barre latérale (Largeur et Pied de page)
+   ========================================================= */
+
+/* 1. Masquer la boîte « Previous / Next » en bas de la barre latérale */
+.rst-versions {
+    display: none !important;
+}
+
+/* 2. Augmenter la largeur de la barre latérale sur grand écran */
+@media screen and (min-width: 993px) {
+    .wy-nav-side {
+        width: 420px !important;  
+    }
+    .wy-nav-content-wrap {
+        margin-left: 420px !important; 
+    }
+    .wy-side-nav-search {
+        width: 400px !important; 
+    }
+    /*.wy-form {
+        width: 380px !important; 
+    }*/
+    .wy-menu-vertical a.current{
+        width: 420px !important; 
+    }
+    .wy-menu-vertical li.toctree-l1 > a,
+    .navtree.toctree-l1 > a,
+    .navtree.toctree-l1.page > a {
+        width: 420px !important; 
+    }
+    .wy-menu-vertical,
+    .wy-menu.wy-menu-vertical,
+    .wy-side-scroll .wy-menu-vertical {
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    body.sidebar-open {
+        overflow: hidden;
+    }
+
+    .wy-nav-side,
+    .wy-side-nav-search {
+        width: min(86vw, 320px) !important;
+        max-width: 320px !important;
+    }
+
+    .wy-nav-side {
+        position: fixed !important;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        transform: translateX(-102%);
+        transition: transform 0.28s ease, box-shadow 0.28s ease;
+        z-index: 1200;
+        box-shadow: 0 24px 80px rgba(15, 23, 42, 0.28);
+    }
+
+
+    .wy-side-nav-search::after {
+        filter: brightness(1.08) saturate(1.05);
+    }
+
+    body.sidebar-open .wy-nav-side,
+    .wy-nav-side.shift {
+        transform: translateX(0) !important;
+    }
+
+    .wy-nav-content-wrap {
+        margin-left: 0 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+
+    .wy-nav-content {
+        max-width: none !important;
+        width: 100% !important;
+    }
+
+    .wy-nav-top {
+        display: block !important;
+        background-color: #2980B9 !important;
+        color: #ffffff !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        left: 0 !important;
+        z-index: 1050;
+    }
+
+    .sidebar-toggle-button {
+        display: inline-flex;
+    }
+
+    .sidebar-backdrop {
+        display: block;
+    }
+
+    .rst-footer-buttons .btn {
+        min-width: 0;
+        width: 100%;
+        padding: 12px 18px !important;
+    }
+    .gallery-card {
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.42);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+    z-index: 1100;
+}
+
+body.sidebar-open .sidebar-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebar-toggle-button {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 1300;
+    border: 0;
+    border-radius: 999px;
+    padding: 0.8rem 1rem;
+    background: #0f172a;
+    color: #ffffff;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.28);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.sidebar-toggle-button:hover,
+.sidebar-toggle-button:focus-visible {
+    background: #111f3a;
+}
+
+.sidebar-toggle-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.sidebar-toggle-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+.sidebar-toggle-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.rst-footer-buttons .btn {
+    padding: 15px 40px !important;
+    font-size: 1.05rem !important;
+    min-width: 180px;
+    text-align: center;
+}
+
+.wy-side-nav-search img, .wy-side-nav-search::after {
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+}
+
+/* Gallery Card Hover Effect */
+.gallery-card {
+    width: min(100%, 250px);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: white;
+}
+
+.gallery-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 4px 8px 15px rgba(0,0,0,0.2);
+}
+/* Change hamburger to cross when sidebar is shifted */
+.wy-nav-content-wrap.shift .wy-nav-top i.fa-bars::before,
+body.sidebar-open .wy-nav-top i.fa-bars::before {
+    content: "\f00d" !important;
+}

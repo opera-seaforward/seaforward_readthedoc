@@ -1,0 +1,136 @@
+/* Centrage des boutons de navigation (Précédent / Suivant) */
+.md-footer__inner {
+    display: flex;
+    justify-content: center !important;
+    gap: 6rem; /* Espace entre les deux boutons */
+}
+
+.md-footer__link {
+    flex: none !important; /* Empêche le bouton de s'étirer pour occuper l'espace */
+    width: auto !important;
+    margin: 0 !important; /* Supprime les marges auto (margin-left: auto sur le bouton Next) */
+}
+
+/* =========================================================
+   Blocs de code — style carte claire moderne
+   ========================================================= */
+.highlight,
+.highlight > div,
+.highlight table,
+.highlight td {
+    overflow: visible !important;
+}
+
+.highlight pre,
+.highlight pre code,
+pre code.hljs {
+    white-space: pre !important;
+}
+
+/* Carte du bloc de code (Design inspiré de l'image : fond vert/jaune pâle) */
+.highlight {
+    position: relative;
+    background: #f4fbdf !important; /* Fond vert pâle / jaune pâle */
+    border: 1px solid #dcdcdc !important; /* Bordure simple */
+    border-radius: 2px !important;
+    box-shadow: none !important;
+    overflow: hidden;
+    margin: 1.2em 0;
+}
+
+/* Bandeau supérieur (masqué pour correspondre à l'image) */
+.highlight .filename {
+    display: none !important;
+}
+
+.highlight pre {
+    margin: 0;
+    padding: 12px 16px;
+    background: transparent;
+    overflow-x: auto;          /* seul niveau de scroll horizontal autorisé */
+}
+
+.highlight code.hljs {
+    background: transparent !important;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.75rem !important;
+    line-height: 1.6;
+}
+
+.highlight .linenos {
+    color: #b0b0b0;
+    font-family: "JetBrains Mono", monospace;
+    margin-right: 1em;
+    user-select: none;
+}
+
+/* =========================================================
+   Bouton copier — icône seule, sans fond parasite
+   ========================================================= */
+
+.copy-code-button {
+    all: unset;                /* reset total du style natif du bouton */
+    box-sizing: border-box;
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    color: #8a8f98;
+    opacity: 1;
+    transition: color 0.15s ease;
+}
+
+.copy-code-button:hover,
+.copy-code-button:focus-visible,
+.copy-code-button.copied {
+    opacity: 1;
+}
+
+.copy-code-button:hover {
+    color: #1a1a1a;
+}
+
+.copy-code-button.copied {
+    color: #1a7f37;
+}
+
+/* Réduit la largeur de la sidebar */
+.wy-nav-side {
+    width: 330px;   /* défaut généralement ~300px — ajuste selon le rendu voulu */
+}
+
+/* Décale le contenu principal pour compenser la nouvelle largeur */
+.wy-nav-content-wrap {
+    margin-left: 315px;   /* doit correspondre exactement à la largeur ci-dessus */
+}
+
+/* Si le thème limite aussi la largeur max du bloc de contenu central */
+.wy-nav-content {
+    max-width: 50vw;   /* optionnel : retire la limite si tu veux profiter de l'espace gagné */
+}
+
+@media screen and (max-width: 768px) {
+    .wy-nav-content {
+        max-width: none;
+        width: 100%;
+    }
+
+    .highlight pre {
+        padding: 10px 12px;
+    }
+
+    .copy-code-button {
+        top: 6px;
+        right: 6px;
+    }
+}
+
+.wy-side-scroll {
+    overflow-y: scroll;        /* toujours réserver l'espace de la scrollbar, même sans contenu débordant */
+    scrollbar-gutter: stable;  /* équivalent moderne, pris en compte par les navigateurs récents */
+}

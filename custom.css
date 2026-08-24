@@ -1,0 +1,14 @@
+/* Changer la couleur de fond de la barre latérale */
+.wy-nav-side {
+    background: #2c3e50 !important;
+}
+
+/* Changer la couleur de la zone de recherche */
+.wy-side-nav-search {
+    background-color: #34495e !important;
+}
+
+/* Ajuster la couleur des liens */
+.wy-menu-vertical a:hover {
+    background: #3e5871 !important;
+}
