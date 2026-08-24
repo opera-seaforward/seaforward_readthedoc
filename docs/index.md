@@ -7,7 +7,12 @@ SEA-FORWARD (**S**imple **E**ducational **A**ccess for **For**ecast and **War**n
 complete ocean forecasting system on your own computer — from raw input data
 through to a validated 5-day forecast you can plot and interpret. SEA-FORWARD is based on the OPERA OCeanPrediction-A Architecture as described by the figure below.
 
-![Implementation of the OceanPrediction-A architecture for the SEA-FORWARD system. The system consists of two main components (UNIX/LINUX based system and Jupyter Notebooks) accessible via a GitHub Repository](./img/SEA-FORWARD_Architecture.png)
+<figure style="text-align: center; margin: 20px 0;">
+  <img src="./img/SEA-FORWARD_Architecture.png" alt="Architecture" style="max-width: 100%; height: auto;">
+  <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
+    Implementation of the OceanPrediction-A architecture for the SEA-FORWARD system. The system consists of two main components (UNIX/LINUX based system and Jupyter Notebooks) accessible via a GitHub Repository.
+  </figcaption>
+</figure>
 
 The OceanPrediction-A architecture is functionally implemented within a downloadable workflow, hence locally accessible by the users. The SEA-FORWARD architecture diagram illustrates a system which consists of two main components:
 

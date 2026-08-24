@@ -13,7 +13,12 @@ bathymetry so the model stays stable. The scrolling `rx0`/`ry0` numbers are the
 smoothing working; they settle near `0.20`. It finishes with
 `Writing .../CROCO_FILES/croco_grd.nc done`.
 
-![Workflow for building model_grid.nc (model bathymetry + geometry) from CROCO_tools bathymetry and coastline inputs, using -config-name/-domain-limits and -grid-spacing (x,y,z) parameters processed through SEA_FORWARD pytools (make grid → grid.ini → CROCO pytools "Build grid"). Output feeds U2–U6, C1, and V1.](../img/bathymetry_U1.png)
+<figure style="text-align: center; margin: 20px 0;">
+  <img src="../img/bathymetry_U1.png" alt="Workflow for building model_grid.nc" style="max-width: 100%; height: auto;">
+  <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
+    Workflow for building <code>model_grid.nc</code> (model bathymetry + geometry) from CROCO_tools bathymetry and coastline inputs, using <code>-config-name</code>/<code>-domain-limits</code> and <code>-grid-spacing (x,y,z)</code> parameters processed through SEA_FORWARD pytools (make grid &rarr; grid.ini &rarr; CROCO pytools "Build grid"). Output feeds U2–U6, C1, and V1.
+  </figcaption>
+</figure>
 
 Now read the **real** grid dimensions from the file it produced:
 

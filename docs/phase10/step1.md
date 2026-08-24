@@ -25,4 +25,9 @@ from *their* param file. Keeping the tide params in their own directory avoids
 the collision entirely.
 
 The process described above is summarized by the figure below.
-![Workflow combining CROCO_tools/TPXO10 Atlas tidal data with model_grid.nc, processed by SEA_FORWARD pytools (using -run-date, -reference-date, crocotools_param_tides.py) to produce the tides-upstr-input file, linked downstream to C1, V1, and D1.](../img/tides_U4.png)
+<figure style="text-align: center; margin: 20px 0;">
+  <img src="../img/tides_U4.png" alt="Workflow combining CROCO_tools/TPXO10 Atlas tidal data with model_grid.nc" style="max-width: 100%; height: auto;">
+  <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
+    Workflow combining CROCO_tools/TPXO10 Atlas tidal data with <code>model_grid.nc</code>, processed by SEA_FORWARD pytools (using <code>-run-date</code>, <code>-reference-date</code>, <code>crocotools_param_tides.py</code>) to produce the <code>tides-upstr-input</code> file, linked downstream to C1, V1, and D1.
+  </figcaption>
+</figure>
