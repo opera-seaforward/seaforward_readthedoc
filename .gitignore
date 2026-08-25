@@ -1,0 +1,5 @@
+test_venv/
+site/
+__pycache__/
+*.pyc
+output.html
