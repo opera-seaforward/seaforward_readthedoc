@@ -14,7 +14,7 @@ smoothing working; they settle near `0.20`. It finishes with
 `Writing .../CROCO_FILES/croco_grd.nc done`.
 
 <figure style="text-align: center; margin: 20px 0;">
-  <img src="../img/bathymetry_U1.png" alt="Workflow for building model_grid.nc" style="max-width: 100%; height: auto;">
+  <img src="../../img/bathymetry_U1.png" alt="Workflow for building model_grid.nc" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
     Workflow for building <code>model_grid.nc</code> (model bathymetry + geometry) from CROCO_tools bathymetry and coastline inputs, using <code>-config-name</code>/<code>-domain-limits</code> and <code>-grid-spacing (x,y,z)</code> parameters processed through SEA_FORWARD pytools (make grid &rarr; grid.ini &rarr; CROCO pytools "Build grid"). Output feeds U2–U6, C1, and V1.
   </figcaption>

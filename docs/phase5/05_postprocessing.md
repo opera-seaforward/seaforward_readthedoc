@@ -33,21 +33,21 @@ builds temperature at 50 m, the plotter draws and labels it.
     Note that this section covers the validation of the simulation outputs and the production of downstream services. However, before reaching that stage, an upstream step is required to prepare the observations so that they can be compared with the model simulations. The figure below illustrates this process. The validation process, as well as the production of downstream services, is then illustrated by the two dedicated figures that follow.
 
 <figure style="text-align: center; margin: 20px 0;">
-  <img src="../img/observations_U6.png" alt="Workflow for ingesting Copernicus-observations" style="max-width: 100%; height: auto;">
+  <img src="../../img/observations_U6.png" alt="Workflow for ingesting Copernicus-observations" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
     Workflow for ingesting Copernicus-observations (profiles, fixed stations, satellites, drifters, tide gauges) with <code>model_grid.nc</code>, processed via SEA_FORWARD pytools (obs-selector, format-converter) and observation-processing steps (obs-processing &rarr; colocate-in-time &rarr; colocate-in-space), producing <code>obs-upstr-input</code>, linked to V1.
   </figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 20px 0;">
-  <img src="../img/validation_V1.png" alt="Workflow for qualifying ocean-model products" style="max-width: 100%; height: auto;">
+  <img src="../../img/validation_V1.png" alt="Workflow for qualifying ocean-model products" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
     Workflow for qualifying ocean-model products, taking ocean-model, <code>obs-upstr-input</code>, and <code>model_grid.nc</code> as inputs, processed by SEA_FORWARD pytools/Notebooks (hardware-control-val, class-1 to class-4 validation), producing class-1 through class-4 metrics and process-oriented-metrics, linked to D1.
   </figcaption>
 </figure>
 
 <figure style="text-align: center; margin: 20px 0;">
-  <img src="../img/downstream_services_D1.png" alt="Workflow taking ocean-model, model_grid.nc, and class-1/2/4 and process-oriented metrics" style="max-width: 100%; height: auto;">
+  <img src="../../img/downstream_services_D1.png" alt="Workflow taking ocean-model, model_grid.nc, and class-1/2/4 and process-oriented metrics" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
     Workflow taking ocean-model, <code>model_grid.nc</code>, and class-1/2/4 and process-oriented metrics as inputs into SEA_FORWARD tools, delivering outputs to Visualization and Web Portal interfaces (<a href="https://readthedocs.io" target="_blank">https://readthedocs.io</a>) for end users, with a feedback loop back into the system.
   </figcaption>

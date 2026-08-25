@@ -60,7 +60,7 @@ to the model. Understanding that configuration is the whole point.
 ## The upstream data — what feeds your model, and what you choose
 
 <figure style="text-align: center; margin: 20px 0;">
-  <img src="../img/entire_forecast_build_chain.png" alt="the three dashed boxes (tides, rivers and AGRIF child)" style="max-width: 100%; height: auto;">
+  <img src="../../img/entire_forecast_build_chain.png" alt="the three dashed boxes (tides, rivers and AGRIF child)" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
     The three dashed boxes (tides, rivers and AGRIF child) represent optional or conditional build steps depending on the domain configuration and forecast capabilities enabled.
   </figcaption>
