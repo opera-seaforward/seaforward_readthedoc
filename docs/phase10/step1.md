@@ -27,7 +27,7 @@ the collision entirely.
 The process described above is summarized by the figure below.
 <figure style="text-align: center; margin: 20px 0;">
   <img src="../../img/tides_U4.png" alt="Workflow combining CROCO_tools/TPXO10 Atlas tidal data with model_grid.nc" style="max-width: 100%; height: auto;">
-  <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
+  <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
     Workflow combining CROCO_tools/TPXO10 Atlas tidal data with <code>model_grid.nc</code>, processed by SEA_FORWARD pytools (using <code>-run-date</code>, <code>-reference-date</code>, <code>crocotools_param_tides.py</code>) to produce the <code>tides-upstr-input</code> file, linked downstream to C1, V1, and D1.
   </figcaption>
 </figure>

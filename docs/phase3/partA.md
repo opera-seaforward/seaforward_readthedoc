@@ -16,7 +16,7 @@ conda deactivate                                    # run outside conda
 The figure below illustrates how the forecast runs.
 <figure style="text-align: center; margin: 20px 0;">
   <img src="../../img/model_C1.png" alt="Core forecasting-engine workflow" style="max-width: 100%; height: auto;">
-  <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
+  <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
     Core forecasting-engine workflow combining <code>model_grid.nc</code>, <code>ocean-model-obc-input</code>, <code>ocean-model-init-input</code>, <code>river-upstr-input</code>, <code>atm-upstr-input</code>, and <code>tides-upstr-input</code>, run through the workflow-model-engine (CROCO-model, configuration, result-control, workflow-CROCO-monitor) and Ocean-output-manager (grid-transformation &rarr; format-converter &rarr; catalog-insertion), producing the ocean-model output linked to V1 and D1.
   </figcaption>
 </figure>

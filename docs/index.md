@@ -9,7 +9,7 @@ through to a validated 5-day forecast you can plot and interpret. SEA-FORWARD is
 
 <figure style="text-align: center; margin: 20px 0;">
   <img src="./img/SEA-FORWARD_Architecture.png" alt="Architecture" style="max-width: 100%; height: auto;">
-  <figcaption style="font-size: 0.9em; color: #555; margin-top: 8px; font-style: italic;">
+  <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
     Implementation of the OceanPrediction-A architecture for the SEA-FORWARD system. The system consists of two main components (UNIX/LINUX based system and Jupyter Notebooks) accessible via a GitHub Repository.
   </figcaption>
 </figure>
