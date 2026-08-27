@@ -29,16 +29,16 @@ Save: `Ctrl-O`, Enter. Exit: `Ctrl-X`.
 
 **Line by line — what each is:**
 
-     - `inputdata = 'mercator'` — the global ocean data comes from Mercator (variables named `zos/thetao/so/uo/vo`). This tells the reader which naming to expect.
+- `inputdata = 'mercator'` — the global ocean data comes from Mercator (variables named `zos/thetao/so/uo/vo`). This tells the reader which naming to expect.
   **(Hindcast: this becomes `'glorys'`.)**
-     - `Nzgoodmin = 4` — minimum good vertical levels before the tool fills gaps.
-     - `multi_files = False` — your ocean data is one merged file, not many.
-     - `tracers = ['temp', 'salt']` — temperature and salinity, carried through the water.
-     - `croco_grd = 'croco_grd.nc'` — the grid filename, in the same folder.
-     - `sigma_params = dict(theta_s=7, theta_b=2, N=50, hc=200)` — the **vertical grid**: 50 layers from surface to sea floor, stretched to pack more near the surface. **These four numbers must match `croco.in` and `param.h` later.**
-     - `ini_prefix` / `bry_prefix` — the names your initial/boundary files will get.
-     - `obc_dict = dict(south=1, west=1, east=0, north=1)` — **your boundaries from Step 3.** Change these to match *your* mask for a different region.
-     - `cycle_bry = 0` — the boundary data uses real dates, not a repeating loop.
+- `Nzgoodmin = 4` — minimum good vertical levels before the tool fills gaps.
+- `multi_files = False` — your ocean data is one merged file, not many.
+- `tracers = ['temp', 'salt']` — temperature and salinity, carried through the water.
+- `croco_grd = 'croco_grd.nc'` — the grid filename, in the same folder.
+- `sigma_params = dict(theta_s=7, theta_b=2, N=50, hc=200)` — the **vertical grid**: 50 layers from surface to sea floor, stretched to pack more near the surface. **These four numbers must match `croco.in` and `param.h` later.**
+- `ini_prefix` / `bry_prefix` — the names your initial/boundary files will get.
+- `obc_dict = dict(south=1, west=1, east=0, north=1)` — **your boundaries from Step 3.** Change these to match *your* mask for a different region.
+- `cycle_bry = 0` — the boundary data uses real dates, not a repeating loop.
 
 !!! important
     **Keep a copy with the recipe.** Also save this file into your config folder so the recipe is complete: `cp ${CF}/crocotools_param.py ${CONFIG_DIR}/`.
