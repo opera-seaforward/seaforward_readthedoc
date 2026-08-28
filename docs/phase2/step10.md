@@ -34,7 +34,6 @@ keeps `opt_seq/bin` on `PATH` and the compilers set.
 
 !!! check
     ✅ **CHECK** — after a few minutes you see the CROCO ASCII logo and **`CROCO is OK`**, and a `croco` program appears:
-
-```bash
-ls -lh ${FCAST}/croco
-```
+    ```bash
+    ls -lh ${FCAST}/croco
+    ```
