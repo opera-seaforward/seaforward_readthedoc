@@ -64,7 +64,7 @@ input: the **ocean** becomes the initial and boundary conditions, the
 *The global ocean forecast supplies the state your model starts from and the values that flow in at the open edges the one Mercator file you downloaded. The figure below shows how this is functionally implemented.*
 
 <figure style="text-align: center; margin: 20px 0;">
-  <img src="../index.md../img/ocean_model_U2.png" alt="Workflow for ingesting Global Ocean Forecast data" style="max-width: 100%; height: auto;">
+  <img src="../../img/ocean_model_U2.png" alt="Workflow for ingesting Global Ocean Forecast data" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
     Workflow for ingesting Global Ocean Forecast (OM) data alongside <code>model_grid.nc</code> and <code>-run-date</code>, processed via SEA_FORWARD pytools (subset-clim-oce, subset-mod-oce, format-converter-oce) and the Ocean-to-model step (extrapolation &rarr; interpolation &rarr; processing-oce), producing <code>ocean-model</code>, <code>ocean-model-initial-input</code>, and <code>ocean-model-obc (open boundary conditions)-input</code> outputs linked to V1, C1, and D1.
   </figcaption>
@@ -100,7 +100,7 @@ python seaforward.py make_bry \
 *The global weather becomes the surface forcing — the ten files (wind, heat, radiation, pressure, humidity, precipitation) CROCO reads at every timestep. The figure below shows how this is functionally implemented*
 
 <figure style="text-align: center; margin: 20px 0;">
-  <img src="../img/atmosphere_U3.png" alt="Workflow for preparing atmospheric forcing" style="max-width: 100%; height: auto;">
+  <img src="../../img/atmosphere_U3.png" alt="Workflow for preparing atmospheric forcing" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
     Workflow for preparing atmospheric forcing from the Global Forecasting System (ATM), <code>-run-date</code>, and <code>model_grid.nc</code>, run through SEA_FORWARD pytools (subset-mod-atm, format-converter-atm) and the Ocean-to-model chain (extrapolation &rarr; processing-atm &rarr; interpolation &rarr; grid-transformation), yielding <code>atm-upstr-input</code> and <code>atm-model</code> outputs linked to C1, V1, and D1.
   </figcaption>
