@@ -12,5 +12,5 @@ echo "-- pytools tools --";   ls ${CROCO_PYTOOLS_DIR}/prepro/Modules/toolsf*.so 
 echo "-- bathymetry --";      ls ${CROCO_DATA_ROOT}/DATASETS_CROCOTOOLS/Topo/etopo2.nc >/dev/null && echo "  OK"
 ```
 
-If all six print `OK` (and `nf-config --prefix` shows `~/seaforward/opt_seq`),
-your machine is fully set up.
+If the five checks print `OK` and `nf-config --prefix` shows
+`~/seaforward/opt_seq`, your machine is fully set up.
