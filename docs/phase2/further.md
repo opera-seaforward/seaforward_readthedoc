@@ -5,8 +5,13 @@
 What you built above is a single-grid forecast — one domain, one resolution. When
 you need **high resolution over just part of the domain** — a bay, a shelf, an
 island wake — rebuilding the whole thing at fine resolution is expensive and
-usually unnecessary. Instead you add an **AGRIF child**: a finer grid nested inside
-the parent that resolves the small-scale detail only where you want it.
+usually unnecessary. Instead you add a **child grid**: a finer grid inside the
+parent that resolves the small-scale detail only where you want it.
+
+SEA-FORWARD offers two ways to do this. **Offline nesting** (Phase 6) runs the
+parent first, then builds the child's boundaries from the parent's saved output and
+runs the child afterwards. **AGRIF** (Phase 8), described here, runs both grids in
+one execution with the parent feeding the child every timestep.
 
 ### The one idea to hold onto
 
@@ -51,7 +56,8 @@ a domain:
 
 - **The child's vertical grid equals the parent's** (`N`, `theta_s`, `theta_b`,
   `hc` are all inherited) — the two grids exchange data column-by-column every step,
-  so they must share the vertical.
+  so they must share the vertical. Offline nesting has no such constraint, which is
+  one reason to prefer it if you want more vertical levels in the child.
 - **The ratio is 3 or 5 only** — AGRIF sub-cycles the child in time by the same
   integer it refines in space.
 
@@ -63,16 +69,16 @@ Building a nest is its own phase because of this new machinery — the child gri
 index box, the ratio, the `.1` files, the coupling switches. This chapter got you
 the parent that a child needs. To build the child:
 
-- **Phase 8 — AGRIF nesting** (`08_agrif.md`) is the step-by-step how-to: choosing
-  the box against the parent's mask, building the child grid, its initial condition,
-  the `croco.in.1`, turning AGRIF on, and running one-way then two-way — each edit
-  by hand, the same way you built the parent here.
-- **The Agulhas worked example** (`09_agulhas.md`) shows the whole thing done
-  end-to-end: a parent *and* an AGRIF child built from nothing and run together
-  operationally, if you'd rather see a complete case before building your own.
-
-Start with Phase 8 for the mechanics; use the Agulhas chapter as the worked
-reference alongside it.
+- **[Phase 6 — Nesting (offline)](../phase6/06_nesting.md)** builds the child from
+  the parent's saved output, running the two separately. It allows a different
+  vertical grid.
+- **[Phase 8 — AGRIF nesting](../phase8/08_agrif.md)** is the step-by-step how-to for
+  the online route: choosing the box against the parent's mask, building the child
+  grid, its initial condition, the `croco.in.1`, turning AGRIF on, and running
+  one-way then two-way.
+- **[Phase 9 — Worked example](../phase9/09_agulhas.md)** shows the whole thing done
+  end-to-end: a parent *and* an AGRIF child built from nothing and run together, if
+  you'd rather see a complete case before building your own.
 
 Whether you run a single grid or a nest, the last step is the same: turn the
 manual run into an automatic daily forecast. That is next.
