@@ -123,7 +123,6 @@ nav:
       - Overview: phase3/03_forecast.md
       - Part A — The single manual run: phase3/partA.md
       - Part B — The operational driver: phase3/partB.md
-      - Why spin up before forecasting?: phase3/before.md
       - Quick reference: phase3/reference.md
   - Phase 4 — Running a Hindcast:
       - Overview: phase4/04_hindcast.md
