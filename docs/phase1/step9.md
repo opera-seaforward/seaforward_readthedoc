@@ -1,18 +1,18 @@
 Building a grid needs global **bathymetry** (sea-floor depth, ETOPO2) and a
 **coastline** (GSHHS). CROCO distributes these as the *DATASETS_CROCOTOOLS*
-package (several GB). If you already have the datasets, place it in the repository's `data/` directory. Otherwise, download it using the following commands:
+package (several GB). If you already have the datasets, place them in the
+repository's `data/` directory. Otherwise download them:
 
 ```bash
-# This can be postponed for later when it's needed. It also takes a lot of time; do it overnight. 
-# Use -c option with wget -c to resume downloading a partially downloaded file instead of starting the download over from the beginning.
-# this can take some time; do it overnight.
-
 mkdir -p ${SEA_FORWARD_ROOT}/data
 cd ${SEA_FORWARD_ROOT}/data
 
 wget -c https://data-croco.ifremer.fr/DATASETS/DATASETS_CROCOTOOLS.tar.gz
-tar -xzf DATASETS_CROCOTOOLS.tar.gz -C data/
+tar -xzf DATASETS_CROCOTOOLS.tar.gz
 ```
+
+!!! note
+    **Large download — plan for it.** The package is several GB and can take hours; running it overnight is sensible. The `-c` flag lets `wget` resume a partial download rather than starting over, so an interrupted transfer costs nothing. You can also postpone this step until you first build a grid (Phase 2).
 
 !!! note
     This data is **large and never committed** to the repository (it is git-ignored). Each user downloads it once. `CROCO_DATA_ROOT` in `env.sh` points at `~/seaforward/data`, so as long as the datasets sit there, the tools find them.
