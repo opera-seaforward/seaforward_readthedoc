@@ -1,4 +1,4 @@
-`forecast/run_forecast_today.sh` runs one complete cycle for **today**, ready to
+`forecast/run_forecast_cycle.sh` runs one complete cycle for **today**, ready to
 run daily (e.g. from cron). It reuses the compiled model and grid from Phase 2
 and handles everything else.
 
@@ -63,7 +63,7 @@ ls ${CROCO_RUNS_ROOT}/${CONFIG_NAME}/croco \
 ### B.4 Settings at the top of the driver
 
 !!! warning
-    ⚠️ **The driver ships set up for `Canary_12`.** The reference `run_forecast_today.sh` has the Canary_12 config name and its download box baked in. **Every time you build a new region in Phase 2, you must update these settings to match that config**, or the driver will try to run Canary_12 instead of yours. What to change for a new region:
+    ⚠️ **The driver ships set up for `Canary_12`.** The reference `run_forecast_cycle.sh` has the Canary_12 config name and its download box baked in. **Every time you build a new region in Phase 2, you must update these settings to match that config**, or the driver will try to run Canary_12 instead of yours. What to change for a new region:
      - `CONFIG_NAME` → your config's exact name (must match the folder in `forecast/scratch/` and `forecast/configs/`, and the `# define <NAME>` in `cppdefs.h`).
      - `EXTENTS` → the **same download box** you used in Phase 2 Step 0 for that region.
      - `FIX_GFS_LON` → `1` if the region is west of Greenwich, else `0`.
@@ -72,7 +72,7 @@ ls ${CROCO_RUNS_ROOT}/${CONFIG_NAME}/croco \
 !!! note
     A clean way to keep this straight: copy the driver per region (e.g.`run_forecast_<CONFIG>.sh`) with that config's settings, so each region has its own ready-to-run driver.
 
-Open `forecast/run_forecast_today.sh` and check the CONFIG block:
+Open `forecast/run_forecast_cycle.sh` and check the CONFIG block:
 
 ```bash
 CONFIG_NAME=Canary_12               # <-- change to YOUR config name
@@ -147,7 +147,7 @@ operational run.** Its six stages:
 cd ~/seaforward/forecast
 source ~/seaforward/env.sh
 conda activate seaforward
-./run_forecast_today.sh 2>&1 | tee fcst_$(date -u +%Y%m%d).log
+./run_forecast_cycle.sh 2>&1 | tee fcst_$(date -u +%Y%m%d).log
 ```
 
 ### B.7 Where the results go
@@ -177,7 +177,7 @@ The forecast you care about is `fcst/CROCO_FILES/croco_his.nc` (and
 To run daily at, say, 06:00 UTC, add a cron entry (`crontab -e`):
 
 ```
-0 6 * * *  /bin/bash -lc 'source ~/seaforward/env.sh && cd ~/seaforward/forecast && ./run_forecast_today.sh >> ~/seaforward/forecast/cron.log 2>&1'
+0 6 * * *  /bin/bash -lc 'source ~/seaforward/env.sh && cd ~/seaforward/forecast && ./run_forecast_cycle.sh >> ~/seaforward/forecast/cron.log 2>&1'
 ```
 
 !!! note
