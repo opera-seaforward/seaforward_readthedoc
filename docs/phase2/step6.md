@@ -1,5 +1,6 @@
-You start from CROCO's blank templates. Copy them into your **config** folder
-(the recipe), and keep pristine `.orig` backups:
+You start from CROCO's blank templates. Copy the four you will edit into your
+config folder. The originals stay in `${CROCO_MODEL_DIR}/OCEAN/`, so you can always
+re-copy one if an edit goes wrong.
 
 ```bash
 cd ${CONFIG_DIR}
@@ -7,10 +8,11 @@ cp ${CROCO_MODEL_DIR}/OCEAN/cppdefs.h .
 cp ${CROCO_MODEL_DIR}/OCEAN/param.h .
 cp ${CROCO_MODEL_DIR}/OCEAN/croco.in .
 cp ${CROCO_MODEL_DIR}/OCEAN/jobcomp .
-for f in cppdefs.h param.h croco.in jobcomp; do cp $f $f.orig; done
 ```
 
-!!! note
-    **No `config.sh` to copy.** In the new setup, the compilers and the `opt_seq` NetCDF paths are already in `env.sh` (which you sourced in Step 0). There is no per-config `config.sh` to copy or source — sourcing `env.sh` at the start of the session is enough to compile later.
+These four files are all you need. The compilers and the `opt_seq` NetCDF paths
+already came from `env.sh` in Step 0, so nothing else has to be sourced before
+compiling.
 
-You will edit each of these four files by hand over the next steps — `cppdefs.h`, `param.h`, and `jobcomp` before compiling, then `croco.in` for the run. This is the heart of understanding a CROCO configuration.
+You edit each of them over the next steps — `cppdefs.h`, `param.h` and `jobcomp`
+before compiling, then `croco.in` for the run.
