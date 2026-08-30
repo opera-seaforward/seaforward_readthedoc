@@ -78,7 +78,7 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Hands-on Documentation: handsOn.md
-  - Setup:
+  - Phase 1 — Setup:
       - Overview: phase1/01_setup.md
       #- 0. What you are building, in one picture: phase1/step0.md
       - System build tools: phase1/step1.md
@@ -102,7 +102,7 @@ nav:
       - From now on — the every-session ritual: phase1/step11.md
       - What you have now: phase1/now.md
       - Troubleshooting: phase1/trouble.md
-  - Building a Forecast Configuration:
+  - Phase 2 — Forecast Configuration:
       - Overview: phase2/02_forecast_config.md
       - Step 0 — Set up your environment (every session starts here): phase2/step0.md
       - Step 1 — Create the grid definition: phase2/step1.md
@@ -123,13 +123,13 @@ nav:
       - Toward an operational workflow: phase2/toward.md
       - What you change for your own region: phase2/change.md
       - The consistency rules to remember: phase2/consistency.md
-  - Running a Forecast:
+  - Phase 3 — Running a Forecast:
       - Overview: phase3/03_forecast.md
       - Part A — The single manual run (recap of Phase 2): phase3/partA.md
       - Part B — The operational driver (daily cycle): phase3/partB.md
       - Why spin up before forecasting?: phase3/before.md
       - Quick reference — forecast: phase3/reference.md
-  - Running a Hindcast:
+  - Phase 4 — Running a Hindcast:
       - Overview: phase4/04_hindcast.md
       - Step 0 — Session ritual (the HINDCAST track): phase4/step0.md
       - Step 1 — Build the grid (its own, in the hindcast track): phase4/step1.md
@@ -146,7 +146,7 @@ nav:
       - Forecast vs hindcast — the mental model: phase4/forehin.md
       - Quick reference — hindcast: phase4/reference.md
       - Troubleshooting (hindcast-specific): phase4/trouble.md
-  - Post-processing:
+  - Phase 5 — Post-processing:
       - Overview: phase5/05_postprocessing.md
       - Gallery: phase5/00_gallery.md
       - Setup: phase5/step51_setup.md
@@ -159,7 +159,7 @@ nav:
       - Animations: phase5/step59_animations.md
   - Validation:
       - Validation: phase5/step58_validation.md
-  - Nesting (offline):
+  - Phase 6 — Nesting (offline):
       - Overview: phase6/06_nesting.md
       - Step 0 — Session setup: phase6/step0.md
       - Step 1 — Create the child grid (finer resolution, same box): phase6/step1.md
@@ -171,13 +171,13 @@ nav:
       - Step 7 — Run the nested child: phase6/step7.md
       - Step 8 — Part A — does the finer grid resolve more?: phase6/partA.md
       - Step 8 — Part B — the operational nesting driver: phase6/partB.md
-  - Region Gallery:
+  - Phase 7 — Region Gallery:
       - Overview: phase7/07_regions.md
       - Canary — `Canary_12` (1/12°): phase7/canary.md
       - Gulf of Guinea — `IGOG_12` (1/12°): phase7/guinea.md
       - Agulhas — `Agulhas_12` (1/12°) — *coming soon*: phase7/agulhas.md
       - The pattern — what always changes vs stays the same: phase7/pattern.md
-  - AGRIF nesting (online):
+  - Phase 8 — AGRIF nesting (online):
       - Overview: phase8/08_agrif.md
       - Why bother — what two-way actually buys you: phase8/bother.md
       - The hard constraints: phase8/constraint.md
@@ -192,7 +192,7 @@ nav:
       - Worked example 2 — a coastal child: phase8/example.md
       - Gotchas — the short list: phase8/gotchas.md
       - What this chapter does not cover: phase8/chapter.md
-  - Worked example:
+  - Phase 9 — Worked example:
       - Overview: phase9/09_agulhas.md
       - Phase A — the parent: phase9/phaseA.md
       - Phase B — the AGRIF child: phase9/phaseB.md
@@ -200,7 +200,7 @@ nav:
       - Checking the nested run: phase9/checking.md
       - The numbers, collected: phase9/numbers.md
       - What Agulhas taught that IGOG didn't: phase9/taught.md
-  - Tides:
+  - Phase 10 — Tides:
       - Overview: phase10/10_tides.md
       - Step 1 — the tide tool: phase10/step1.md
       - Step 2 — the TPXO data and its param file: phase10/step2.md
@@ -211,7 +211,7 @@ nav:
       - Step 7 — the operational option: phase10/step7.md
       - What this buys you, and its honest limit: phase10/what.md
       - Recap — the whole tide path: phase10/recap.md
-  - Ocean-Forecasting Architecture:
+  - Phase 11 — Architecture:
       - Overview: phase11/11_architecture.md
       - Where the reference architecture comes from: phase11/where.md
       - The value chain, and the three roles: phase11/value.md
@@ -220,7 +220,7 @@ nav:
       - Why this framing matters: phase11/why.md
       - References: phase11/references.md
       - Regenerating the diagram: phase11/regenerating.md
-  - River (Runoff) Forcing in SEA-FORWARD:
+  - Phase 12 — River Forcing:
       - Overview: phase12/12_rivers.md
       - What are we doing, and why?: phase12/1.md
       - The data — Dai & Trenberth river climatology: phase12/2.md
