@@ -14,9 +14,9 @@ NetCDF, not conda's), then run `./jobcomp`.
 
 | Task | When |
 |------|------|
-| Install Miniconda [3](step3.md) | once per machine |
-| Create `seaforward` env [5](step5.md) | once per machine |
-| Build `opt_seq` NetCDF stack [7](step7.md) | once per machine |
-| Install CROCO + croco_pytools [8](step8.md) | once per machine |
-| Download bathymetry data [9](step9.md) | once per machine |
+| Install Miniconda ([step 1](step1.md)) | once per machine |
+| Create `seaforward` env ([step 5](step5.md)) | once per machine |
+| Build `opt_seq` NetCDF stack ([step 7](step7.md)) | once per machine |
+| Install CROCO + croco_pytools ([step 8](step8.md)) | once per machine |
+| Download bathymetry data ([step 9](step9.md)) | once per machine |
 | **`source env.sh` + `track.sh` + `conda activate`** | **every session** |
