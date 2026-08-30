@@ -1,147 +1,239 @@
-`forecast/run_forecast_cycle.sh` runs one complete cycle for **today**, ready to
-run daily (e.g. from cron). It reuses the compiled model and grid from Phase 2
-and handles everything else.
+`forecast/run_forecast_cycle.sh` runs one complete cycle for **today**, ready to be
+scheduled. The manual run above proves the configuration; this is how you'd actually
+operate it.
 
-### B.1 The two-phase cycle (the picture)
+## B.1 — What the driver does
 
-Each daily run has two phases on the model clock:
-
-```
-        day:  -2      -1       0       +1  +2  +3  +4  +5
-              │───spin-up───►│
-              │  (2 days,     │◄──────forecast (5 days)──────►│
-              │   ini+bry     │   ini = spin-up END (restart)
-              │   from        │   bry = FORECAST part
-              │   ANALYSIS)   │   of the anfc
-```
-
-The driver's key numbers are **`SPINUP_DAYS=2`** and **`FCST_DAYS=5`**. Your
-documentation diagram shows exactly this: a 2-day spin-up bar (ini+bry from the
-analysis) feeding a 5-day forecast bar whose ini is the spin-up's end and whose
-bry is the forecast part of the product.
-
-- **Spin-up — 2 days.** From `today − 2` to `today`, with its initial condition
-  (**ini**) and boundary conditions (**bry**) built from the **analysis** part of
-  the global ocean product (GLO12 analysis via Mercator anfc). Running these 2
-  days lets the fine grid settle into balance and write a clean restart at
-  `today`.
-- **Forecast — 5 days.** From `today` to `today + 5`:
-  - **ini** = the **spin-up's end** (the restart the spin-up wrote at `today`) —
-    not the global data again.
-  - **bry** = the **forecast** part of the global product (the future portion of
-    the anfc), because this window is in the future and its edges must come from
-    the forecast, not the analysis.
-
-So the two phases differ in where their boundaries come from: the spin-up's boundaries are from the Global Forecasting System (GFS), the forecast's boundaries are from the spin-up analysis. The forecast's initial condition is the spin-up restart. This is better illustrated by the figure below.
-
-![Phase 3](../img/forecasting_scheme.png)
-
-### B.2 One download feeds both phases
-
-The driver downloads today's ocean + weather **once** — a single Mercator anfc
-file that contains **both** the analysis (past → `today`) and the forecast
-(`today` → `today+5`) parts, covering the whole `today−2 … today+5` window. The
-spin-up reads the **analysis** records for its ini+bry; the forecast reads the
-**forecast** records for its bry. The model clock selects the right records from
-that one file — no second download.
-
-### B.3 What the driver reuses from Phase 2
-
-It expects the compiled model and grid to exist in
-`forecast/scratch/<CONFIG>/` (exactly what Phase 2 produced):
+The driver replaces the whole manual sequence — download, prepare, patch `croco.in`,
+run — with one command that produces today's forecast in two phases and files the
+result.
 
 ```bash
-source ~/seaforward/env.sh
-source ~/seaforward/forecast/track.sh
-export CONFIG_NAME=Canary_12
-ls ${CROCO_RUNS_ROOT}/${CONFIG_NAME}/croco \
-   ${CROCO_RUNS_ROOT}/${CONFIG_NAME}/CROCO_FILES/croco_grd.nc \
-   ${CROCO_RUNS_ROOT}/${CONFIG_NAME}/CROCO_FILES/crocotools_param.py \
-   ${CROCO_RUNS_ROOT}/${CONFIG_NAME}/croco.in
+cd ~/seaforward/forecast
+./run_forecast_cycle.sh
 ```
 
-### B.4 Settings at the top of the driver
+**One data download, two phases.** It fetches Mercator and GFS once for the whole
+`today−2 … today+5` window; both phases read from that same download, each taking the
+part it needs. The log numbers the stages:
 
-!!! warning
-    ⚠️ **The driver ships set up for `Canary_12`.** The reference `run_forecast_cycle.sh` has the Canary_12 config name and its download box baked in. **Every time you build a new region in Phase 2, you must update these settings to match that config**, or the driver will try to run Canary_12 instead of yours. What to change for a new region:
-     - `CONFIG_NAME` → your config's exact name (must match the folder in `forecast/scratch/` and `forecast/configs/`, and the `# define <NAME>` in `cppdefs.h`).
-     - `EXTENTS` → the **same download box** you used in Phase 2 Step 0 for that region.
-     - `FIX_GFS_LON` → `1` if the region is west of Greenwich, else `0`.
-     - `SPINUP_DAYS` / `FCST_DAYS` → only if you want a different cycle length.
+| stage | what it does |
+|---|---|
+| 1 | Downloads Mercator + GFS for the whole window. |
+| 2 | Reshapes GFS into online-forcing files, applying the longitude fix if `FIX_GFS_LON=1` (and builds tidal forcing, if `--tides`). |
+| 3 | Builds the spin-up's ini + bry from the *analysis* part of the download. |
+| 4 | Runs the 2-day spin-up, writing a restart. |
+| 5 | Builds the forecast bry from the *forecast* part, and stages the spin-up restart as the forecast's initial condition. |
+| 6 | Runs the 5-day forecast and files the output. |
+
+`croco.in` is patched automatically for each phase — the timestep count, the initial
+and boundary filenames, the online-forcing block. You never hand-edit it.
+
+By default the driver runs **today's** cycle. To rerun a past one:
+
+```bash
+./run_forecast_cycle.sh --date 2026-07-11
+```
+
+## B.2 — Why two phases
+
+The spin-up exists so the forecast doesn't start cold. A regional model handed a
+coarse interpolated state spends its first hours or days adjusting: generating the
+eddies and fronts the global product cannot resolve, and letting the density field
+settle against the bathymetry. Doing that *inside* the forecast wastes the part of the
+run you care about.
+
+So the spin-up absorbs it. Two days from the analysis, output discarded, restart kept
+— and the forecast begins from that adjusted state instead.
+
+The two phases also differ in **where their ocean data comes from**: the spin-up is
+driven by the analysis (the reconstructed recent past), the forecast by the forecast
+portion of the same file. A single download contains both.
+
+## B.3 — Optional physics, and the binary it needs
+
+Three extensions are runtime flags:
+
+```bash
+./run_forecast_cycle.sh                          # plain
+./run_forecast_cycle.sh --tides                  # tidal forcing
+./run_forecast_cycle.sh --rivers                 # river freshwater forcing
+./run_forecast_cycle.sh --child 1way             # AGRIF nest, one-way
+./run_forecast_cycle.sh --child 2way             # AGRIF nest, two-way feedback
+./run_forecast_cycle.sh --child 1way --tides     # flags compose
+```
+
+But AGRIF, tides and rivers are **compile-time** switches in CROCO, not run-time
+options. Each combination is therefore a **separate binary**, and the driver picks one
+by name from the flags you passed.
+
+### How the name is built
+
+```
+croco_ + [ plain | 1way | 2way ] + [ _tides ] + [ _rivers ]
+```
+
+The order is fixed:
+
+| command | binary the driver looks for |
+|---|---|
+| (no flags) | `croco_plain` |
+| `--tides` | `croco_plain_tides` |
+| `--rivers` | `croco_plain_rivers` |
+| `--tides --rivers` | `croco_plain_tides_rivers` |
+| `--child 1way` | `croco_1way` |
+| `--child 1way --tides` | `croco_1way_tides` |
+| `--child 1way --rivers` | `croco_1way_rivers` |
+| `--child 1way --tides --rivers` | `croco_1way_tides_rivers` |
+| `--child 2way` | `croco_2way` |
+| `--child 2way --tides` | `croco_2way_tides` |
+| `--child 2way --rivers` | `croco_2way_rivers` |
+| `--child 2way --tides --rivers` | `croco_2way_tides_rivers` |
+
+All of them live in `forecast/scratch/<CONFIG>/`. You only build the ones you intend
+to use.
+
+### The switches for each axis
+
+| axis | `cppdefs.h` |
+|---|---|
+| no nest | `# undef AGRIF` |
+| one-way nest | `# define AGRIF`, `# undef AGRIF_2WAY` |
+| two-way nest | `# define AGRIF`, `# define AGRIF_2WAY` |
+| tides | `# define TIDES`, `SSH_TIDES`, `UV_TIDES`, `POT_TIDES` (leave `TIDES_MAS` undef) |
+| rivers | `# define PSOURCE`, `# define PSOURCE_NCFILE` (leave `PSOURCE_NCFILE_TS` undef) |
 
 !!! note
-    A clean way to keep this straight: copy the driver per region (e.g.`run_forecast_<CONFIG>.sh`) with that config's settings, so each region has its own ready-to-run driver.
+    **Tides and rivers need a data file as well as a binary.** The switches only tell CROCO to read one. The tide file `croco_frc.nc` is generated per cycle by the driver from the TPXO atlas — and on a nested run the child needs its own, `croco_frc.nc.1`, because tidal forcing has to be defined on each grid. The river file `croco_runoff.nc` is built once per region and staged each cycle.
 
-Open `forecast/run_forecast_cycle.sh` and check the CONFIG block:
+### Building them
+
+Every build is the same three steps: set the switches in `cppdefs.h`, compile, rename
+the result. `jobcomp` always produces a file called `croco`, and each build overwrites
+the last — so **rename before building the next**.
+
+**The plain binary — do this one first.** Phase 2 already built it; it just needs the
+name:
 
 ```bash
-CONFIG_NAME=Canary_12               # <-- change to YOUR config name
-SPINUP_DAYS=2                       # the 2-day spin-up
-FCST_DAYS=5                         # the 5-day forecast
+cd ~/seaforward/forecast/scratch/Canary_12
+cp croco croco_plain
+```
+
+!!! warning
+    **Without this rename the driver fails immediately**, because Phase 2's `jobcomp` produces `croco` while the driver looks for `croco_plain`:
+
+```
+    ERROR: binary not found: .../scratch/Canary_12/croco_plain
+      (child=none, tides=0) needs its own build.
+```
+
+    The error also prints the CPP switches for whichever combination it couldn't find.
+
+**A tides build:**
+
+```bash
+cd ~/seaforward/forecast/scratch/Canary_12
+nano cppdefs.h                    # define TIDES SSH_TIDES UV_TIDES POT_TIDES
+conda deactivate
+source ~/seaforward/env.sh
+./jobcomp
+cp croco croco_plain_tides        # rename before the next build
+```
+
+**A rivers build:**
+
+```bash
+nano cppdefs.h                    # define PSOURCE and PSOURCE_NCFILE
+                                  # leave PSOURCE_NCFILE_TS undef
+./jobcomp
+cp croco croco_plain_rivers
+```
+
+**A one-way nest with tides:**
+
+```bash
+nano cppdefs.h                    # define AGRIF (leave AGRIF_2WAY undef), keep the TIDES block
+./jobcomp
+cp croco croco_1way_tides
+```
+
+**A two-way nest:**
+
+```bash
+nano cppdefs.h                    # define AGRIF and AGRIF_2WAY
+./jobcomp
+cp croco croco_2way
+```
+
+Check what you have at any point:
+
+```bash
+ls ~/seaforward/forecast/scratch/Canary_12/croco_*
+```
+
+Full setup for each: **Phase 10** for tides, **Phase 12** for rivers, **Phase 8** for
+AGRIF — those chapters cover the data files each one also needs, not just the switches.
+
+## B.4 — Settings at the top of the driver
+
+!!! warning
+    **The driver is configured for `Canary_12` by default.** The settings block names that config, its download box and its hemisphere flag. **Every time you build a new region in Phase 2, update these to match**, or the driver runs Canary_12 instead of yours.
+
+Find the settings block:
+
+```bash
+grep -n "^CONFIG_NAME=\|^EXTENTS=\|^FIX_GFS_LON=\|^COEF=" \
+     ~/seaforward/forecast/run_forecast_cycle.sh
+```
+
+```
+58:CONFIG_NAME=Canary_12
+59:COEF=3
+63:EXTENTS="-23.5,-14.0,12.5,25.5"
+64:FIX_GFS_LON=1
+```
+
+Open the file there — `nano +58` puts the cursor on the first of them:
+
+```bash
+nano +58 ~/seaforward/forecast/run_forecast_cycle.sh
+```
+
+The whole block:
+
+```bash
+SEA_FORWARD_ROOT=${HOME}/seaforward
+CONFIG_NAME=Canary_12               # must match your config folder and cppdefs name
+COEF=3                              # AGRIF refinement ratio, only used with --child
+SPINUP_DAYS=2                       # spin-up length
+FCST_DAYS=5                         # forecast length
 YORIG=2000
-EXTENTS="-23.5,-14.0,12.5,25.5"     # <-- change to YOUR download box (same as Phase 2)
-FIX_GFS_LON=1                       # GFS longitude fix: 1 = apply, 0 = skip
+EXTENTS="-23.5,-14.0,12.5,25.5"     # the SAME download box you used in Phase 2 Step 0
+FIX_GFS_LON=1                       # 1 = box west of Greenwich, 0 = east
+TPXO_DIR="${SEA_FORWARD_ROOT}/data/DATASETS_CROCOTOOLS/TPXO10"
+DT=300; NDTFAST=60; NINFO=1         # timestep settings, as in croco.in
 ```
 
-**About `FIX_GFS_LON`.** This is the automatic version of the Phase 2 Step 6
-longitude fix. GFS labels longitude 0–360; CROCO uses −180…180. West of Greenwich
-these disagree and the model crashes reading the weather, so the forcing must be
-converted. Set it by where your region is:
+What to change for a new region:
 
-- `FIX_GFS_LON=1` → **western hemisphere** (your box has negative longitudes —
-  Canary, West Africa, the Americas). Applies the conversion.
-- `FIX_GFS_LON=0` → **eastern hemisphere** (your box is all positive longitudes —
-  Mediterranean, East Africa, Asia). No conversion needed.
+- **`CONFIG_NAME`** — must match the folder under `forecast/scratch/` and the name you
+  set in `cppdefs.h`.
+- **`EXTENTS`** — your grid box plus about 1.5° of margin, the same string you used in
+  Phase 2.
+- **`FIX_GFS_LON`** — `1` if your box has negative longitudes, `0` if it is entirely
+  east of Greenwich. This is the automatic version of the longitude fix you did by hand
+  in Phase 2 Step 5.
 
-Canary is at 22°W–15.5°W, so the provided driver ships with `FIX_GFS_LON=1`. If
-unsure, the `covers?` check from Phase 2 Step 6 tells you: `covers? False` with
-big forcing numbers (like 336–346) means you need `1`.
+`SPINUP_DAYS` and `FCST_DAYS` rarely change: two days is enough for a regional domain
+to shed the cold-start imbalance, and five is the useful horizon of the global forecast
+driving the boundaries. `COEF` only matters with `--child`, and `DT`/`NDTFAST` should
+match what you set in `croco.in`.
 
-These must agree with the config you built in Phase 2. The example values shown
-are for the provided **Canary_12** build; a different region overrides all of
-them.
+!!! tip
+    **Copy the driver per region.** Rather than editing one script back and forth, keep a copy per configuration — `run_forecast_Canary_12.sh`, `run_forecast_IGOG_12.sh` — each with its own settings block. Then a scheduled job can run several regions without conflict.
 
-Paths — **inputs read from `scratch`, outputs written to `model-runs`**:
-
-```bash
-export CROCO_CONFIGS_ROOT="${SEA_FORWARD_ROOT}/forecast/configs"
-export CROCO_RUNS_ROOT="${SEA_FORWARD_ROOT}/forecast/scratch"       # binary + grid live here
-OUTPUT_ROOT="${SEA_FORWARD_ROOT}/forecast/model-runs/${CONFIG_NAME}"
-CYCLE_ROOT="${OUTPUT_ROOT}/${RUN_TAG}"                              # one folder per day
-```
-
-### B.5 What it does, stage by stage
-
-The driver's `patch_croco_in` sets each phase's settings **automatically** —
-including the **dates** (`start_date`/`end_date`): the spin-up gets
-`today−2 → today`, the forecast gets `today → today+5`. It also sets
-`time_stepping` (phase days ÷ dt), the `initial` block, `boundary`, and the online
-forcing block. **You never hand-edit `croco.in` — or its dates — for an
-operational run.** Its six stages:
-
-1. **Download** the Mercator ocean + GFS weather for the **whole window**
-   (`today−2 … today+5`) in one go — `--hdays 2 --fdays 5` pull that full span,
-   not just today.
-2. **Reformat GFS** into online forcing over that window (and apply the longitude
-   fix if `FIX_GFS_LON=1`).
-3. **Build spin-up ini + bry** — `make_ini` and `make_bry` from the **analysis**
-   part of the anfc file, for the 2-day spin-up window.
-4. **Run the spin-up** (2 days) → writes a restart at `today`:
-   `${SPIN_DIR}/CROCO_FILES/croco_rst.nc`. This restart holds the fine grid's
-   balanced ocean state at `today` and the model clock — it becomes the
-   forecast's starting point.
-5. **Build forecast bry** — `make_bry` from the **forecast** part of the same
-   anfc file, spanning the 5-day forecast window. No new ini is built: instead
-   the driver copies the spin-up restart in as the forecast's initial condition —
-   `cp ${SPIN_DIR}/CROCO_FILES/croco_rst.nc  ${FCST_DIR}/CROCO_FILES/croco_ini.nc`
-   — and patches the forecast `croco.in` to read it (`NRREC=1`, `initial:` →
-   `CROCO_FILES/croco_ini.nc`). Because the restart carries the model clock, the
-   run continues cleanly from `today`.
-6. **Run the forecast** (5 days) → writes the outputs you keep:
-   `${FCST_DIR}/CROCO_FILES/croco_his.nc` (history, e.g. every 6 h) and
-   `croco_avg.nc` (time-averaged fields), plus its own `croco_rst.nc`.
-
-### B.6 Run it
+## B.5 — Running it
 
 ```bash
 cd ~/seaforward/forecast
@@ -150,35 +242,48 @@ conda activate seaforward
 ./run_forecast_cycle.sh 2>&1 | tee fcst_$(date -u +%Y%m%d).log
 ```
 
-### B.7 Where the results go
+The driver prints a header showing the config, the child mode, whether tides are on,
+which binary it picked and the two date windows — worth reading before it starts, as a
+last check that it is running what you intended.
 
-Everything for one day lives in one dated folder under `model-runs`:
+!!! check
+    Two `MAIN: DONE` lines in the log — one for the spin-up, one for the forecast — and a dated folder under `model-runs/`.
+
+**If it takes a long time,** run it detached so a closed terminal doesn't stop it:
+
+```bash
+nohup ./run_forecast_cycle.sh > fcst_$(date -u +%Y%m%d).log 2>&1 &
+tail -f fcst_$(date -u +%Y%m%d).log        # Ctrl-C stops watching, not the run
+```
+
+## B.6 — Where the output goes
 
 ```
-forecast/model-runs/Canary_12/20260711/
-├── spinup/            # the 2-day spin-up run (produces croco_rst.nc)
-├── fcst/              # the 5-day forecast run
+forecast/model-runs/Canary_12/<date>/
+├── spinup/
 │   └── CROCO_FILES/
-│       ├── croco_his.nc     # forecast history  (what you plot)
-│       └── croco_avg.nc     # forecast averages
-├── downloaded_data/   # Mercator + GFS for the whole window (today−2…today+5) + forcing
-├── gen_spinup/        # where the spin-up ini/bry were generated
-└── gen_fcst/          # where the forecast bry was generated
+│       └── croco_rst.nc     # the restart the forecast starts from
+└── fcst/
+    └── CROCO_FILES/
+        ├── croco_his.nc     # forecast history — what you plot
+        └── croco_avg.nc     # forecast time-averages
 ```
 
-The forecast you care about is `fcst/CROCO_FILES/croco_his.nc` (and
-`croco_avg.nc`).
+Two roots, two jobs: `forecast/scratch/<CONFIG>/` is the workbench, holding the
+compiled binaries and the grid, reused every cycle.
+`forecast/model-runs/<CONFIG>/<date>/` holds the results you keep, one folder per day.
 
-!!! note
-    **scratch vs model-runs.** The built config (binary, grid) stays in `forecast/scratch/<CONFIG>/`; each day's **output** is written to `forecast/model-runs/<CONFIG>/<date>/`. Scratch is the workbench; model-runs holds the results you keep.
+## B.7 — Scheduling it
 
-### B.8 Automating (optional)
-
-To run daily at, say, 06:00 UTC, add a cron entry (`crontab -e`):
+To produce a fresh forecast every morning, add a cron entry with `crontab -e`. For
+06:00 UTC:
 
 ```
 0 6 * * *  /bin/bash -lc 'source ~/seaforward/env.sh && cd ~/seaforward/forecast && ./run_forecast_cycle.sh >> ~/seaforward/forecast/cron.log 2>&1'
 ```
 
-!!! note
-    **Data availability:** Mercator analysis-forecast and GFS for "today" must be published before your cron time. If a download comes back empty, push the cron later.
+The `-lc` matters: cron runs with a minimal environment, so the shell has to be a login
+shell for conda and the paths to resolve.
+
+!!! warning
+    **Check the data is published before your cron time.** Mercator and GFS for "today" appear at different hours. If a download returns nothing, the cycle fails at stage 1 — move the cron later rather than retrying.
