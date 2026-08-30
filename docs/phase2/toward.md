@@ -11,10 +11,10 @@ to it — generating the eddies and fronts the global product is too coarse to
 resolve, and letting the density field settle into balance with the bathymetry.
 During that adjustment the forecast is least trustworthy.
 
-An operational cycle avoids paying that cost inside the forecast by splitting the
-run into two phases:
+An operational cycle keeps the cold-start adjustment out of the forecast by splitting
+the run into two phases:
 
-```
+```text
         day:  −2      −1       0       +1  +2  +3  +4  +5
               │◄──── spin-up (2 days) ───►│
               │   ini + bry from the      │◄──────── forecast (5 days) ───────►│
@@ -67,7 +67,7 @@ FIX_GFS_LON=1                       # 1 = west of Greenwich (apply GFS lon fix),
 ```
 
 !!! note
-    These are the only lines you change for a new region. `CONFIG_NAME`, `EXTENTS`, and `FIX_GFS_LON` must match what you built in Phase 2 — otherwise the driver runs the wrong domain or crashes reading the weather. `FIX_GFS_LON` is the automatic version of the longitude fix from Step 5b: `1` for a western-hemisphere box (negative longitudes), `0` for an eastern one.
+    These are the only lines you change for a new region. `CONFIG_NAME`, `EXTENTS`, and `FIX_GFS_LON` must match what you built in Phase 2 — otherwise the driver runs the wrong domain or crashes reading the weather. `FIX_GFS_LON` is the automatic version of the longitude fix from Step 5: `1` for a western-hemisphere box (negative longitudes), `0` for an eastern one.
 
 **2. Launch the cycle.** From the `forecast/` directory, inside the environment:
 
@@ -106,31 +106,34 @@ cron entry (`crontab -e`) — for 06:00 UTC:
 0 6 * * *  /bin/bash -lc 'source ~/seaforward/env.sh && cd ~/seaforward/forecast && ./run_forecast_cycle.sh >> ~/seaforward/forecast/cron.log 2>&1'
 ```
 
-(Mercator and GFS for "today" must be published before your cron time; if a
-download comes back empty, push the cron later.)
+Mercator and GFS for "today" must be published before your cron time; if a download
+comes back empty, push the cron later.
 
-### The optional physics — tides and nesting
+### The optional physics — tides, nesting and rivers
 
-The same driver carries two optional extensions as runtime flags, so you select
+The same driver carries three optional extensions as runtime flags, so you select
 them at launch rather than keeping separate scripts:
 
 ```bash
-./run_forecast_cycle.sh                        # plain: one grid, no tides
+./run_forecast_cycle.sh                        # plain: one grid, no tides, no rivers
 ./run_forecast_cycle.sh --tides                # add tidal forcing
+./run_forecast_cycle.sh --rivers               # add river freshwater forcing
 ./run_forecast_cycle.sh --child 1way           # add an AGRIF nest (one-way)
 ./run_forecast_cycle.sh --child 2way           # add an AGRIF nest (two-way feedback)
-./run_forecast_cycle.sh --child 1way --tides   # both together
+./run_forecast_cycle.sh --child 1way --tides   # flags compose
 ```
 
-The two flags are independent and compose. **`--tides`** generates a tidal-forcing
-file per cycle and switches the output to hourly history / daily averages (full
-setup in **Phase 10**). **`--child 1way|2way`** runs the AGRIF nest described just
-above — the parent and child together, the parent supplying the child's boundaries
-each step — with `1way` passing information parent→child only and `2way` also
-feeding the child's solution back to the parent. Because tides and nesting are
-compile-time features, each combination is a pre-built binary the driver selects
-from the flags — but the daily cycle itself is unchanged. This chapter's plain
-forecast is the base; the flags layer physics on top.
+The flags are independent and compose. **`--tides`** generates a tidal-forcing file
+per cycle and switches the output to hourly history and daily averages (full setup in
+**Phase 10**). **`--rivers`** stages the pre-built river climatology into each cycle
+(**Phase 12**). **`--child 1way|2way`** runs the AGRIF nest described just above — the
+parent and child together, the parent supplying the child's boundaries each step —
+with `1way` passing information parent→child only and `2way` also feeding the child's
+solution back to the parent.
+
+Because tides, rivers and nesting are all compile-time features, each combination is a
+pre-built binary the driver selects from the flags — but the daily cycle itself is
+unchanged. This chapter's plain forecast is the base; the flags layer physics on top.
 
 Full details of the operational driver — every stage, the settings, the output
 layout — are in **Phase 3 (Running a Forecast)**.
