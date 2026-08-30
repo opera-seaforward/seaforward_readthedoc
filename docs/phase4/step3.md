@@ -1,85 +1,81 @@
-GFS comes from the **Copernicus Climate Data Store (CDS)** — a different service
+ERA5 comes from the **Copernicus Climate Data Store (CDS)** — a different service
 from CMEMS, with its own free account and API key. This is a one-time setup.
-Here's the whole thing, step by step.
 
 ### 3.1 Create a free CDS account
 
-1. Go to [Copernicus](https://cds.climate.copernicus.eu) and click **Login / register**
-   (top right). Create an account (email + password), then confirm via the email
-   they send and log in.
+Go to [the CDS](https://cds.climate.copernicus.eu) and click **Login / register**
+(top right). Create an account, confirm via the email they send, and log in.
 
 ### 3.2 Get your Personal Access Token
 
-2. While logged in, open your [profile page](https://cds.climate.copernicus.eu/profile)
-3. Find the section **"Personal Access Token"** (sometimes shown under an "API
-   key" / "How to use the CDS API" heading). It shows two lines you'll need —
-   something like:
-   ```
-   url: https://cds.climate.copernicus.eu/api
-   key: 12345678-abcd-1234-efgh-1234567890ab
-   ```
-   The long string after `key:` is your token. **Treat it like a password** — keep
-   it secret.
-
-!!! note
-    **The 2024–25 CDS change:** the CDS moved to a new system. The URL is now `https://cds.climate.copernicus.eu/api` (not the old `.../api/v2`), and the key is a single **token** (no `UID:APIKEY` colon form). If a tutorial shows the old two-part key with a colon, it's outdated — use the single-token form from your profile.
-
-### 3.3 Create the `~/.cdsapirc` file
-
-4. Create the credentials file in your home directory (the `cdsapi` library reads
-   it automatically):
-
-```bash
-nano ~/.cdsapirc
-```
-
-Paste **exactly** the two lines from your profile (with *your* token):
+While logged in, open your [profile page](https://cds.climate.copernicus.eu/profile)
+and find the **Personal Access Token** section (sometimes under an "API key" or "How
+to use the CDS API" heading). It shows two lines:
 
 ```
 url: https://cds.climate.copernicus.eu/api
 key: 12345678-abcd-1234-efgh-1234567890ab
 ```
 
-**What:** `url` is the CDS API endpoint; `key` is your personal token. **Why
-here:** `cdsapi.Client()` looks for `~/.cdsapirc` by default, so every GFS
-download finds your credentials with no extra flags.
+The string after `key:` is your token. **Treat it like a password.**
 
-Save (`Ctrl-O`, Enter), exit (`Ctrl-X`). Lock the permissions (it holds a secret):
+!!! note
+    **The 2024–25 CDS change.** The CDS moved to a new system: the URL is now `https://cds.climate.copernicus.eu/api` (not the old `.../api/v2`), and the key is a single **token** rather than the old `UID:APIKEY` colon form. A tutorial showing the two-part key is outdated — use the single token from your profile.
+
+### 3.3 Create the `~/.cdsapirc` file
+
+The `cdsapi` library reads this automatically, so no download needs extra flags:
+
+```bash
+nano ~/.cdsapirc
+```
+
+Paste **exactly** the two lines from your profile, with your own token:
+
+```
+url: https://cds.climate.copernicus.eu/api
+key: 12345678-abcd-1234-efgh-1234567890ab
+```
+
+Save (`Ctrl-O`, Enter), exit (`Ctrl-X`), then lock the permissions — it holds a
+secret:
 
 ```bash
 chmod 600 ~/.cdsapirc
 ```
 
-### 3.4 Install the client (if not already)
+### 3.4 Check the client is installed
 
-The `seaforward` conda env should already have `cdsapi`. If not:
+The `seaforward` environment already has `cdsapi`. If it's missing:
 
 ```bash
-pip install "cdsapi>=0.7.2"      # 0.7.2+ needed for the new CDS system
+pip install "cdsapi>=0.7.2"      # 0.7.2+ is required by the new CDS system
 ```
 
-### 3.5 Accept the GFS licence (one-time, per dataset)
+### 3.5 Accept the ERA5 licence
 
-5. You **must** accept the dataset's terms once, from the website, or downloads
-   fail with a licence error. Open the GFS single-levels dataset:
-   **https://cds.climate.copernicus.eu/datasets/reanalysis-GFS-single-levels**
-   → go to the **Download** tab → scroll to the bottom → under **Terms of use**,
-   click **Accept**. (Do this once; it's remembered for your account.)
+You must accept the dataset's terms once from the website, or downloads fail with a
+licence error. Open the ERA5 single-levels dataset:
 
-### 3.6 Verify it's all set
+**<https://cds.climate.copernicus.eu/datasets/reanalysis-era5-single-levels?tab=download>**
+
+Scroll to the bottom, and under **Terms of use** click **Accept**. This is remembered
+for your account.
+
+### 3.6 Verify
 
 ```bash
 python -c "import cdsapi; print('cdsapi OK')"
 ls -la ~/.cdsapirc && echo ".cdsapirc present"
 python - << 'EOF'
 import cdsapi
-cdsapi.Client()          # reads ~/.cdsapirc; errors here mean bad url/key
+cdsapi.Client()          # reads ~/.cdsapirc; errors here mean bad url or key
 print("CDS client initialised OK")
 EOF
 ```
 
 !!! check
-    ✅ All three should succeed: `cdsapi OK`, the `.cdsapirc` listing, and `CDS client initialised OK`.
+    All three succeed: `cdsapi OK`, the `.cdsapirc` listing, and `CDS client initialised OK`.
 
 !!! warning
-    ⚠️ **If `.cdsapirc` is missing or wrong** you'll get an *authentication* error when downloading — redo 3.2–3.3 (token copied correctly, new URL form). **If you get a *licence* error** for GFS despite the key working, you skipped 3.5 — accept the terms on the dataset page and retry.
+    **An *authentication* error when downloading** means `.cdsapirc` is missing or wrong — redo 3.2 and 3.3, checking the token copied cleanly and the URL has no `/v2`. **A *licence* error** despite a working key means you skipped 3.5.
