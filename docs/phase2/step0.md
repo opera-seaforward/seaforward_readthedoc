@@ -22,21 +22,24 @@ conda activate seaforward                  # the Python tools
 Now set **your region** (the only numbers you change for a different region):
 
 ```bash
-export CONFIG_NAME=Canary_12
-export LON_MIN=-22.0; export LON_MAX=-15.5      # west/east edges of your box
-export LAT_MIN=14.0;  export LAT_MAX=24.0       # south/north edges
-export RES=$(echo "1/12" | bc -l)               # grid spacing: 1/12° (~9 km)
-export EXTENTS=-23.5,-14.0,12.5,25.5            # DOWNLOAD box = your box + ~1.5° margin
+export CONFIG_NAME=Canary_12                     # your region's name (used everywhere)
+export LON_MIN=-22.0; export LON_MAX=-15.5       # west/east edges of your box
+export LAT_MIN=14.0;  export LAT_MAX=24.0        # south/north edges
+export RES=$(echo "1/12" | bc -l)                # grid spacing: 1/12° (~9 km)
+export EXTENTS=-23.5,-14.0,12.5,25.5             # DOWNLOAD box = your box + ~1.5° margin
 export HDAYS=2; export FDAYS=5                   # 2 days spin-up + 5 days forecast
 export YORIG=2000                                # time reference year (leave at 2000)
 
 # derived paths (config recipe vs run folder)
-export CONFIG_DIR=${CROCO_CONFIGS_ROOT}/${CONFIG_NAME}   # forecast/configs/Canary_12
-export FCAST=${CROCO_RUNS_ROOT}/${CONFIG_NAME}           # forecast/scratch/Canary_12
-export CF=${FCAST}/CROCO_FILES
+export CONFIG_DIR=${CROCO_CONFIGS_ROOT}/${CONFIG_NAME}   # the recipe: config files you edit
+export FCAST=${CROCO_RUNS_ROOT}/${CONFIG_NAME}           # the workbench: grid, data, binary
+export CF=${FCAST}/CROCO_FILES                           # where the grid and forcing files go
+
+# create the folders those paths name
 mkdir -p ${CONFIG_DIR} ${CF} \
          ${FCAST}/downloaded_data/MERCATOR \
          ${FCAST}/downloaded_data/GFS/for_croco
+
 echo "Building ${CONFIG_NAME}: lon ${LON_MIN}..${LON_MAX}, lat ${LAT_MIN}..${LAT_MAX}"
 ```
 
