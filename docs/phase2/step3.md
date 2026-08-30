@@ -19,15 +19,17 @@ print('east :', int(m[:,-1].sum()),'/',m.shape[0]); print('   S', strip(m[:,-1])
 **Mostly `O` → open (write `1`). Mostly `.` → closed (write `0`).**
 
 !!! check
-    ✅ **Canary_12 reads:**
-      - west: 123/123 ocean → **open (1)**
-      - east: ~1/123 ocean — it's the African coast → **closed (0)**
-      - north: 77/81 ocean → **open (1)**
-      - south: 67/81 ocean → **open (1)**
+    **Canary_12 reads:**
 
-So your boundary setting is **south=1, west=1, east=0, north=1**. Remember this —
-it appears in **three** places (the `crocotools_param.py` below, `cppdefs.h`, and
-it decides what the boundary file contains). All three must agree.
+    - west: 123/123 ocean → **open (1)**
+    - east: ~1/123 ocean — it's the African coast → **closed (0)**
+    - north: 77/81 ocean → **open (1)**
+    - south: 67/81 ocean → **open (1)**
+
+So your boundary setting is **south=1, west=1, east=0, north=1**. You will write it
+twice — as `obc_dict` in `crocotools_param.py` (Step 4) and as the `OBC_*` switches
+in `cppdefs.h` (Step 7) — and it also decides which boundaries `make_bry` builds
+data for. All three must agree.
 
 **Why it matters:** opening a boundary that's actually land is meaningless and
 can make the model unstable. Closing a boundary that's really open starves the
