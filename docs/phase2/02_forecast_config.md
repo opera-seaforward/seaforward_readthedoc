@@ -63,7 +63,7 @@ handful of global datasets, the **upstream data sources**, which you either
 **download and shape** each run or **build once** into the grid.
 
 <figure style="text-align: center; margin: 20px 0;">
-  <img src="../img/entire_forecast_build_chain.png" alt="The entire SEA-FORWARD forecast build chain" style="max-width: 100%; height: auto;">
+  <img src="../../img/entire_forecast_build_chain.png" alt="The entire SEA-FORWARD forecast build chain" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
     The whole forecast build chain, from upstream data through to downstream services. Dashed boxes — tides, rivers and the AGRIF child grid — are optional, covered in later chapters.
   </figcaption>
