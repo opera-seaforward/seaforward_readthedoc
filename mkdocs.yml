@@ -87,17 +87,16 @@ nav:
       - Get the SEA-FORWARD repository: phase1/step4.md
       - Create the `seaforward` conda environment: phase1/step5.md
       - The environment file `env.sh`: phase1/step6.md
-      - Build the NetCDF/HDF5:
-          - Build the NetCDF/HDF5 stack from source: phase1/step7.md
-          - The two ways to build: phase1/step70.md
-          - Download the source tarballs: phase1/step71.md
-          - Route A — build with the scripts (fast): phase1/routeA.md
-          - Route B — build by hand (learn / debug):
-              - Route B — build by hand (learn / debug): phase1/routeB.md
-              - HDF5: phase1/step72.md
-              - netcdf-c (built on top of HDF5): phase1/step73.md
-              - netcdf-fortran (built on top of netcdf-c): phase1/step74.md
-              - Verify the stack: phase1/step75.md
+      - Build the NetCDF/HDF5 stack from source: phase1/step7.md
+      - The two ways to build: phase1/step70.md
+      - Download the source tarballs: phase1/step71.md
+      - Route A — build with the scripts (fast): phase1/routeA.md
+      - Route B — build by hand (learn / debug):
+          - Overview: phase1/routeB.md
+          - HDF5: phase1/step72.md
+          - netcdf-c (built on top of HDF5): phase1/step73.md
+          - netcdf-fortran (built on top of netcdf-c): phase1/step74.md
+          - Verify the stack: phase1/step75.md
       - Get CROCO and croco_pytools: phase1/step8.md
       - Reference data (bathymetry & coastline): phase1/step9.md
       - Final check — is the machine build-ready?: phase1/step10.md
@@ -136,13 +135,13 @@ nav:
       - Step 0 — Session ritual (the HINDCAST track): phase4/step0.md
       - Step 1 — Build the grid (its own, in the hindcast track): phase4/step1.md
       - Step 2 — The hindcast `crocotools_param.py`: phase4/step2.md
-      - Step 3 — Set up GFS access (CDS account + API key): phase4/step3.md
+      - Step 3 — Set up ERA5 access (CDS account + API key): phase4/step3.md
       - Step 4 — Download the ocean (GLORYS): phase4/step4.md
-      - Step 5 — Download the atmosphere (GFS): phase4/step5.md
+      - Step 5 — Download the atmosphere (ERA5): phase4/step5.md
       - Step 6 — Build the initial condition: phase4/step6.md
       - Step 7 — Build the boundaries: phase4/step7.md
-      - Step 8 — The CROCO config files (Phase 2, with GFS differences): phase4/step8.md
-      - Step 9 — `croco.ini` for the GFS hindcast: phase4/step9.md
+      - Step 8 — The CROCO config files (Phase 2, with ERA5 differences): phase4/step8.md
+      - Step 9 — `croco.in` for the ERA5 hindcast: phase4/step9.md
       - Step 10 — The operational driver: phase4/step10.md
       - What you built (the hindcast CLI additions): phase4/built.md
       - Forecast vs hindcast — the mental model: phase4/forehin.md
@@ -161,41 +160,25 @@ nav:
       - Animations: phase5/step59_animations.md
   - Validation:
       - Validation: phase5/step58_validation.md
-  - AGRIF nesting:
-      - Overview: phase8/08_agrif.md
-      - Why bother — what two-way actually buys you: phase8/bother.md
-      - The hard constraints: phase8/constraint.md
-      - Step 1 — Choose the child box, and check it against the mask: phase8/step1.md
-      - Step 2 — Build the child grid: phase8/step2.md
-      - Step 3 — Build the child's initial condition: phase8/step3.md
-      - Step 4 — Assemble the run directory: phase8/step4.md
-      - Step 5 — `croco.in.1`, the child's runtime settings: phase8/step5.md
-      - Step 6 — Turn AGRIF on and compile: phase8/step6.md
-      - Step 7 — Run it (one-way): phase8/step7.md
-      - Step 8 — Switch to two-way, and measure it: phase8/step8.md
-      - Worked example 2 — a coastal child: phase8/example.md
-      - Gotchas — the short list: phase8/gotchas.md
-      - What this chapter does not cover: phase8/chapter.md
-  #- Nesting:
-      #- Overview: phase6/06_nesting.md
-      #- Step 0 — Session setup: phase6/step0.md
-      #- Step 1 — Create the child grid (finer resolution, same box): phase6/step1.md
-      #- Step 2 — Write the child `crocotools_param.py` (the vertical refinement): phase6/step2.md
-      #- Step 3 — Convert the parent output to Mercator format (the new step): phase6/step3.md
-      #- Step 4 — Build the child initial and boundary conditions: phase6/step4.md
-      #- Step 5 — Build the child config files (Phase-2 Steps 7–11, refined): phase6/step5.md
-      #- Step 6 — Compile the child: phase6/step6.md
-      #- Step 7 — Run the nested child: phase6/step7.md
-      #- Step 8:
-          #- Part A — Validate — does the finer grid resolve more? (the payoff): phase6/partA.md
-          #- Part B — The operational nesting driver (`run_nest_today.sh`): phase6/partB.md
+  - Nesting (offline):
+      - Overview: phase6/06_nesting.md
+      - Step 0 — Session setup: phase6/step0.md
+      - Step 1 — Create the child grid (finer resolution, same box): phase6/step1.md
+      - Step 2 — Write the child `crocotools_param.py` (the vertical refinement): phase6/step2.md
+      - Step 3 — Convert the parent output to Mercator format (the new step): phase6/step3.md
+      - Step 4 — Build the child initial and boundary conditions: phase6/step4.md
+      - Step 5 — Build the child config files (Phase-2 Steps 7–11, refined): phase6/step5.md
+      - Step 6 — Compile the child: phase6/step6.md
+      - Step 7 — Run the nested child: phase6/step7.md
+      - Step 8 — Part A — does the finer grid resolve more?: phase6/partA.md
+      - Step 8 — Part B — the operational nesting driver: phase6/partB.md
   - Region Gallery:
       - Overview: phase7/07_regions.md
       - Canary — `Canary_12` (1/12°): phase7/canary.md
       - Gulf of Guinea — `IGOG_12` (1/12°): phase7/guinea.md
       - Agulhas — `Agulhas_12` (1/12°) — *coming soon*: phase7/agulhas.md
       - The pattern — what always changes vs stays the same: phase7/pattern.md
-  - AGRIF nesting:
+  - AGRIF nesting (online):
       - Overview: phase8/08_agrif.md
       - Why bother — what two-way actually buys you: phase8/bother.md
       - The hard constraints: phase8/constraint.md
