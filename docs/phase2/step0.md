@@ -14,12 +14,10 @@ conda activate seaforward                  # the Python tools
   `CROCO_MODEL_DIR=…/code/croco`, `CROCO_PYTOOLS_DIR=…/code/croco_pytools`,
   `CROCO_DATA_ROOT=…/data`, `SEAFORWARD=…/sftools`, the compilers, and the
   `opt_seq` NetCDF paths.
-- `track.sh` sets the **per-track** variables — where configs and runs live:
-  - `forecast/track.sh` → `CROCO_CONFIGS_ROOT=…/forecast/configs`,
-    `CROCO_RUNS_ROOT=…/forecast/scratch`
-
-!!! important
-    **Why a track?** Sourcing `forecast/track.sh` sets the paths for the forecast workflow — configs under `forecast/configs`, runs under `forecast/scratch`. This document uses the **forecast** track throughout.
+- `track.sh` sets the **per-track** variables — where configs and runs live. The
+  forecast track gives `CROCO_CONFIGS_ROOT=…/forecast/configs` and
+  `CROCO_RUNS_ROOT=…/forecast/scratch`; the hindcast track points at
+  `hindcast/` instead. This document uses the forecast track throughout.
 
 Now set **your region** (the only numbers you change for a different region):
 
@@ -53,8 +51,9 @@ tools that interpolate global data onto your grid need data slightly *beyond*
 your grid edges. If the download box is too tight, `make_ini`/`make_bry` fail
 with "extents not sufficient."
 
-!!! warning 
-    ⚠️ **WATCH — the region variables live only in this terminal.** The scripts below read them; if one is missing, a tool guesses a wrong path and stops. If you open a fresh terminal later, re-run the whole Step 0 block first (the ritual **and** the region variables).
+**Why `bc -l`?** It computes `1/12` at full precision, so you never hand-round it
+to `0.0833` — the exact value is what makes the grid come out to the expected
+point count.
 
-!!! important
-    **`bc -l` for the resolution.** We compute `1/12` with `bc -l` so you never hand-round it to `0.0833`. The full-precision value is what makes the grid come out to the expected point count.
+!!! warning
+    **The region variables live only in this terminal.** The scripts below read them; if one is missing, a tool guesses a wrong path and stops. If you open a fresh terminal later, re-run the whole Step 0 block first — the ritual **and** the region variables.
