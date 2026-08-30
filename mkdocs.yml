@@ -91,12 +91,11 @@ nav:
       - The two ways to build: phase1/step70.md
       - Download the source tarballs: phase1/step71.md
       - Route A — build with the scripts (fast): phase1/routeA.md
-      - Route B — build by hand (learn / debug):
-          - Overview: phase1/routeB.md
-          - HDF5: phase1/step72.md
-          - netcdf-c (built on top of HDF5): phase1/step73.md
-          - netcdf-fortran (built on top of netcdf-c): phase1/step74.md
-          - Verify the stack: phase1/step75.md
+      - Route B — build by hand (learn / debug): phase1/routeB.md
+      - HDF5: phase1/step72.md
+      - netcdf-c (built on top of HDF5): phase1/step73.md
+      - netcdf-fortran (built on top of netcdf-c): phase1/step74.md
+      - Verify the stack: phase1/step75.md
       - Get CROCO and croco_pytools: phase1/step8.md
       - Reference data (bathymetry & coastline): phase1/step9.md
       - Final check — is the machine build-ready?: phase1/step10.md
