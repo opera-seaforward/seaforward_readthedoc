@@ -1,5 +1,5 @@
 Once the manual run works, wrap Steps 3–7 in a driver so one command produces a
-nested forecast. It's a sibling of the parent's `run_forecast_today.sh`, with two
+nested forecast. It's a sibling of the parent's `run_forecast_cycle.sh`, with two
 deliberate differences: **no spin-up** (a single forecast run from the nested IC),
 and the **ocean comes from the parent** (convert + make_ini/make_bry) instead of a
 Mercator download. The atmosphere reuses the parent's GFS.
@@ -8,7 +8,7 @@ Mercator download. The atmosphere reuses the parent's GFS.
 driver is on-demand and chained, not scheduled:
 ```bash
 cd ~/seaforward/forecast
-./run_forecast_today.sh     # 1) the 1/12° parent (produces croco_his.nc + GFS)
+./run_forecast_cycle.sh     # 1) the 1/12° parent (produces croco_his.nc + GFS)
 ./run_nest_today.sh         # 2) the 1/25° child, nested inside it
 ```
 
@@ -20,7 +20,7 @@ closes, and the output is captured to a log you can watch:
 ```bash
 cd ~/seaforward/forecast
 # parent first, in the background, logging to a timestamped file
-nohup ./run_forecast_today.sh > run_parent_$(date -u +%Y%m%d).log 2>&1 &
+nohup ./run_forecast_cycle.sh > run_parent_$(date -u +%Y%m%d).log 2>&1 &
 # then the child (wait for the parent to finish first, or chain with &&)
 nohup ./run_nest_today.sh     > run_nest_$(date -u +%Y%m%d).log   2>&1 &
 
@@ -36,7 +36,7 @@ tail -f run_nest_$(date -u +%Y%m%d).log
 - To run them **in sequence** unattended (child only after the parent finishes), chain
   with `&&`:
   ```bash
-  nohup bash -c './run_forecast_today.sh && ./run_nest_today.sh' \
+  nohup bash -c './run_forecast_cycle.sh && ./run_nest_today.sh' \
       > run_chain_$(date -u +%Y%m%d).log 2>&1 &
   ```
 

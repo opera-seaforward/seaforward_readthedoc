@@ -7,11 +7,12 @@ The sources involved:
 
 - **Global ocean forecast** (Mercator) → the initial condition and boundaries
 - **Atmosphere** (GFS) → the surface forcing
-- **Tides** (TPXO) → *optional*, skipped in this tide-free forecast
+- **Tides** (TPXO) → *optional*, skipped here
+- **Rivers** (Dai & Trenberth) → *optional*, skipped here
 
-(Bathymetry was the fourth source — already wired in at the grid, Step 2.) This
-guide produces the **tide-free** forecast, so you download and prepare the ocean
-and atmosphere, and stop.
+Bathymetry was the fifth source, already wired in at the grid (Step 2). This guide
+produces the **tide-free, river-free** forecast, so you download and prepare the
+ocean and the atmosphere, and stop.
 
 First set up the shared bits:
 
@@ -21,7 +22,7 @@ export RUN_DT="$(date -u +'%Y-%m-%d') 00:00:00"
 ```
 
 !!! warning
-    ⚠️ **WATCH — negative longitudes need `--domain=` with an equals sign.** Because your box is west of Greenwich, the domain string starts with `-`, and the command reader mistakes it for an option unless you attach it with `=`. Use `--domain="${EXTENTS}"`.
+    **Negative longitudes need `--domain=` with an equals sign.** Because your box is west of Greenwich, the domain string starts with `-`, and the command reader mistakes it for an option unless you attach it with `=`. Use `--domain="${EXTENTS}"`.
 
 ### 5a — Download the forcing data
 
@@ -48,7 +49,7 @@ python seaforward.py download_atmosphere \
 ```
 
 !!! check
-    ✅ **CHECK** — both `downloaded_data/MERCATOR` and `downloaded_data/GFS` now hold raw global files covering your download box.
+    Both `downloaded_data/MERCATOR` and `downloaded_data/GFS` now hold raw global files covering your download box.
 
 
 ### 5b — Prepare the model inputs
@@ -61,12 +62,12 @@ input: the **ocean** becomes the initial and boundary conditions, the
 
 ![build progress](../img/init_bound_conditions.png)
 
-*The global ocean forecast supplies the state your model starts from and the values that flow in at the open edges the one Mercator file you downloaded. The figure below shows how this is functionally implemented.*
+*The global ocean forecast supplies both the state your model starts from and the values that flow in at the open edges — both interpolated from the one Mercator file you downloaded. The figure below shows how this is implemented.*
 
 <figure style="text-align: center; margin: 20px 0;">
   <img src="../../img/ocean_model_U2.png" alt="Workflow for ingesting Global Ocean Forecast data" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
-    Workflow for ingesting Global Ocean Forecast (OM) data alongside <code>model_grid.nc</code> and <code>-run-date</code>, processed via SEA_FORWARD pytools (subset-clim-oce, subset-mod-oce, format-converter-oce) and the Ocean-to-model step (extrapolation &rarr; interpolation &rarr; processing-oce), producing <code>ocean-model</code>, <code>ocean-model-initial-input</code>, and <code>ocean-model-obc (open boundary conditions)-input</code> outputs linked to V1, C1, and D1.
+    Ingesting the global ocean forecast: the downloaded product, the model grid and the run date pass through the SEA-FORWARD pytools, which subset, convert and interpolate them onto your grid — producing the initial condition and the open boundary conditions.
   </figcaption>
 </figure>
 
@@ -80,7 +81,7 @@ python seaforward.py make_ini \
 ```
 
 !!! check
-    ✅ **CHECK** — it interpolates temp/salt/u/v onto the sigma layers and prints `Initial file created … croco_ini_MERCATOR_<date>_00.nc`.
+    It interpolates temp/salt/u/v onto the sigma layers and prints `Initial file created … croco_ini_MERCATOR_<date>_00.nc`.
 
 Build the **boundary conditions** (what flows in at the open edges over time):
 
@@ -91,18 +92,18 @@ python seaforward.py make_bry \
 ```
 
 !!! check
-    ✅ **CHECK** — it processes **south, west, north** and **skips east**. That's your `obc_dict` in action: it only builds data for the *open* boundaries. The mask, `obc_dict`, and the `OBC_*` switches all describe the same set of open edges.
+    It processes **south, west, north** and **skips east**. That's your `obc_dict` in action: it only builds data for the *open* boundaries. The mask, `obc_dict`, and the `OBC_*` switches all describe the same set of open edges.
 
 **From the atmosphere → surface forcing**
 
 ![build progress](../img/surface_forcing.png)
 
-*The global weather becomes the surface forcing — the ten files (wind, heat, radiation, pressure, humidity, precipitation) CROCO reads at every timestep. The figure below shows how this is functionally implemented*
+*The global weather becomes the surface forcing — the ten files (wind, heat, radiation, pressure, humidity, precipitation) CROCO reads at every timestep. The figure below shows how this is implemented.*
 
 <figure style="text-align: center; margin: 20px 0;">
   <img src="../../img/atmosphere_U3.png" alt="Workflow for preparing atmospheric forcing" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
-    Workflow for preparing atmospheric forcing from the Global Forecasting System (ATM), <code>-run-date</code>, and <code>model_grid.nc</code>, run through SEA_FORWARD pytools (subset-mod-atm, format-converter-atm) and the Ocean-to-model chain (extrapolation &rarr; processing-atm &rarr; interpolation &rarr; grid-transformation), yielding <code>atm-upstr-input</code> and <code>atm-model</code> outputs linked to C1, V1, and D1.
+    Preparing the atmospheric forcing: the downloaded GFS fields, the run date and the model grid pass through the SEA-FORWARD pytools, which subset, convert and interpolate them onto your grid — producing the surface forcing files CROCO reads at run time.
   </figcaption>
 </figure>
 
@@ -117,7 +118,7 @@ ls ${FCAST}/downloaded_data/GFS/for_croco/*.nc | wc -l   # expect 10
 ```
 
 !!! check
-    ✅ **CHECK** — it works through Temperature, Humidity, Precipitation, the four radiation fluxes, U/V wind, and pressure, then `10` files exist.
+    It works through Temperature, Humidity, Precipitation, the four radiation fluxes, U/V wind, and pressure, then `10` files exist.
 
 **Fix the GFS longitudes — only for western-hemisphere regions.** GFS labels
 longitude from 0 to 360; your model uses −180 to 180. For a region west of
@@ -154,8 +155,8 @@ print('done')
 PYEOF
 ```
 
-!!! check 
-    ✅ **CHECK** — re-run the check above; it should now say `covers? True` with forcing lon around your box. Eastern-hemisphere regions skip this — their GFS longitudes already fall in range.
+!!! check
+    Re-run the check above; it should now say `covers? True` with forcing lon around your box. Eastern-hemisphere regions skip this — their GFS longitudes already fall in range.
 
 
 ### 5c — Tides
@@ -177,14 +178,39 @@ For completeness, in the same download-then-shape pattern:
   you meet at Step 7.
 
 Because tides touch both the data preparation *and* the compile step, they are a
-chapter of their own. **See Phase 10 (Tides)** for the full build. You leave this
-source out of the tide-free forecast.
+chapter of their own. **See Phase 10 (Tides)** for the full build.
 
-### 5d — Confirm your inputs are in place
+### 5d — Rivers
+
+![build progress](../img/river_discharges.png)
+
+*Rivers are the one input that comes from land rather than from the global ocean or the atmosphere. For domains with a significant river mouth — a delta, an estuary — the freshwater they add is what keeps coastal salinity and stratification right.*
+
+This guide builds the **river-free** forecast, so you do not build this source here.
+For completeness, and to show where rivers differ from tides:
+
+- **There is nothing to download per cycle** — rivers use a fixed climatology (Dai &
+  Trenberth) already on disk. And unlike tides, the river file is **built once**, not
+  regenerated each cycle: a climatology repeats every year, so CROCO reads the right
+  day-of-year on any date.
+- **Shape the climatology onto your grid** with two tools: `dai_rivers.py` picks your
+  region's rivers by reading the grid, and `make_river_run.py` builds them into a
+  `croco_runoff.nc` runoff file plus the `psource` block for `croco.in`.
+- **Turn rivers on at compile time** with the `PSOURCE` / `PSOURCE_NCFILE` switches in
+  `cppdefs.h`, so a river run is a *different binary* — the same distinction you meet
+  at Step 7 and with tides.
+
+Because rivers touch the data preparation, the compile step *and* `croco.in`, they are
+a chapter of their own. **See Phase 12 (Rivers)** for the full build.
+
+### 5e — Confirm your inputs are in place
 
 ```bash
 ls -lh ${CF}/croco_ini_MERCATOR*.nc ${CF}/croco_bry_MERCATOR*.nc
 ls ${FCAST}/downloaded_data/GFS/for_croco/*.nc | wc -l   # 10
 ```
 
-You now have the two sources this forecast needs: the **ocean** (ini + bry) and the **atmosphere** (surface forcing). **Bathymetry** was already wired in at the grid (Step 2). **Tides** are the optional third source, skipped here. That is the full upstream picture for a forecast.
+You now have the two sources this forecast needs: the **ocean** (ini + bry) and the
+**atmosphere** (surface forcing). **Bathymetry** was already wired in at the grid
+(Step 2). **Tides** and **rivers** are the optional sources, skipped here. That is the
+full upstream picture for a forecast.

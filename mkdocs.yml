@@ -78,179 +78,154 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Hands-on Documentation: handsOn.md
-  - Setup:
+  - Phase 1 — Setup:
       - Overview: phase1/01_setup.md
-      #- 0. What you are building, in one picture: phase1/step0.md
       - System build tools: phase1/step1.md
-      #- System build tools: phase1/step2.md
-      #- Miniconda (the Python package manager): phase1/step3.md
       - Get the SEA-FORWARD repository: phase1/step4.md
-      - Create the `seaforward` conda environment: phase1/step5.md
+      - Create the conda environment: phase1/step5.md
       - The environment file `env.sh`: phase1/step6.md
-      - Build the NetCDF/HDF5:
-          - Build the NetCDF/HDF5 stack from source: phase1/step7.md
-          - The two ways to build: phase1/step70.md
-          - Download the source tarballs: phase1/step71.md
-          - Route A — build with the scripts (fast): phase1/routeA.md
-          - Route B — build by hand (learn / debug):
-              - Route B — build by hand (learn / debug): phase1/routeB.md
-              - HDF5: phase1/step72.md
-              - netcdf-c (built on top of HDF5): phase1/step73.md
-              - netcdf-fortran (built on top of netcdf-c): phase1/step74.md
-              - Verify the stack: phase1/step75.md
+      - Build the NetCDF/HDF5 stack: phase1/step7.md
+      - The two ways to build: phase1/step70.md
+      - Download the source tarballs: phase1/step71.md
+      - Route A — build with the scripts: phase1/routeA.md
+      - Route B — build by hand: phase1/routeB.md
+      - HDF5: phase1/step72.md
+      - netcdf-c: phase1/step73.md
+      - netcdf-fortran: phase1/step74.md
+      - Verify the stack: phase1/step75.md
       - Get CROCO and croco_pytools: phase1/step8.md
-      - Reference data (bathymetry & coastline): phase1/step9.md
-      - Final check — is the machine build-ready?: phase1/step10.md
-      - From now on — the every-session ritual: phase1/step11.md
+      - Reference data: phase1/step9.md
+      - Final check: phase1/step10.md
+      - The every-session ritual: phase1/step11.md
       - What you have now: phase1/now.md
       - Troubleshooting: phase1/trouble.md
-  - Building a Forecast Configuration:
+  - Phase 2 — Forecast Configuration:
       - Overview: phase2/02_forecast_config.md
-      - Step 0 — Set up your environment (every session starts here): phase2/step0.md
+      - Step 0 — Set up your environment: phase2/step0.md
       - Step 1 — Create the grid definition: phase2/step1.md
-      - Step 2 — Build the grid (run), then read its real size: phase2/step2.md
-      - Step 3 — Look at the land and decide your boundaries: phase2/step3.md
+      - Step 2 — Build the grid: phase2/step2.md
+      - Step 3 — Decide your boundaries: phase2/step3.md
       - Step 4 — Write `crocotools_param.py`: phase2/step4.md
       - Step 5 — Prepare the data: phase2/step5.md
-      - Step 6 — Copy the CROCO source files you'll edit: phase2/step6.md
-      - Step 7 — Edit `cppdefs.h` (the model's "features" switches): phase2/step7.md
-      - Step 8 — Edit `param.h` (the grid size): phase2/step8.md
-      - Step 9 — Edit `jobcomp` (where the source lives): phase2/step9.md
-      - Step 10 — Compile (build the program): phase2/step10.md
-      - Step 11 — Edit `croco.in` (the config-specific run settings): phase2/step11.md
+      - Step 6 — Copy the CROCO source files: phase2/step6.md
+      - Step 7 — Edit `cppdefs.h`: phase2/step7.md
+      - Step 8 — Edit `param.h`: phase2/step8.md
+      - Step 9 — Edit `jobcomp`: phase2/step9.md
+      - Step 10 — Compile: phase2/step10.md
+      - Step 11 — Edit `croco.in`: phase2/step11.md
       - Step 12 — Run it once to prove the config: phase2/step12.md
-      #- Step 13 — Run it once to prove the config: phase2/step13.md
       - What you have now: phase2/now.md
       - Going further — the AGRIF nest: phase2/further.md
       - Toward an operational workflow: phase2/toward.md
       - What you change for your own region: phase2/change.md
       - The consistency rules to remember: phase2/consistency.md
-  - Running a Forecast:
+  - Phase 3 — Running a Forecast:
       - Overview: phase3/03_forecast.md
-      - Part A — The single manual run (recap of Phase 2): phase3/partA.md
-      - Part B — The operational driver (daily cycle): phase3/partB.md
-      - Why spin up before forecasting?: phase3/before.md
-      - Quick reference — forecast: phase3/reference.md
-  - Running a Hindcast:
+      - Part A — The single manual run: phase3/partA.md
+      - Part B — The operational driver: phase3/partB.md
+      - Quick reference: phase3/reference.md
+  - Phase 4 — Running a Hindcast:
       - Overview: phase4/04_hindcast.md
-      - Step 0 — Session ritual (the HINDCAST track): phase4/step0.md
-      - Step 1 — Build the grid (its own, in the hindcast track): phase4/step1.md
+      - Step 0 — Session ritual: phase4/step0.md
+      - Step 1 — Build the grid: phase4/step1.md
       - Step 2 — The hindcast `crocotools_param.py`: phase4/step2.md
-      - Step 3 — Set up GFS access (CDS account + API key): phase4/step3.md
+      - Step 3 — Set up ERA5 access: phase4/step3.md
       - Step 4 — Download the ocean (GLORYS): phase4/step4.md
-      - Step 5 — Download the atmosphere (GFS): phase4/step5.md
+      - Step 5 — Download the atmosphere (ERA5): phase4/step5.md
       - Step 6 — Build the initial condition: phase4/step6.md
       - Step 7 — Build the boundaries: phase4/step7.md
-      - Step 8 — The CROCO config files (Phase 2, with GFS differences): phase4/step8.md
-      - Step 9 — `croco.ini` for the GFS hindcast: phase4/step9.md
+      - Step 8 — The CROCO config files: phase4/step8.md
+      - Step 9 — `croco.in` for the hindcast: phase4/step9.md
       - Step 10 — The operational driver: phase4/step10.md
-      - What you built (the hindcast CLI additions): phase4/built.md
-      - Forecast vs hindcast — the mental model: phase4/forehin.md
-      - Quick reference — hindcast: phase4/reference.md
-      - Troubleshooting (hindcast-specific): phase4/trouble.md
-  - Post-processing:
+      - What you built: phase4/built.md
+      - Forecast vs hindcast: phase4/forehin.md
+      - Quick reference: phase4/reference.md
+      - Troubleshooting: phase4/trouble.md
+  - Phase 5 — Post-processing:
       - Overview: phase5/05_postprocessing.md
       - Gallery: phase5/00_gallery.md
       - Setup: phase5/step51_setup.md
       - Open data: phase5/step52_open_data.md
-      - Horizontal section: phase5/step53_horizontal_section.md
-      - Vertical section: phase5/step54_vertical_section.md
-      - Vertical Profile: phase5/step55_vertcal_profil.md
-      - Hovmöller diagrams: phase5/step56_hovm_ller_diagrams.md
-      - Time series: phase5/step57_time_series.md
-      - Animations: phase5/step59_animations.md
+      - Surface fields: phase5/surface.md
+      - Dynamics: phase5/dynamics.md
+      - Vertical structure: phase5/vertical.md
+      - Through time: phase5/time.md
   - Validation:
       - Validation: phase5/step58_validation.md
-  - AGRIF nesting:
-      - Overview: phase8/08_agrif.md
-      - Why bother — what two-way actually buys you: phase8/bother.md
-      - The hard constraints: phase8/constraint.md
-      - Step 1 — Choose the child box, and check it against the mask: phase8/step1.md
-      - Step 2 — Build the child grid: phase8/step2.md
-      - Step 3 — Build the child's initial condition: phase8/step3.md
-      - Step 4 — Assemble the run directory: phase8/step4.md
-      - Step 5 — `croco.in.1`, the child's runtime settings: phase8/step5.md
-      - Step 6 — Turn AGRIF on and compile: phase8/step6.md
-      - Step 7 — Run it (one-way): phase8/step7.md
-      - Step 8 — Switch to two-way, and measure it: phase8/step8.md
-      - Worked example 2 — a coastal child: phase8/example.md
-      - Gotchas — the short list: phase8/gotchas.md
-      - What this chapter does not cover: phase8/chapter.md
-  #- Nesting:
-      #- Overview: phase6/06_nesting.md
-      #- Step 0 — Session setup: phase6/step0.md
-      #- Step 1 — Create the child grid (finer resolution, same box): phase6/step1.md
-      #- Step 2 — Write the child `crocotools_param.py` (the vertical refinement): phase6/step2.md
-      #- Step 3 — Convert the parent output to Mercator format (the new step): phase6/step3.md
-      #- Step 4 — Build the child initial and boundary conditions: phase6/step4.md
-      #- Step 5 — Build the child config files (Phase-2 Steps 7–11, refined): phase6/step5.md
-      #- Step 6 — Compile the child: phase6/step6.md
-      #- Step 7 — Run the nested child: phase6/step7.md
-      #- Step 8:
-          #- Part A — Validate — does the finer grid resolve more? (the payoff): phase6/partA.md
-          #- Part B — The operational nesting driver (`run_nest_today.sh`): phase6/partB.md
-  - Region Gallery:
+  - Phase 6 — Nesting (offline):
+      - Overview: phase6/06_nesting.md
+      - Step 0 — Session setup: phase6/step0.md
+      - Step 1 — Create the child grid: phase6/step1.md
+      - Step 2 — The child `crocotools_param.py`: phase6/step2.md
+      - Step 3 — Convert the parent output: phase6/step3.md
+      - Step 4 — Child initial and boundary conditions: phase6/step4.md
+      - Step 5 — Build the child config files: phase6/step5.md
+      - Step 6 — Compile the child: phase6/step6.md
+      - Step 7 — Run the nested child: phase6/step7.md
+      - Step 8a — Does the finer grid resolve more?: phase6/partA.md
+      - Step 8b — The nesting driver: phase6/partB.md
+  - Phase 7 — Region Gallery:
       - Overview: phase7/07_regions.md
-      - Canary — `Canary_12` (1/12°): phase7/canary.md
-      - Gulf of Guinea — `IGOG_12` (1/12°): phase7/guinea.md
-      - Agulhas — `Agulhas_12` (1/12°) — *coming soon*: phase7/agulhas.md
-      - The pattern — what always changes vs stays the same: phase7/pattern.md
-  - AGRIF nesting:
+      - Canary — `Canary_12`: phase7/canary.md
+      - Gulf of Guinea — `IGOG_12`: phase7/guinea.md
+      - Agulhas — `Agulhas_12`: phase7/agulhas.md
+      - What changes, what stays the same: phase7/pattern.md
+  - Phase 8 — AGRIF nesting (online):
       - Overview: phase8/08_agrif.md
-      - Why bother — what two-way actually buys you: phase8/bother.md
+      - Why two-way nesting?: phase8/bother.md
       - The hard constraints: phase8/constraint.md
-      - Step 1 — Choose the child box, and check it against the mask: phase8/step1.md
+      - Step 1 — Choose the child box: phase8/step1.md
       - Step 2 — Build the child grid: phase8/step2.md
-      - Step 3 — Build the child's initial condition: phase8/step3.md
+      - Step 3 — The child's initial condition: phase8/step3.md
       - Step 4 — Assemble the run directory: phase8/step4.md
-      - Step 5 — `croco.in.1`, the child's runtime settings: phase8/step5.md
+      - Step 5 — `croco.in.1`: phase8/step5.md
       - Step 6 — Turn AGRIF on and compile: phase8/step6.md
       - Step 7 — Run it (one-way): phase8/step7.md
-      - Step 8 — Switch to two-way, and measure it: phase8/step8.md
-      - Worked example 2 — a coastal child: phase8/example.md
-      - Gotchas — the short list: phase8/gotchas.md
+      - Step 8 — Switch to two-way: phase8/step8.md
+      - Worked example — a coastal child: phase8/example.md
+      - Gotchas: phase8/gotchas.md
       - What this chapter does not cover: phase8/chapter.md
-  - Worked example:
+  - Phase 9 — Worked example:
       - Overview: phase9/09_agulhas.md
-      - Phase A — the parent: phase9/phaseA.md
-      - Phase B — the AGRIF child: phase9/phaseB.md
-      - Phase C — the driver: phase9/phaseC.md
+      - Part A — the parent: phase9/phaseA.md
+      - Part B — the AGRIF child: phase9/phaseB.md
+      - Part C — the driver: phase9/phaseC.md
       - Checking the nested run: phase9/checking.md
       - The numbers, collected: phase9/numbers.md
-      - What Agulhas taught that IGOG didn't: phase9/taught.md
-  - Tides:
+      - What Agulhas taught: phase9/taught.md
+  - Phase 10 — Tides:
       - Overview: phase10/10_tides.md
-      - Step 1 — the tide tool: phase10/step1.md
-      - Step 2 — the TPXO data and its param file: phase10/step2.md
-      - Step 3 — generate and check: phase10/step3.md
-      - Step 4 — turn tides on in the config: phase10/step4.md
-      - Step 5 — output intervals must change for tides: phase10/step5.md
-      - Step 6 — prove it on the parent: phase10/step6.md
-      - Step 7 — the operational option: phase10/step7.md
-      - What this buys you, and its honest limit: phase10/what.md
-      - Recap — the whole tide path: phase10/recap.md
-  - Ocean-Forecasting Architecture:
+      - Step 1 — The tide tool: phase10/step1.md
+      - Step 2 — TPXO data and its param file: phase10/step2.md
+      - Step 3 — Generate and check: phase10/step3.md
+      - Step 4 — Turn tides on: phase10/step4.md
+      - Step 5 — Output intervals: phase10/step5.md
+      - Step 6 — Prove it on the parent: phase10/step6.md
+      - Step 7 — The operational option: phase10/step7.md
+      - What this buys you: phase10/what.md
+      - Recap: phase10/recap.md
+  - Phase 11 — Architecture:
       - Overview: phase11/11_architecture.md
-      - Where the reference architecture comes from: phase11/where.md
-      - The value chain, and the three roles: phase11/value.md
-      - The map — SEA-FORWARD's components in the value chain: phase11/map.md
-      - What changes when the system runs operationally: phase11/changes.md
+      - Where the reference comes from: phase11/where.md
+      - The value chain and three roles: phase11/value.md
+      - The map — components in the chain: phase11/map.md
+      - Running operationally: phase11/changes.md
       - Why this framing matters: phase11/why.md
       - References: phase11/references.md
       - Regenerating the diagram: phase11/regenerating.md
-  - River (Runoff) Forcing in SEA-FORWARD:
+  - Phase 12 — River Forcing:
       - Overview: phase12/12_rivers.md
       - What are we doing, and why?: phase12/1.md
-      - The data — Dai & Trenberth river climatology: phase12/2.md
+      - The Dai & Trenberth climatology: phase12/2.md
       - Step 1 — Extract your region's rivers: phase12/3.md
       - Step 2 — Build the runoff file: phase12/4.md
-      - Step 3 — Turn rivers ON in `cppdefs.h`: phase12/5.md
+      - Step 3 — Turn rivers on in `cppdefs.h`: phase12/5.md
       - Step 4 — List the rivers in `croco.in`: phase12/6.md
       - Step 5 — Recompile CROCO: phase12/7.md
       - Step 6 — A quick 2-day test: phase12/8.md
-      - How the automatic `--rivers` flag works: phase12/9.md
+      - The `--rivers` flag: phase12/9.md
       - Doing this for a new region: phase12/10.md
-      - Notes and gotchas (learned the hard way): phase12/11.md
+      - Notes and gotchas: phase12/11.md
   - Notebooks Toolkit:
       - Overview: notebooks/00_notebooks_overview.md
       - Before you start: notebooks/01_before_you_start.md
@@ -260,5 +235,5 @@ nav:
       - Validate all cycles (batch): notebooks/05_validate_all_cycles.md
       - Validation crontab: notebooks/06_validation_crontab.md
       - Notebook notes and language: notebooks/07_notebook_notes_and_language.md
-      - Guided exercises (from 03_exercises): notebooks/08_guided_exercises.md
-      - Sensitivity analysis (from 04_sensitivity): notebooks/09_sensitivity_analysis.md
+      - Guided exercises: notebooks/08_guided_exercises.md
+      - Sensitivity analysis: notebooks/09_sensitivity_analysis.md

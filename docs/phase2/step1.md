@@ -1,5 +1,5 @@
-You run a helper that writes a small text file describing the grid. In the new
-repo the config generators live under `sftools/config`:
+You run a helper that writes a small text file describing the grid. The config
+generators live under `sftools/config`:
 
 ```bash
 cd ${SEAFORWARD}/config
@@ -22,5 +22,8 @@ and spacing. Also notice `topo_file` and `shp_file`: they point at your
 `croco_files_dir`, which is where the grid will be written. `Ctrl-X` to exit
 (don't change anything).
 
+!!! note
+    **`topo_file` is a decision point.** It is the only place the bathymetry source is chosen. Once Step 2 has run, that choice is baked into `croco_grd.nc` — and any nested child grid you build later inherits it. If you want a different bathymetry than the default, change it here.
+
 !!! check
-    ✅ **CHECK** — the box matches what you set; `dlon = dlat ≈ 0.083333` (that's 1/12°). The "(79x121 points)" is only an **estimate**; the real size comes from the next step.
+    The box matches what you set, and `dlon = dlat ≈ 0.083333` (that's 1/12°). The "(79x121 points)" is only an **estimate** — the real size comes from the next step.

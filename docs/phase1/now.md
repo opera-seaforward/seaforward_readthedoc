@@ -4,8 +4,8 @@
 ├── env.sh                     # sourced each session (paths + compilers + NetCDF)
 ├── environment.yml            # the conda environment definition
 ├── install/                   # 00..04 build scripts (the downloaded sources are git-ignored)
-├── sftools/                   # the Python CLI + vendored croco_pytools
-├── docs/                      # the step-by-step guides (this document is docs/01_setup.md)
+├── sftools/                   # the Python CLI + SEA-FORWARD's croco_pytools
+├── docs/                      # the step-by-step guides
 ├── code/                      # obtained by install/04 — git-ignored
 │   ├── croco/                 # CROCO model source
 │   └── croco_pytools/         # pre-processing toolbox (Fortran helpers compiled)

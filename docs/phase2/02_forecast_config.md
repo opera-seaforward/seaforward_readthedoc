@@ -1,6 +1,6 @@
-# Phase 2 — Run a Forecast Locally
+# Phase 2 — Building a Forecast Configuration
 
-<!-- <img src="../img/phase2.png" alt="Phase 2" tyle="width: 100%; height: 250px; object-fit: contain;" /> -->
+<!-- <img src="../img/phase2.png" alt="Phase 2" style="width: 100%; height: 250px; object-fit: contain;" /> -->
 
 ![Phase 2](../img/phase2.jpeg)
 
@@ -14,20 +14,32 @@ running one wrapper script — is the point: you finish knowing _what_ every set
 does and _why_ it is there, which is exactly the knowledge that automating the run
 later depends on.
 
-For the initial condition and open boundaries we use the **Mercator** global
-analysis-and-forecast product; for the surface forcing we use **GFS**. The worked
-example is **Canary_12**, a 1/12° domain off North-West Africa (22°W–15.5°W,
-14°N–24°N). To build your own region you change only a handful of the values you
-edit here — and because you edited them by hand, you will know exactly which ones.
+The data sources for this build:
+
+- **Ocean** (initial condition and open boundaries) — the Mercator global
+  analysis-and-forecast product.
+- **Atmosphere** (surface forcing) — GFS.
+
+The worked example is **Canary_12**, a 1/12° domain off North-West Africa
+(22°W–15.5°W, 14°N–24°N). To build your own region you change only a handful of the
+values you edit here.
 
 !!! note
-    **A note on scope — this is not yet a fully operational forecast.** A real operational system does two things this manual run does not: it gives the forecast a proper **spin-up** (a short run that lets the regional model settle into balance and provides the forecast's initial state, instead of a cold start from the global model), and it runs **automatically on a schedule**. Here we do a single cold-started run by hand. That is the correct place to begin — it is the forecast that the operational cycle wraps a spin-up around and repeats daily. The step from this manual run to the automated, spun-up workflow is introduced at the end of this chapter (_Toward an operational workflow_) and built in Phase 3.
+    **This is not yet an operational forecast.** The run here is manual and cold-started. An operational system adds a spin-up and runs on a schedule — Phase 3 builds that.
 
 !!! important
-    **Prerequisite.** You have finished Phase 1 (Setup): the `seaforward` conda environment exists `nf-config --prefix` shows `~/seaforward/opt_seq`, CROCO is in `~/seaforward/code/croco`, and the bathymetry data is under `~/seaforward/data/DATASETS_CROCOTOOLS/`.
+    **Prerequisite.** You have finished Phase 1 (Setup): the `seaforward` conda environment exists, `nf-config --prefix` shows `~/seaforward/opt_seq`, CROCO is in `~/seaforward/code/croco`, and the bathymetry data is under `~/seaforward/data/DATASETS_CROCOTOOLS/`.
 
-!!! important
-    **How to read this guide.** - When a step **edits a file**, you open it in `nano`; the guide tells you what to **find** and what to **change it to**, with a **What / Why** for each edit. - A few steps (downloading data, building the grid, compiling) are run rather than edited — the guide explains what each is doing. - **✅ CHECK** shows what a correct result looks like. - **⚠️ WATCH** marks a trap. - A **workflow diagram** opens each step, with the piece that step produces highlighted, so you always see where you are in the build.
+**How to read this guide.**
+
+- When a step **edits a file**, you open it in `nano`; the guide tells you what to
+  **find** and what to **change it to**, with a **What / Why** for each edit.
+- A few steps — downloading data, building the grid, compiling — are run rather
+  than edited, and the guide explains what each is doing.
+- **✅ CHECK** shows what a correct result looks like.
+- **⚠️ WATCH** marks a trap.
+- A **workflow diagram** opens each step, with the piece that step produces
+  highlighted, so you always see where you are in the build.
 
 ### nano crash course
 
@@ -43,39 +55,19 @@ arrow keys           move around; just type to insert text
 `Ctrl-W` (search) is the main tool — you use it to find the line to change in each
 file.
 
-## The idea behind the whole thing
+## The upstream data — what feeds your model
 
-A regional ocean model **takes a global ocean and weather product and adds fine detail over your region**. You build it in two phases:
-
-- **Phase A — prepare the data:** make a grid, decide its boundaries, download the
-  global ocean and weather, and turn them into the model's starting state, edge
-  values, and surface forcing.
-
-- **Phase B — set up and run the model:** tell CROCO about your grid and physics
-  (by editing four text files), compile it into a program, and run it.
-
-Everything you edit by hand is _configuration_ — text that describes your region
-to the model. Understanding that configuration is the whole point.
-
-## The upstream data — what feeds your model, and what you choose
+A regional ocean model takes a global ocean and weather product and adds fine
+detail over your region. Before the steps, understand _what_ the model eats: a
+handful of global datasets, the **upstream data sources**, which you either
+**download and shape** each run or **build once** into the grid.
 
 <figure style="text-align: center; margin: 20px 0;">
-  <img src="../../img/entire_forecast_build_chain.png" alt="the three dashed boxes (tides, rivers and AGRIF child)" style="max-width: 100%; height: auto;">
+  <img src="../../img/entire_forecast_build_chain.png" alt="The entire SEA-FORWARD forecast build chain" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
-    The three dashed boxes (tides, rivers and AGRIF child) represent optional or conditional build steps depending on the domain configuration and forecast capabilities enabled.
+    The whole forecast build chain, from upstream data through to downstream services. Dashed boxes — tides, rivers and the AGRIF child grid — are optional, covered in later chapters.
   </figcaption>
 </figure>
-
-_The whole forecast build. Each step below highlights the piece it produces; the two dashed boxes (tides, AGRIF child) are optional add-ons covered in later chapters._
-
-Before the steps, understand _what_ the model eats. A regional model doesn't
-invent the ocean — it takes global datasets, the **upstream data sources**, and
-refines them over your box. There are only a handful, and each one you either
-**download and shape** (a per-cycle input) or **build once** (the grid). Knowing
-which source does what is what lets you decide, later, what to change for a
-different run.
-
-Here is everything, and the role each plays:
 
 | upstream source               | what it gives the model                   | product             | you set it in                                             |
 | ----------------------------- | ----------------------------------------- | ------------------- | --------------------------------------------------------- |
@@ -88,32 +80,26 @@ Here is everything, and the role each plays:
 Read the roles, because they tell you _where_ each enters:
 
 - **Bathymetry** is not forcing — it's the shape of the basin the model solves
-  in. It's baked into `croco_grd.nc` at grid build and never touched again. The
+  in. It's baked into `croco_grd.nc` at grid build and never touched again: the
   one upstream source you don't regenerate each run.
 - **The global ocean forecast** is the big one. It gives the _initial condition_
   (the ocean state at t=0, from `make_ini`) and the _boundary conditions_ (what
   flows in at your open edges over time, from `make_bry`). This is the ocean your
-  model refines. It comes from **Mercator**, the global ocean forecast product.
-- **Atmospheric forcing** is the weather that drives the ocean from above. It
-  comes from **GFS**, the global weather forecast.
+  model refines.
+- **Atmospheric forcing** is the weather that drives the ocean from above.
 - **Tides** are optional and added separately (Phase 10). No global ocean product
   carries tides, so if your domain has a shelf or coast where the tide matters,
-  you add it from TPXO. If your domain is deep open ocean, you skip it.
-- **Rivers** add coastal freshwater as point sources. They are built once per
-  region as a repeating seasonal climatology (Dai & Trenberth), then staged
-  automatically each cycle with the `--rivers` flag — the same optional-add-on
-  pattern as tides. Wire them in for domains where a big river mouth matters
-  (see **Phase 12, Rivers**).
+  you add it from TPXO. Deep open-ocean domains skip it.
+- **Rivers** add coastal freshwater as point sources, built once per region as a
+  repeating seasonal climatology (Dai & Trenberth) and then staged automatically
+  each cycle with the `--rivers` flag (Phase 12).
 
-So as you go through the steps, notice that **three sources are being wired in**:
-the bathymetry (Step 2, into the grid), the global ocean forecast (Steps 4–5, ini + bry),
-and the atmosphere (Steps 5, 7, the forcing). Tides come later as an add-on. When
-you build your own region, _these_ are the things you'd reconsider — and the table
-above is your checklist.
+Three sources are wired in during this chapter: the bathymetry (Step 2), the
+global ocean (Steps 4–5), and the atmosphere (Steps 5 and 7).
 
 ### The build at a glance
 
-The twelve steps fall into four natural stages:
+The twelve steps fall into four stages:
 
 | stage     | steps | what you produce                                                                                 |
 | --------- | ----- | ------------------------------------------------------------------------------------------------ |

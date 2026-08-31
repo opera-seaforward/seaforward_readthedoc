@@ -1,0 +1,134 @@
+commit 03a6d7f0f586d7fffc9306a0ca2e3d73aed10e90
+Author: babettetchonang <tadjom@yahoo.fr>
+Date:   Fri Jul 17 03:40:00 2026 -0500
+
+    Agulhas chapter: compare daily means, not snapshots (child SSH gap 32% -> 8%)
+
+diff --git a/docs/09_agulhas.md b/docs/09_agulhas.md
+index e992e32..3b3aa4d 100755
+--- a/docs/09_agulhas.md
++++ b/docs/09_agulhas.md
+@@ -1235,6 +1235,108 @@ The picture changes completely:
+   score being diluted by easy deep water outside the box.
+ - **SSH: the child is genuinely worse** over the same water — 0.0677 against 0.0514.
+ 
++### But the SSH comparison has a second flaw: means vs snapshots
++
++Mercator's global attributes say it plainly:
++
++```bash
++python3 -c "
++import xarray as xr
++m = xr.open_dataset('.../MERCATOR_20260717_00.nc')
++for k,v in m.attrs.items(): print('%-12s %s' % (k,v))
++"
++```
++```
++title        daily mean fields from Global Ocean Physics Analysis and Forecast
++```
++
++**Mercator's fields are daily means.** Everything above compared them against CROCO
++*instantaneous* history records. That penalises the finer grid for variability the
++reference has already averaged away — and a 2.5 km grid sub-stepping 3× has a lot more
++high-frequency energy than a 9 km one.
++
++(The variable's own `cell_methods` says only `area: mean`, which is why this is easy to
++miss. The global `title` is the authority.)
++
++Compare like with like. `croco_avg.nc` holds **6-hourly** means (the driver sets
++`NAVG` to 6 h), so average four consecutive records to build the day:
++
++```bash
++D=~/seaforward/forecast/model-runs/Agulhas_AGRIF/20260717_1way/spinup/CROCO_FILES
++cp $D/croco_avg.nc /tmp/ag_pavg.nc; cp $D/croco_avg.nc.1 /tmp/ag_cavg.nc
++
++cd ~/seaforward
++python3 << 'PYEOF'
++import xarray as xr, numpy as np, pandas as pd
++MERC = ('forecast/model-runs/Agulhas_AGRIF/20260717_1way/'
++        'downloaded_data/MERCATOR/MERCATOR_20260717_00.nc')
++m = xr.open_dataset(MERC)
++T0, T1 = 9693.0, 9694.0          # day 2 of the spin-up
++
++def daily(f):
++    d = xr.open_dataset(f, decode_times=False)
++    t = d.scrum_time.values/86400.0
++    k = np.where((t > T0) & (t <= T1))[0]      # the four 6h means inside the day
++    return d, d.zeta.isel(time=k).mean('time').where(d.mask_rho==1).values
++
++p, pz = daily('/tmp/ag_pavg.nc')
++c, cz = daily('/tmp/ag_cavg.nc')
++
++# Mercator daily means are LABELLED AT THE START of their day -> take T0's label,
++# not the window centre. argmin on the centre sits equidistant between two records.
++k = int(np.abs(m.time.values - np.datetime64(
++        pd.Timestamp('2000-01-01') + pd.Timedelta(days=T0))).argmin())
++zos = m.zos.isel(time=k)
++
++def diff(ds, z, mask=None):
++    lo, la = ds.lon_rho.values, ds.lat_rho.values
++    mi = zos.interp(longitude=xr.DataArray(lo,dims=['eta','xi']),
++                    latitude =xr.DataArray(la,dims=['eta','xi'])).values
++    mi = np.where(ds.mask_rho.values==1, mi, np.nan)
++    zz = z.copy()
++    if mask is not None: zz = np.where(mask, zz, np.nan); mi = np.where(mask, mi, np.nan)
++    d = (zz - np.nanmean(zz)) - (mi - np.nanmean(mi))
++    return float(np.sqrt(np.nanmean(d**2)))
++
++lo0,lo1 = float(c.lon_rho.min()), float(c.lon_rho.max())
++la0,la1 = float(c.lat_rho.min()), float(c.lat_rho.max())
++inbox = ((p.lon_rho.values>=lo0)&(p.lon_rho.values<=lo1)&
++         (p.lat_rho.values>=la0)&(p.lat_rho.values<=la1))
++
++print('daily-mean SSH anomaly RMSE (m):')
++print('  parent whole domain    %.4f' % diff(p, pz))
++print('  parent child box only  %.4f   <- fair' % diff(p, pz, inbox))
++print('  child                  %.4f' % diff(c, cz))
++PYEOF
++```
++
++![Agulhas AGRIF daily-mean SSH](img/agulhas_ssh_daily.png)
++
++*Daily-mean SSH anomaly, both grids against Mercator's daily mean for the same day.*
++
++```
++daily-mean SSH anomaly RMSE (m):
++  parent whole domain    0.0527
++  parent child box only  0.0481   <- fair
++  child                  0.0520
++```
++
++Side by side with the snapshot comparison:
++
++| | instantaneous | daily mean |
++|---|---|---|
++| parent (child box) | 0.0514 | 0.0481 |
++| child | **0.0677** | **0.0520** |
++| child penalty | **+32%** | **+8%** |
++
++**Averaging removed three-quarters of the gap.** Most of what looked like the child
++being worse was high-frequency variability the daily-mean reference had already
++smoothed out.
++
++An 8% gap survives — same water, both 24-hour means. Small, and consistent with the
++child resolving shelf structure Mercator cannot represent, but not zero, and this data
++cannot distinguish that from genuine error.
++
+ ### What that actually means
+ 
+ Not that the nest is broken. Compare Phase 8's worked example 2, where the child was
+@@ -1258,10 +1360,12 @@ A pattern across three nests is suggestive:
+ |---|---|---|
+ | São Tomé | deep, all edges open ocean | **much better** (0.0042 vs 0.0141) |
+ | IGOG coastal | shelf, marched edges | **much worse** (0.0559 vs 0.0139) |
+-| Agulhas | shelf + steep break | **slightly worse** (0.0677 vs 0.0514) |
++| Agulhas | shelf + steep break | **8% worse** (0.0520 vs 0.0481, daily means) |
+ 
+ Children over deep water beat their parents. Children over shelves don't — at least not
+-by this metric, against this reference.
++by this metric, against this reference. But note how much of the Agulhas "gap" turned
++out to be a sampling artifact once means were compared with means: a conclusion drawn
++from the instantaneous number would have been four times too harsh.
+ 
+ > **The honest limit of all of this.** Every comparison in this chapter is against
+ > Mercator, which supplied the initial and boundary conditions. It tests

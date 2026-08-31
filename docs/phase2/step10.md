@@ -5,7 +5,7 @@
 This turns the source + your compile-time files into an executable called `croco`.
 It's a command, not an edit — but one detail matters a lot.
 
-First, **stage** the three compile-time files from the recipe folder into the run
+First, **stage** the three compile-time files from the config folder into the run
 folder (where the build happens). `croco.in` is *not* needed yet — it's a run-time
 file, edited next in Step 11 — so only these three go in now:
 
@@ -30,10 +30,11 @@ Leaving conda lets the system linker use your `opt_seq` build. Sourcing `env.sh`
 keeps `opt_seq/bin` on `PATH` and the compilers set.
 
 !!! warning
-    ⚠️ **WATCH — `which nf-config` must show `opt_seq`, not a conda path.** If it shows conda, run `conda deactivate`, `source ~/seaforward/env.sh`, and re-check before `./jobcomp`.
+    **`which nf-config` must show `opt_seq`, not a conda path.** If it shows conda, run `conda deactivate`, `source ~/seaforward/env.sh`, and re-check before `./jobcomp`.
 
 !!! check
-    ✅ **CHECK** — after a few minutes you see the CROCO ASCII logo and **`CROCO is OK`**, and a `croco` program appears:
-    ```bash
+    After a few minutes you see the CROCO ASCII logo and **`CROCO is OK`**, and a `croco` program appears:
+
+```bash
     ls -lh ${FCAST}/croco
-    ```
+```

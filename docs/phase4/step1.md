@@ -14,4 +14,7 @@ ncdump -h ${CF}/croco_grd.nc | grep -E "xi_rho|eta_rho"
 ```
 
 !!! check
-    ✅ `xi_rho = 81`, `eta_rho = 123` (→ `LLm0=79, MMm0=121`), written to `hindcast/scratch/Canary_12/CROCO_FILES/croco_grd.nc`.
+    `xi_rho = 81`, `eta_rho = 123` (so `LLm0 = 79`, `MMm0 = 121`), written to `hindcast/scratch/Canary_12/CROCO_FILES/croco_grd.nc`. Confirm the path says **hindcast**, not forecast — that is your proof the track took.
+
+Read the boundaries from the mask as in Phase 2 Step 3, and note the result: you
+need it again for `crocotools_param.py` and `cppdefs.h`.

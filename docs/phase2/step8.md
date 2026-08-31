@@ -33,7 +33,7 @@ vertical levels. **Why:** the numbers come from Step 2 (`xi_rho=81 → LLm0=79`,
 `CANARY_12` must be **identical** to the one you set in `cppdefs.h`.
 
 !!! warning
-    ⚠️ **WATCH — the new `# elif` goes ABOVE `# else`, never below it.** An `# elif` after `# else` is a compile error. Put your two lines between the `GIBRALTAR_VHR5` block and the `# else`.
+    **The new `# elif` goes above `# else`, never below it.** An `# elif` after `# else` is a compile error. Put your two lines between the `GIBRALTAR_VHR5` block and the `# else`.
 
 Save (`Ctrl-O`, Enter), exit (`Ctrl-X`), and verify the model will pick up your
 numbers:
@@ -43,4 +43,4 @@ cpp -DREGIONAL -DCANARY_12 param.h 2>/dev/null | grep "parameter (LLm0" | head
 ```
 
 !!! check
-    ✅ **CHECK** — it prints `parameter (LLm0=79, MMm0=121, N=50)` (your numbers). If it shows `xx` or a BENGUELA number, your branch name or placement is off — reopen and fix.
+    It prints `parameter (LLm0=79, MMm0=121, N=50)` — your numbers. If it shows `xx` or a BENGUELA number, your branch name or placement is off; reopen and fix.

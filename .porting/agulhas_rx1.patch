@@ -1,0 +1,114 @@
+commit da5936054b3e6f5090f595426591dbaa3a669c45
+Author: babettetchonang <tadjom@yahoo.fr>
+Date:   Fri Jul 17 03:29:18 2026 -0500
+
+    Correct rx1 claim in Agulhas chapter: child rx1=13.4 < parent 14.8
+
+diff --git a/docs/09_agulhas.md b/docs/09_agulhas.md
+index 55ca14b..e992e32 100755
+--- a/docs/09_agulhas.md
++++ b/docs/09_agulhas.md
+@@ -320,8 +320,10 @@ Agulhas shelf break: 100 m to 4000 m over a short distance, with 50 sigma layers
+ stretched across the tilt. **It ran stably** — KE steady, `trd = 0` throughout — so
+ 14.84 is demonstrably survivable at 1/12°.
+ 
+-But it set up the open question for Phase B: **a 3× child resolves that same slope with
+-thinner layers, so its `rx1` will likely be worse.**
++But it set up the open question for Phase B: **would the 3× child's `rx1` be worse?** The
++reasoning was that refinement resolves the same slope with thinner layers, so the tilt
++per layer thickness should rise. See B6 — the answer was not what that reasoning
++predicted.
+ 
+ **And `dt = 300` survived 2 m/s.** That was the other worry — CFL scales with velocity,
+ and the Agulhas is fast. It didn't blink. Good news for the child, which gets `dt = 100`
+@@ -594,8 +596,12 @@ Two deliberate departures from the parent:
+   closed. (Note the parent's north is *open*; the child's is *closed*. They're
+   different latitudes.)
+ - **`rfact = 0.15`**, not the parent's 0.2 — the parent already reports `rx1 = 14.84`,
+-  and refining the shelf break 3× will make the layers thinner over the same slope.
+-  This is the one place we don't copy the parent.
++  and the reasoning was that refining the shelf break 3× would resolve the same slope
++  with thinner layers, making the tilt-per-thickness worse. This is the one place we
++  don't copy the parent.
++
++  **That reasoning turned out to be wrong** — or at least, the prediction it made was.
++  See the numbers in B6.
+ 
+ Setup and build:
+ 
+@@ -838,6 +844,50 @@ ls -lh croco_1way croco_2way    # 1.7M each
+ **`AGRIF` stays defined in both.** It means "there is a child at all". Only
+ `AGRIF_2WAY` toggles.
+ 
++### The `rx1` result — and a prediction that failed
++
++Once the model runs, both grids report their stiffness. From the driver's spin-up log:
++
++```bash
++grep -i stiffness ~/seaforward/forecast/model-runs/Agulhas_AGRIF/20260717_1way/spinup/croco_spinup.out
++```
++```
++ Maximum grid stiffness ratios:   rx0 = 0.2001   rx1 = 14.836     <- parent
++ Maximum grid stiffness ratios:   rx0 = 0.2115   rx1 = 13.416     <- child
++```
++
++**The child's `rx1` is *lower* than its parent's.** 13.42 against 14.84.
++
++That contradicts the prediction in A13. The reasoning there — "3× refinement resolves
++the same slope with thinner layers, so `rx1` gets worse" — sounded right and is not
++what happened.
++
++Compare the São Tomé child (Phase 8), built at the **same `rfact = 0.2` as its parent**:
++
++| | parent `rx1` | child `rx1` | child `rfact` |
++|---|---|---|---|
++| IGOG / São Tomé | 14.82 | **18.39** (worse) | 0.2 (same as parent) |
++| Agulhas | 14.84 | **13.42** (better) | **0.15** (lower) |
++
++So the reasoning does hold when `rfact` is held constant — São Tomé's child got worse
++exactly as predicted. The Agulhas child is better **because of the `rfact = 0.15`**,
++which more than compensated.
++
++**What this is honestly worth:** the caution was right in *effect*, but for reasons that
++weren't tested. The counterfactual — an Agulhas child at `rfact = 0.2` — was never run.
++It might have landed near 18 and been perfectly fine, since São Tomé's child sits at
++18.39 and is the best-behaved grid in this whole documentation set (Phase 8: RMSE 0.0042
++against Mercator, better than its own parent).
++
++The useful, defensible statements:
++
++- `rfact` on the child **does** control its `rx1`, and lowering it works.
++- A high `rx1` is **not** by itself a problem — 18.39 ran beautifully.
++- So treat `rx1` as **something to watch, not something to fix pre-emptively.** Build
++  with the parent's `rfact`, read the number, and only reach for a lower one if the
++  child actually misbehaves. Changing it up front means you never learn whether you
++  needed to.
++
+ ## B7 — the last build-phase pieces
+ 
+ ```bash
+@@ -1236,7 +1286,7 @@ before drawing conclusions.
+ | parent indices | — | `39 121 24 84`, coef 3 |
+ | boundaries | all four **open** | S open, **N closed**, W/E open (mixed) |
+ | `rfact` | 0.2 | **0.15** |
+-| `rx0` / `rx1` | 0.2001 / **14.84** | *(see the run)* |
++| `rx0` / `rx1` | 0.2001 / 14.836 | 0.2115 / **13.416** |
+ | ocean | — | 80.4% |
+ | depth | — | 48–5556 m |
+ | KE (1-day run) | **2.6e-2** (10× IGOG) | — |
+@@ -1251,9 +1301,12 @@ before drawing conclusions.
+   continent.
+ - **Resolution in km is latitude-dependent.** The same 1/36° grid is 3.06 km at São
+   Tomé and 2.5 km here.
+-- **`rfact` is where you spend your stability budget** on a steep shelf. The parent's
+-  `rx1 = 14.84` at 1/12° is the warning; the child gets 0.15 because refinement makes
+-  layers thinner over the same slope.
++- **`rx1` is a number to watch, not to pre-empt.** The Agulhas child got `rfact = 0.15`
++  on the theory that refinement would worsen its `rx1`; it came out at 13.4, *better*
++  than its parent's 14.8 — but the counterfactual was never run. Meanwhile São Tomé's
++  child sits at 18.39, was built at its parent's `rfact`, and is the best-behaved grid
++  in this documentation. Build with the parent's value, read the number, change it only
++  if the child misbehaves.
+ - **Fast currents were not the problem.** `dt = 300` handled 2 m/s without complaint.
+   The worry was misplaced — the bathymetry is the risk here, not the velocity.
+ - **Comparing a child to its parent means comparing over the same water.** The parent's

@@ -1,4 +1,4 @@
-Create the pre-processing parameters in `CF`. It's like the forecast's, with
+Create the pre-processing parameters in `CF`. It's the forecast's file with
 GLORYS-specific values:
 
 ```bash
@@ -18,11 +18,14 @@ obc_dict      = dict(south=1, west=1, east=0, north=1)      # same Canary bounda
 cycle_bry     = 0
 ```
 
-**Line by line — what's different from the forecast:**
+Keep a copy with the recipe: `cp ${CF}/crocotools_param.py ${CONFIG_DIR}/`.
 
-- `inputdata = 'mercator'` — **not** `'glorys'`. GLORYS from CMEMS uses the same variable names as Mercator (`zos, thetao, so, uo, vo`), so it reads through the reader's `'mercator'` branch. (Verified: the reader `ibc_class.py` maps `'mercator'` → `ssh:zos, temp:thetao, salt:so, u:uo, v:vo` — exactly GLORYS.)
-- `ini_prefix`/`bry_prefix` → `GLORYS` so hindcast files are distinct from forecast `MERCATOR` ones.
-- `sigma_params`, `obc_dict` — **identical** to the forecast (same grid, same boundaries).
+**What's different from the forecast:**
+
+- `ini_prefix` / `bry_prefix` → `GLORYS`, so the hindcast files are distinct from the
+  forecast's `MERCATOR` ones.
+- `sigma_params` and `obc_dict` are **identical** — same grid, same boundaries.
+- `inputdata` is **unchanged**, and that surprises people. See the warning below.
 
 !!! warning
-    ⚠️ **WATCH — it's `'mercator'`, not `'glorys'`.** There is no `'glorys'` key in the reader. GLORYS's CMEMS variable names match the `'mercator'` mapping, so that's the one to use. `'mercator_croco'` is a *different* mapping (renamed variables) — not your raw GLORYS.
+    **It stays `'mercator'` — there is no `'glorys'` key in the reader.** GLORYS from CMEMS uses the same variable names as Mercator (`zos`, `thetao`, `so`, `uo`, `vo`), so it reads through the `'mercator'` branch: `ibc_class.py` maps `'mercator'` → `ssh:zos, temp:thetao, salt:so, u:uo, v:vo`, which is exactly GLORYS. Note that `'mercator_croco'` is a *different* mapping with renamed variables — not your raw GLORYS.

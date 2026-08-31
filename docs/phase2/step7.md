@@ -9,7 +9,7 @@ built. Open it:
 nano cppdefs.h
 ```
 
-You'll make **three** changes. Use `Ctrl-W` to find each line.
+For Canary_12 you make **three** changes. Use `Ctrl-W` to find each line.
 
 ### 7.1 — Name your configuration
 
@@ -47,37 +47,64 @@ Change `undef` to `define`:
 **What:** turns on the feature that reads your GFS surface forcing. **Why:**
 without it, the model wouldn't use the weather files you made in Step 5b. Just
 below it, leave `AROME` and `ERA_ECMWF` as `undef` — that selects the default
-(GFS-style) forcing format your files are in.
+(GFS-style) forcing format your files are in. A hindcast defines `ERA_ECMWF`
+instead (Phase 4).
 
-### 7.3 — Close the land boundary
+### 7.3 — Close the land boundaries
 
-`Ctrl-W`, type `define OBC_EAST`, Enter:
+Save what you have so far and leave nano: **Ctrl-O**, **Enter**, **Ctrl-X**.
+
+Every configuration in `cppdefs.h` has its own `OBC_*` block — there are four in the
+file — so this is the one edit you should not search for. Find yours first:
+
+```bash
+grep -nE "define CANARY_12|^# *(define|undef) +OBC_(EAST|WEST|NORTH|SOUTH)" cppdefs.h | head -12
+```
 
 ```
-# define OBC_EAST
+72:# define CANARY_12
+98:# define OBC_EAST
+99:# define OBC_WEST
+100:# define OBC_NORTH
+101:# define OBC_SOUTH
+456:# define OBC_EAST
+457:# define OBC_WEST
+...
 ```
 
-Change `define` to `undef` (and fix the spacing so it lines up):
+The block you want is the one **just below your config name** — here lines 98–101.
+Everything from 456 on belongs to other configurations and never compiles. These
+line numbers are the same for any new region, since every config starts from the
+same template.
+
+Reopen the file with the cursor already on that line — `nano +N` jumps straight to
+line N:
+
+```bash
+nano +98 cppdefs.h
+```
+
+Change the edges your mask showed as land. For Canary_12 that is the east edge only:
 
 ```
 # undef  OBC_EAST
+# define OBC_WEST
+# define OBC_NORTH
+# define OBC_SOUTH
 ```
 
-**What:** makes the eastern edge a solid wall. **Why:** Step 3 showed the east
-edge is land (the African coast), so it must be closed. Leave `OBC_WEST`,
-`OBC_NORTH`, `OBC_SOUTH` as `define` — those are your open boundaries.
+**What:** makes the eastern edge a solid wall. **Why:** Step 3 showed the east edge
+is land (the African coast). A region whose coast wraps two edges closes two — this
+must match the `obc_dict` you wrote in Step 4.
 
 !!! warning
-    ⚠️ **WATCH — many blocks contain `OBC_EAST`.** `Ctrl-W` may land in a different configuration's block. Make sure you're editing the one in **your REGIONAL block** (near your `# define CANARY_12`). If unsure, search again to confirm you changed the right one, and that the other three `OBC_*` there are still `define`.
-
-!!! note
-    For **your** region: close whichever edges your mask (Step 3) showed as land. This must match the `obc_dict` you wrote in Step 4.
+    **Never search for `OBC_EAST` with `Ctrl-W`.** It lands on the first match, and there are four blocks in the file. Editing the wrong one is silent: the model still compiles, the boundaries are wrong, and a grep afterwards still looks plausible. Work from the line numbers.
 
 Save (`Ctrl-O`, Enter) and exit (`Ctrl-X`). Then confirm your edits:
 
 ```bash
-grep -nE "define CANARY_12|define ONLINE|OBC_EAST|OBC_WEST|OBC_NORTH|OBC_SOUTH|undef  TIDES|undef  USE_CALENDAR" cppdefs.h | head
+grep -nE "define CANARY_12|define ONLINE|^# *(define|undef) +OBC_(EAST|WEST|NORTH|SOUTH)|undef  TIDES|undef  USE_CALENDAR" cppdefs.h | head
 ```
 
 !!! check
-    ✅ **CHECK** — `CANARY_12` and `ONLINE` are `define`d; `OBC_EAST` is `undef`, the other three `OBC_*` are `define`d; `TIDES` and `USE_CALENDAR` are `undef` (already off in the template — good: we're not using tides, and calendar-off is the mode forecasts use).
+    `CANARY_12` and `ONLINE` are `define`d; `OBC_EAST` is `undef` and the other three `OBC_*` are `define`d — **and those four `OBC_*` lines are the ones immediately below your `CANARY_12` line**, not matches further down the file. `TIDES` and `USE_CALENDAR` are `undef` (already off in the template: we're not using tides, and calendar-off is the mode forecasts use).

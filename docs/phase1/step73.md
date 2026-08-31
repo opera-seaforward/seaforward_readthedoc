@@ -20,7 +20,8 @@ make install         2>&1 | tee install.log
 ```
 
 Flags explained: `CPPFLAGS`/`LDFLAGS` point at the **HDF5 you just built** (so
-netcdf-c finds it); `--enable-hdf5` turns on the HDF5 backend;
+netcdf-c finds it); `LIBS=-ldl` links the dynamic-loading library that some
+configure checks need; `--enable-hdf5` turns on the HDF5 backend;
 `--disable-libxml2` avoids an optional dependency; `--enable-curl` allows reading
 remote datasets.
 

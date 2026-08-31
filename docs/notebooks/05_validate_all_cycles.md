@@ -6,7 +6,7 @@ region if `--region` is omitted), skips any that already has a
 on the rest. Appends one row per cycle to a running `validation_summary.csv`
 per region — this is what `02_validation.ipynb` Section 8 loads to plot
 criteria trends across cycles. Handles both existing cycle-directory naming
-conventions in this repo (`run_forecast_today.sh`'s plain `YYYYMMDD`, and
+conventions in this repo (`run_forecast_cycle.sh`'s plain `YYYYMMDD`, and
 the AGRIF matrix driver `run_forecast_cycle.sh`'s suffixed
 `YYYYMMDD_plain`-style names). One bad cycle never aborts the batch; a
 timestamped log goes to `forecast/logs/`.

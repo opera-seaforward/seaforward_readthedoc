@@ -2,9 +2,9 @@
 
 *Step 11 sets the **run-time inputs** in `croco.in` — dates, filenames, output intervals. Changing these needs no recompile.*
 
-`croco.in` is the model's run recipe. You already compiled — this file is read at
-*run* time, not compile time, which is why it comes after the build. Edit the
-recipe copy in your config folder:
+`croco.in` holds the model's run-time settings. You already compiled — this file is
+read at *run* time, not compile time, which is why it comes after the build. Edit
+the copy in your config folder:
 
 ```bash
 nano ${CONFIG_DIR}/croco.in
@@ -32,26 +32,29 @@ Cosmetic, but keeps configs identifiable.
 they **must equal** your `sigma_params` from Step 4. The template usually already
 has these — check, don't assume.
 
-### 11.3 — The sponge (remove the placeholders)
+### 11.3 — The sponge
 
-`Ctrl-W`, `X_SPONGE`, Enter. The line **below** the header may show `XXX  XXX`.
-Change it to real numbers:
+`Ctrl-W`, `X_SPONGE`, Enter. The line **below** the header shows `XXX  XXX`, which
+CROCO cannot read. Set real numbers:
 
 ```
-                    50000.            400.
+                    0.                0.
 ```
 
-**What:** a 50 km "sponge" band near the open boundaries that absorbs outgoing
-waves so they don't reflect back inward. `50000.` is its width in metres (≈5–6
-cells at 1/12°); `400.` is the peak viscosity (m²/s). **Why:** the template
-leaves `XXX` placeholders that would make CROCO error — you must set real values.
-(Finer grids use smaller numbers.)
+**What:** the sponge is a viscosity band near the open boundaries that absorbs
+outgoing waves so they don't reflect back inward. `0.  0.` turns it off. **Why zero
+here:** the parent product is at the same resolution as the model, so the boundary
+mismatch is small and CROCO's radiation conditions handle it on their own.
+
+If you see energy building up along an open edge, turn it on: `50000.  400.` gives a
+50 km band (≈5–6 cells at 1/12°) with a peak viscosity of 400 m²/s. Finer grids use
+smaller numbers.
 
 Save (`Ctrl-O`, Enter), exit (`Ctrl-X`), and confirm no placeholder remains:
 
 ```bash
-grep -n "XXX" croco.in && echo "STILL HAS XXX — fix it" || echo "no XXX left — good"
+grep -n "XXX" ${CONFIG_DIR}/croco.in && echo "STILL HAS XXX — fix it" || echo "no XXX left — good"
 ```
 
-!!! important
-    The `time_stepping`, `initial`, `boundary`, and `online` lines are set at run time (Phase 3). The many `diagnostics`, `floats`, `stations`, `psource`, `sediment`, `biology`, `wkb_*` sections are inert unless their CPP switch is on, so you can ignore them for this configuration.
+!!! note
+    The `time_stepping`, `initial`, `boundary` and `online` lines are set at run time (Phase 3). The `diagnostics`, `floats`, `stations`, `psource`, `sediment`, `biology` and `wkb_*` sections are inert unless their CPP switch is on, so you can ignore them for this configuration.

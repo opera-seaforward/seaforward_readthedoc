@@ -9,5 +9,5 @@ bash install/03_build_netcdf_fortran.sh # netcdf-fortran (~2-3 min)
 
 Each script untars its library, configures it to install into
 `${SEA_FORWARD_ROOT}/opt_seq`, compiles with `-j ${NJOBS}`, and installs. The
-last one prints `>>> sequential NetCDF stack complete`. **Skip to [7.5](step75.md) to
-verify.**
+last one prints `>>> sequential NetCDF stack complete`. **Skip to
+[Verify the stack](step75.md).**
