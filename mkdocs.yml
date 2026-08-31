@@ -90,7 +90,8 @@ nav:
       - The two ways to build: phase1/step70.md
       - Download the source tarballs: phase1/step71.md
       - Route A — build with the scripts: phase1/routeA.md
-      - Route B — build by hand: phase1/routeB.md
+      - Route B — build by hand: 
+          - phase1/routeB.md
           - HDF5: phase1/step72.md
           - netcdf-c: phase1/step73.md
           - netcdf-fortran: phase1/step74.md
