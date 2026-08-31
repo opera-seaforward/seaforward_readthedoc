@@ -32,7 +32,8 @@ python seaforward.py download_ocean_hindcast \
     ncdump -h ${HCAST}/downloaded_data/GLORYS/2025_12.nc | grep -E "time = |zos|thetao|depth ="
     ```
 
-You want `2025_12.nc` and `2026_01.nc`, each with **`time = 31`** (daily records — this is the check that catches the monthly-mean mistake), `depth = 50`, and the ocean variables. Re-running skips months already present.
+    You want `2025_12.nc` and `2026_01.nc`, each with **`time = 31`** (daily records — this is
+    the check that catches the monthly-mean mistake), `depth = 50`, and the ocean variables Re-running skips months already present.
 
 !!! note
     **Neighbour months for boundaries.** Boundary conditions need ocean data slightly *beyond* the run window. For a cycle near a month edge — Dec 30 to Jan 4, say — the tools read **both** `2025_12.nc` and `2026_01.nc`. So download the month before and after your period too. The operational driver does this automatically.
