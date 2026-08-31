@@ -146,12 +146,10 @@ nav:
       - Gallery: phase5/00_gallery.md
       - Setup: phase5/step51_setup.md
       - Open data: phase5/step52_open_data.md
-      - Horizontal section: phase5/step53_horizontal_section.md
-      - Vertical section: phase5/step54_vertical_section.md
-      - Vertical profile: phase5/step55_vertcal_profil.md
-      - Hovmöller diagrams: phase5/step56_hovm_ller_diagrams.md
-      - Time series: phase5/step57_time_series.md
-      - Animations: phase5/step59_animations.md
+      - Surface fields: phase5/surface.md
+      - Dynamics: phase5/dynamics.md
+      - Vertical structure: phase5/vertical.md
+      - Through time: phase5/time.md
   - Validation:
       - Validation: phase5/step58_validation.md
   - Phase 6 — Nesting (offline):
