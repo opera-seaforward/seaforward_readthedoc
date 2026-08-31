@@ -122,12 +122,10 @@ cp croco croco_plain
 
 !!! warning
     **Without this rename the driver fails immediately**, because Phase 2's `jobcomp` produces `croco` while the driver looks for `croco_plain`:
-
-```
+    ```
     ERROR: binary not found: .../scratch/Canary_12/croco_plain
       (child=none, tides=0) needs its own build.
-```
-
+    ```
     The error also prints the CPP switches for whichever combination it couldn't find.
 
 **A tides build:**
