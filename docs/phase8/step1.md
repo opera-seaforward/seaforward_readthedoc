@@ -10,13 +10,15 @@ Four checks, in order. Run them from `~/seaforward`.
 
 Every index below is relative to this grid, so start by reading it:
 
-```python
+```bash
+python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g   = xr.open_dataset('forecast/scratch/IGOG_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values
 lat = g.lat_rho.values
 print('IGOG: xi=%d eta=%d, lon %.2f-%.2fE, lat %.2f-%.2fN'
       % (lon.shape[1], lon.shape[0], lon.min(), lon.max(), lat.min(), lat.max()))
+PYEOF
 ```
 
 ```text
@@ -29,7 +31,8 @@ This converts a lon/lat box to parent indices and reports what you need to judge
 the child size, the margin to the parent's edges, the ocean fraction, the depth
 range, and the land/water pattern along each of the four edges.
 
-```python
+```bash
+python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g   = xr.open_dataset('forecast/scratch/IGOG_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values[0, :]     # 1-D along xi
@@ -67,6 +70,7 @@ def check(name, lo0, lo1, la0, la1, coef=3):
 
 check('A) open-ocean SW box',    4.5, 7.5, -4.5, -1.5)
 check('B) Sao Tome / Principe',  5.5, 7.8, -0.5,  1.8)
+PYEOF
 ```
 
 ```text
@@ -112,7 +116,8 @@ interior in that 1.4% land, and a small child (85×85) so the debug cycle is fas
 If an edge comes back MIXED with holes, scan rather than guess. This walks a
 candidate edge across a range of latitudes and flags which are contiguous:
 
-```python
+```bash
+python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g   = xr.open_dataset('forecast/scratch/IGOG_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values[0, :]; lat = g.lat_rho.values[:, 0]; m = g.mask_rho.values
@@ -128,6 +133,7 @@ for la in [4.5, 4.2, 4.0, 3.8, 3.6, 3.4, 3.2, 3.0]:
     print('%.1fN: %2d/%d water  %s  %s'
           % (lat[j], int(v.sum()), len(v), strip(v),
              'CLEAN' if clean else 'has holes'))
+PYEOF
 ```
 
 ```text
@@ -147,13 +153,14 @@ highest clean edge, threading between the island and the coast.
 
 The `clean` test checks that all the water is contiguous from the west, with land
 only after the last water cell — the "open boundary that terminates at a coast"
-shape, which is fine. Holes in the middle are not.
+shape, which is fine.
 
 ### 1d — Sample a specific line
 
 When a result surprises you, sample along the line directly:
 
-```python
+```bash
+python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g   = xr.open_dataset('forecast/scratch/IGOG_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values[0, :]; lat = g.lat_rho.values[:, 0]; m = g.mask_rho.values
@@ -163,6 +170,7 @@ for la in [4.5, 3.0]:
     for lo in [6.0, 6.5, 7.0, 7.5, 8.0, 9.0, 10.0, 10.5]:
         i = int(np.argmin(abs(lon - lo)))
         print('   %.1fE : %s' % (lon[i], 'OCEAN' if m[j, i] == 1 else 'land'))
+PYEOF
 ```
 
 ```text
@@ -193,25 +201,6 @@ An AGRIF child edge must be one of:
 | All water | **open** | parent supplies data across the whole edge |
 | All land | **closed** | a coastal wall, which is true |
 | Water then land, **contiguous** | open | an open boundary that terminates at a coast |
-| Water with land **holes** in the middle | — | **bad** — the edge slices through an island |
-
-The last case is the one to avoid: parent and child disagree about land and sea
-exactly where they exchange data.
 
 **Mixed edges are fine.** The parent IGOG_12's own south boundary is 98% water with
 two land cells at its east end, and it works.
-
-The case that cannot be made to work is an edge **mostly land with a few water
-holes**. You cannot close it — those cells are real ocean the parent flows through —
-and you cannot open it, because there is no parent water behind most of the edge to
-read from. That was 4.5°N: 3 water cells out of 55.
-
-### What this ruled out
-
-The first candidate here was `6–10.5°E, 2°S–4.5°N`, chosen because the parent's SST
-plot showed apparent ocean near 4.5°N. The mask gave 3 water cells out of 55 on that
-north edge, and 1d confirmed the whole line was land. Scanning southward (1c) found
-Bioko punching holes through 3.2–4.0°N, with clean edges only at 4.2, 3.8 and 3.0°N.
-
-The general lesson: scan candidate edges at fine latitude spacing rather than
-guessing, and watch for islands, not just the mainland.
