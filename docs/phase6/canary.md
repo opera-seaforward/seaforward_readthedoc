@@ -1,5 +1,5 @@
 The worked example throughout the docs: an eastern-boundary upwelling system off
-North-West Africa, and the parent for the nesting chapter (Phase 6).
+North-West Africa, and the parent for the nesting chapter (Phase 7).
 
 ![Canary_12 grid and bathymetry](../img/canary.png)
 
@@ -10,7 +10,7 @@ North-West Africa, and the parent for the nesting chapter (Phase 6).
 | **Grid** | 81 × 123 (LLm0=79, MMm0=121) |
 | **Boundaries** | South, West, North **open**; East **closed** (African coast) |
 | **Hemisphere** | Western → `FIX_GFS_LON=1` |
-| **Distinctive** | Coastal upwelling, filaments and the Canary eddy corridor; the parent for the 1/25° nest (Phase 6) |
+| **Distinctive** | Coastal upwelling, filaments and the Canary eddy corridor; the parent for the 1/25° nest (Phase 7) |
 | **Build** | `make_grid_config.py "Canary_12" -22 -15.5 14 24 1/12 1/12` |
 
 **Physical notes.** Canary is a classic **eastern-boundary upwelling** region:

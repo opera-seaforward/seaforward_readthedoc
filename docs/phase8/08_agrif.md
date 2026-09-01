@@ -1,6 +1,6 @@
 # Phase 8 — AGRIF nesting
 
-Phase 6 built an **offline** nest: the parent runs, writes history files, and a
+Phase 7 built an **offline** nest: the parent runs, writes history files, and a
 converter turns those into boundary conditions for a child that runs afterwards.
 Information flows one way, from parent to child, filtered through hourly snapshots.
 

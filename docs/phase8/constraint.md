@@ -25,7 +25,7 @@ Note the resolution in km depends on **latitude** — a degree of longitude shri
 cos(lat). The same 1/36° grid is 3.06 km at São Tomé (0°N) and 2.5 km at Cape Town
 (34°S). Always check the actual metrics after building (Step 2f), don't assume.
 
-This is a real loss of freedom compared to offline nesting. The Phase 6 nest went
+This is a real loss of freedom compared to offline nesting. The Phase 7 nest went
 1/12° → 1/25°: a 2.08× jump, chosen because it suited the region. AGRIF gives you 3
 or 5 and nothing between.
 

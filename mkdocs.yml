@@ -155,24 +155,24 @@ nav:
       - Through time: phase5/time.md
   - Validation:
       - Validation: phase5/step58_validation.md
-  - Phase 6 — Nesting (offline):
-      - Overview: phase6/06_nesting.md
-      - Step 0 — Session setup: phase6/step0.md
-      - Step 1 — Create the child grid: phase6/step1.md
-      - Step 2 — The child `crocotools_param.py`: phase6/step2.md
-      - Step 3 — Convert the parent output: phase6/step3.md
-      - Step 4 — Child initial and boundary conditions: phase6/step4.md
-      - Step 5 — Build the child config files: phase6/step5.md
-      - Step 6 — Compile the child: phase6/step6.md
-      - Step 7 — Run the nested child: phase6/step7.md
-      - Step 8a — Does the finer grid resolve more?: phase6/partA.md
-      - Step 8b — The nesting driver: phase6/partB.md
-  - Phase 7 — Region Gallery:
-      - Overview: phase7/07_regions.md
-      - Canary — `Canary_12`: phase7/canary.md
-      - Gulf of Guinea — `IGOG_12`: phase7/guinea.md
-      - Agulhas — `Agulhas_12`: phase7/agulhas.md
-      - What changes, what stays the same: phase7/pattern.md
+  - Phase 6 — Region Gallery:
+      - Overview: phase6/06_regions.md
+      - Canary — `Canary_12`: phase6/canary.md
+      - Gulf of Guinea — `IGOG_12`: phase6/guinea.md
+      - Agulhas — `Agulhas_12`: phase6/agulhas.md
+      - What changes, what stays the same: phase6/pattern.md
+  - Phase 7 — Nesting (offline):
+      - Overview: phase7/07_nesting.md
+      - Step 0 — Session setup: phase7/step0.md
+      - Step 1 — Create the child grid: phase7/step1.md
+      - Step 2 — The child `crocotools_param.py`: phase7/step2.md
+      - Step 3 — Convert the parent output: phase7/step3.md
+      - Step 4 — Child initial and boundary conditions: phase7/step4.md
+      - Step 5 — Build the child config files: phase7/step5.md
+      - Step 6 — Compile the child: phase7/step6.md
+      - Step 7 — Run the nested child: phase7/step7.md
+      - Step 8a — Does the finer grid resolve more?: phase7/partA.md
+      - Step 8b — The nesting driver: phase7/partB.md
   - Phase 8 — AGRIF nesting (online):
       - Overview: phase8/08_agrif.md
       - Why two-way nesting?: phase8/bother.md

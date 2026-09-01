@@ -420,7 +420,7 @@ cos(lat) convergence across the box.
 | Grid | 105 × 141 × 50 | 86 × 86 × 50 |
 | dt | 300 s | 100 s |
 
-Note the contrast with the Phase 6 offline nest, which went 1/12° → 1/25° (a 2.08×
+Note the contrast with the Phase 7 offline nest, which went 1/12° → 1/25° (a 2.08×
 jump). AGRIF's integer-ratio constraint takes that freedom away — 3× or 5×, nothing
 else. That is the price of the tighter coupling.
 

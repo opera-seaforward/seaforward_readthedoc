@@ -13,7 +13,7 @@ But unlike a standalone run, it does **not** need boundary conditions:
 | boundary conditions | `croco_bry.nc` | **none** | AGRIF supplies them every barotropic step |
 | surface forcing | GFS (online) | same GFS | both grids read the same atmosphere |
 
-**That missing bry file is the whole point of online nesting.** In the Phase 6 offline
+**That missing bry file is the whole point of online nesting.** In the Phase 7 offline
 nest, `croco_bry_NEST_*.nc` *was* the mechanism — the entire coupling lived in that
 file. Here there's nothing, because the parent hands the child its boundaries in
 memory, every step, while both are running.
