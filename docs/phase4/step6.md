@@ -24,9 +24,8 @@ origin. It reads `crocotools_param.py` and `croco_grd.nc` from `--output_dir`.
 
 !!! warning
     **Avoid the first day of a month.** The interpolator needs a record on each side of the target date. Asking for the 1st means the record before it is in the previous month's file, and if that month isn't downloaded the run fails with:
-
-```
+    ```
     IndexError: index 1 is out of bounds for axis 0 with size 1
-```
+    ```
 
     Either start on the 2nd, as here, or download the preceding month as well. The same applies at the far end of a boundary window.
