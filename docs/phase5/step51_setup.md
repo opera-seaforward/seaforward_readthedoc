@@ -25,12 +25,11 @@ import sftools.animation   as anim   # animate them through time
 
 !!! tip
     **Working in Jupyter?** Add `importlib.reload()` after the imports so edits to the toolkit take effect without restarting the kernel:
-
-```python
+    ```python
     import importlib
     for m in (pp, pl, anim):
         importlib.reload(m)
-```
+    ```
 
 ## Opening a run
 
