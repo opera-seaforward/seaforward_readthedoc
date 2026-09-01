@@ -176,7 +176,7 @@ nav:
   - Phase 8 — AGRIF nesting (online):
       - Overview: phase8/08_agrif.md
       - Why two-way nesting?: phase8/bother.md
-      - The hard constraints: phase8/constraint.md
+      - Constraints: phase8/constraint.md
       - Step 1 — Choose the child box: phase8/step1.md
       - Step 2 — Build the child grid: phase8/step2.md
       - Step 3 — The child's initial condition: phase8/step3.md
