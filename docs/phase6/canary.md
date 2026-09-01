@@ -1,7 +1,7 @@
 The worked example throughout the docs: an eastern-boundary upwelling system off
 North-West Africa, and the parent for the nesting chapter (Phase 7).
 
-![Canary_12 grid and bathymetry](../img/canary.png)
+![Canary_12 grid and bathymetry](../img/canary_12_portrait.png)
 
 | | |
 |---|---|
