@@ -112,47 +112,35 @@ If `croco_his.nc.1` never appears, the child is not running at all — check tha
 Both grids print their own step tables, interleaved:
 
 ```text
-25  9688.08681 2.469078679E-03 ... 2.1948671E+15  0    <- parent
-75  9688.08681 2.874230499E-03 ... 1.7790849E+14  0    <- child
-76  9688.08796 2.878546270E-03 ...
-77  9688.08912 2.882053564E-03 ...
-26  9688.09028 2.470478997E-03 ... 2.1948646E+15  0    <- parent
-78  9688.09028 2.885023770E-03 ...
+ STEP   time[DAYS] KINETIC_ENRG    POTEN_ENRG    TOTAL_ENRG    NET_VOLUME   trd
+     576  9702.00000 2.430828066E-03 3.9316502E+01 3.9318933E+01 2.1948478E+15  0   <- parent
+    1728  9702.00000 2.599978094E-03 3.6195100E+01 3.6197700E+01 1.4753609E+15  0   <- child
+    1729  9702.00116 2.599985181E-03 3.6195094E+01 3.6197694E+01 1.4753610E+15  0
+    1730  9702.00231 2.600002349E-03 3.6195089E+01 3.6197689E+01 1.4753610E+15  0
+     577  9702.00347 2.430569546E-03 3.9316530E+01 3.9318960E+01 2.1948479E+15  0   <- parent
+    1731  9702.00347 2.600011837E-03 3.6195083E+01 3.6197683E+01 1.4753610E+15  0
 ```
 
-The columns are `STEP  time[DAYS]  KINETIC_ENRG  POTEN_ENRG  TOTAL_ENRG NET_VOLUME
-trd`.
-
 Two grids share one stream, so tell them apart by the step number and the volume: the
-parent's steps advance slowly (25, 26, …) with `NET_VOLUME ≈ 2.19e+15`; the child's
-advance three times faster (75, 76, 77, 78, …) with `NET_VOLUME ≈ 1.78e+14`.
+parent advances slowly (576, 577, …) with `NET_VOLUME ≈ 2.19e+15`; the child advances
+three times faster (1728, 1729, 1730, 1731, …) with `NET_VOLUME ≈ 1.48e+15`.
 
-**Three child steps per parent step, meeting at identical times.** Parent 25 and child
-75 both read `9688.08681`; parent 26 and child 78 both read `9688.09028`. That
-lock-step is the single best evidence the nest is correctly configured.
+**Three child steps per parent step, meeting at identical times.** Parent 576 and
+child 1728 both read `9702.00000`; parent 577 and child 1731 both read `9702.00347`.
+That lock-step is the single best evidence the nest is correctly configured.
 
 | Check | Good | Bad, and what it means |
 |---|---|---|
 | **step zero, both grids** | same time, KE ~1e-3 | child KE `1e+71` → broken IC (fill values, Step 3), not instability |
-| **clock lock** | parent 25 = child 75 = same time | child racing ahead → child `dt` not divided (Step 5b) |
-| **child KE vs parent** | child **higher** | expected: a finer grid resolves more flow |
-| **child NET_VOLUME** | smaller, in proportion | a box-size artefact, not a symptom |
+| **clock lock** | parent 576 = child 1728 = same time | child racing ahead → child `dt` not divided (Step 5b) |
+| **child KE vs parent** | child **higher** — 2.600e-3 against 2.431e-3 here | a finer grid resolves more flow |
+| **child NET_VOLUME** | smaller, in proportion to the box | a geometry artefact, not a symptom |
 | **`trd`, last column** | `0` | non-zero is a blowup counter |
 | **volume drift** | conserved to ~5 s.f. | steady loss or gain is a boundary problem |
-
-The child's KE being higher (2.87e-3 against 2.47e-3) and its volume being much
-smaller are both expected. Neither is a warning.
 
 ### 7c — Finishing
 
 Success is **two** `MAIN: DONE`, one per grid:
-
-```text
- MAIN - number of records written into history  file(s):    5
- MAIN: DONE                                                    <- parent
- MAIN - number of records written into history  file(s):   13
- MAIN: DONE                                                    <- child
-```
 
 ```bash
 grep -c "MAIN: DONE" run_agrif.log      # want 2
@@ -160,7 +148,7 @@ ls -lh CROCO_FILES/croco_his.nc CROCO_FILES/croco_his.nc.1
 ```
 
 !!! note
-    **Five parent records against thirteen child records** is the output-interval mismatch: `NWRT` is in *steps*, and the child takes three times as many. Multiply the child's output intervals by `timeref` and both grids write at the same times. The operational driver does this — `NWRT_CHD=$(( NWRT * COEF ))` in `run_forecast_cycle.sh`.
+    **Both grids should write the same number of records.** `NWRT` counts *steps*, and the child takes three times as many, so an unscaled child writes three times as often and every comparison then needs interpolating. Multiply the child's output intervals by `timeref`. The operational driver does this — `NWRT_CHD=$(( NWRT * COEF ))` in `run_forecast_cycle.sh` — and its runs give 21 records on each grid.
 
 If the parent says `DONE` and the child says `Abnormal termination: BLOWUP`, that is
 **one-way isolation working as designed** — the child died without poisoning the
@@ -185,7 +173,7 @@ python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr
 
-B = 'forecast/scratch/IGOG_AGRIF/CROCO_FILES/'
+B = 'forecast/model-runs/IGOG_AGRIF/20260725_1way/fcst/CROCO_FILES/'
 p = xr.open_dataset(B + 'croco_his.nc',   decode_times=False)
 c = xr.open_dataset(B + 'croco_his.nc.1', decode_times=False)
 
