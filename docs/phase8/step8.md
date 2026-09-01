@@ -1,11 +1,10 @@
-Second milestone. Only attempt this once Step 7 gives you two clean `MAIN: DONE` —
-otherwise you're debugging the nest and the feedback at once.
+Second milestone. Attempt this only once Step 7 gives you two clean `MAIN: DONE` —
+otherwise you are debugging the nest and the feedback at once.
 
-### 8a — save the baseline first
+### 8a — Save the baseline first
 
-The two-way run will overwrite `CROCO_FILES/croco_his.nc`. Without a copy of the
-one-way result you have nothing to compare against, and the whole exercise is
-pointless.
+The two-way run overwrites `CROCO_FILES/croco_his.nc`. Without a copy of the one-way
+result you have nothing to compare against, and the exercise has no point.
 
 ```bash
 cd ~/seaforward/forecast/scratch/IGOG_AGRIF
@@ -15,39 +14,42 @@ cp CROCO_FILES/croco_his.nc.1 oneway/
 ls -lh oneway/
 ```
 
-### 8b — flip the flag
+### 8b — Flip the flag
 
 ```bash
 nano cppdefs.h
 ```
 
-`Ctrl+W` `AGRIF_2WAY` `Enter` — again, the **first** match, near line 81:
+`Ctrl+W` `AGRIF_2WAY` `Enter` — again the **first** match, near line 81:
 
-```
+```text
 # define AGRIF
 # undef  AGRIF_2WAY        <- change to "# define AGRIF_2WAY"
 ```
-→
-```
+
+becomes
+
+```text
 # define AGRIF
 # define AGRIF_2WAY
 ```
 
-`Ctrl+O` `Enter`, `Ctrl+X`.
+`Ctrl+O` `Enter`, `Ctrl+X`. Verify:
 
 ```bash
 grep -n "AGRIF" cppdefs.h | head -2
 ```
-```
+
+```text
 80:# define AGRIF
 81:# define AGRIF_2WAY      <- feedback on
 ```
 
 That one word is the entire difference between one-way and two-way.
 
-### 8c — recompile and rerun
+### 8c — Recompile and rerun
 
-A cppdefs change means a **full rebuild** — the flag changes which code gets
+A `cppdefs.h` change means a **full rebuild** — the flag changes which code is
 compiled, not a runtime setting.
 
 ```bash
@@ -55,58 +57,104 @@ conda deactivate
 source ./config.sh
 ./jobcomp 2>&1 | tail -3
 # ... CROCO is OK
+cp croco croco_2way
 
-nohup ./croco croco.in > run_2way.log 2>&1 &
+nohup ./croco croco.in > run_agrif_2way.log 2>&1 &
 ```
 
-Nothing else changes — same grids, same ICs, same `croco.in` and `croco.in.1`. That's what makes it a clean experiment: one variable.
+Keep the binary under its own name. You now have `croco_1way` and `croco_2way`, which
+is what the operational driver expects — it selects between them by name, so both
+modes stay available without recompiling.
 
-### 8d — check the feedback is actually engaging
+Nothing else changes: same grids, same ICs, same `croco.in` and `croco.in.1`. That is
+what makes it a clean experiment — one variable.
+
+### 8d — Check the feedback is engaging
 
 ```bash
 sleep 60
-grep -E "^ +25 +9688\." run_2way.log
+grep -E "^ +576 +9702\." run_agrif_2way.log
 ```
 
-Compare the parent's KE against the one-way run at the same step. In the São Tomé
-example, one-way step 25 was `2.469078679E-03`. **If two-way gives a bit-identical
-number, the feedback isn't doing anything** and something is wrong — the parent
-should start diverging within a few steps of receiving the child's solution.
+Compare the parent's kinetic energy against the one-way run at the same step. **If
+two-way gives a bit-identical number the feedback is not doing anything**, and
+something is wrong — the parent should begin diverging within a few steps of
+receiving the child's solution.
 
-Also watch for instability. Two-way injects fine-grid values into a coarse grid every
-step; if the grids disagree at the interface it can ring. The blowup counter and KE
-are the early warning.
+Watch for instability too. Two-way injects fine-grid values into a coarse grid every
+step; if the grids disagree at the interface it can ring. The blowup counter and the
+kinetic energy are the early warning.
 
-### The difference plot — the whole point
+### 8e — The difference plot
 
-```python
+This is the whole point of running both: the parent's solution with and without the
+child feeding back.
+
+```bash
+cd ~/seaforward
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
+from matplotlib.colors import ListedColormap
 
-B  = 'forecast/scratch/IGOG_AGRIF/'
-p1 = xr.open_dataset(B + 'oneway/croco_his.nc',      decode_times=False)
-p2 = xr.open_dataset(B + 'CROCO_FILES/croco_his.nc', decode_times=False)
+B = 'forecast/scratch/IGOG_AGRIF/'
+p1 = xr.open_dataset(B + 'oneway/croco_his.nc',        decode_times=False)
+p2 = xr.open_dataset(B + 'CROCO_FILES/croco_his.nc',   decode_times=False)
 c  = xr.open_dataset(B + 'CROCO_FILES/croco_his.nc.1', decode_times=False)
 
-s1 = p1.temp.isel(time=-1, s_rho=-1).where(p1.mask_rho == 1)
-s2 = p2.temp.isel(time=-1, s_rho=-1).where(p2.mask_rho == 1)
-d  = s2 - s1
-lim = float(np.nanmax(np.abs(d)))
-print('max |parent_2way - parent_1way| SST = %.4f C' % lim)
+land = ListedColormap(['0.85'])
+def shade(ax, ds):
+    ax.pcolormesh(ds.lon_rho, ds.lat_rho,
+                  np.where(ds.mask_rho.values == 0, 1, np.nan),
+                  cmap=land, vmin=0, vmax=1, zorder=0)
 
-fig, ax = plt.subplots(figsize=(7, 6), constrained_layout=True)
-m = ax.pcolormesh(p1.lon_rho, p1.lat_rho, d, cmap='RdBu_r', vmin=-lim, vmax=lim)
-ax.plot([float(c.lon_rho.min()), float(c.lon_rho.max()), float(c.lon_rho.max()),
-         float(c.lon_rho.min()), float(c.lon_rho.min())],
-        [float(c.lat_rho.min()), float(c.lat_rho.min()), float(c.lat_rho.max()),
-         float(c.lat_rho.max()), float(c.lat_rho.min())], 'k-', lw=1.5)
-ax.set_title('parent SST: two-way minus one-way (1 day)')
-fig.colorbar(m, ax=ax, label='dSST (C)')
+ps = p1.temp.isel(time=-1, s_rho=-1).where(p1.mask_rho == 1)
+cs = c.temp.isel(time=-1, s_rho=-1).where(c.mask_rho == 1)
+s2 = p2.temp.isel(time=-1, s_rho=-1).where(p2.mask_rho == 1)
+d  = s2 - ps
+lim = float(np.nanmax(np.abs(d)))
+vmin, vmax = float(ps.min()), float(ps.max())
+
+x0, x1 = float(c.lon_rho.min()), float(c.lon_rho.max())
+y0, y1 = float(c.lat_rho.min()), float(c.lat_rho.max())
+
+fig, ax = plt.subplots(1, 3, figsize=(17, 5.5), constrained_layout=True)
+
+shade(ax[0], p1)
+ax[0].pcolormesh(p1.lon_rho, p1.lat_rho, ps, cmap='RdYlBu_r', vmin=vmin, vmax=vmax)
+ax[0].plot([x0,x1,x1,x0,x0], [y0,y0,y1,y1,y0], 'k-', lw=1.5)
+ax[0].set_title('parent  1/12')
+
+shade(ax[1], c)
+m1 = ax[1].pcolormesh(c.lon_rho, c.lat_rho, cs, cmap='RdYlBu_r', vmin=vmin, vmax=vmax)
+ax[1].set_title('AGRIF child  1/36')
+fig.colorbar(m1, ax=ax[1], label='SST (C)')
+
+shade(ax[2], p1)
+m2 = ax[2].pcolormesh(p1.lon_rho, p1.lat_rho, d, cmap='RdBu_r', vmin=-lim, vmax=lim)
+ax[2].plot([x0,x1,x1,x0,x0], [y0,y0,y1,y1,y0], 'k-', lw=1.5)
+ax[2].set_title('parent: two-way minus one-way')
+fig.colorbar(m2, ax=ax[2], label='dSST (C)')
+
+for a in ax:
+    a.set_xlabel('longitude')
+ax[0].set_ylabel('latitude')
 fig.savefig('docs/img/agrif_2way_diff.png', dpi=110)
+print('max |diff| = %.4f C' % lim)
+PYEOF
 ```
 
-![two-way minus one-way](img/agrif_2way_diff.png)
+![parent, child and the two-way difference](../img/agrif_2way_diff.png)
 
-*The parent's SST, two-way minus one-way, after one day. Strongest signal (±0.5 °C) inside the child box, concentrated around São Tomé — the child telling the parent about a wake it never computed. Outside the box, a scatter of smaller differences trails south and west: water the child never touched, carried there by the parent's own advection. Direct correction in the box; indirect propagation beyond it.*
+*Left, the parent at 1/12° with the child's box outlined. Centre, the child at 1/36°,
+resolving a cyclonic spiral around São Tomé that the parent renders as a kink. Right,
+the parent's SST with two-way feedback minus without — the correction concentrates
+inside the box and trails south-west with the flow.*
 
-Read it honestly: 0.5 °C after one day from a cold start is modest, and the speckled texture suggests some of it is grid-scale noise from the feedback rather than clean physics. A longer, spun-up run would separate signal from adjustment. But the core result stands — **the parent's solution changed, most where the child is, and it spread**. That is what offline nesting structurally cannot do.
+*From an earlier, smaller nest over São Tomé and Príncipe. The current child covers
+most of the parent, which makes a less legible picture of the same effect.*
+
+**What to look for.** The strongest signal should sit **inside the child's box** —
+that is the child correcting the parent directly. Outside it, expect smaller
+differences trailing downstream: water the child never touched, carried there by the
+parent's own advection. Direct correction inside, indirect propagation beyond.
