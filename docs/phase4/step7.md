@@ -18,12 +18,11 @@ following your `obc_dict`.
 
 !!! check
     Writes `croco_bry_GLORYS_Y...D..._to_Y...D....nc` with `bry_time` referenced to 1993 and only the open-boundary variables:
-
-```bash
+    ```bash
     ls -lh ${CF}/croco_bry_GLORYS_*.nc
     ncdump -h ${CF}/croco_bry_GLORYS_*to*.nc | grep -E "bry_time = |since|_south|_west|_north"
     ncdump -h ${CF}/croco_bry_GLORYS_*to*.nc | grep -c "_east"      # 0
-```
+    ```
 
     The `_east` count of zero is the proof that `obc_dict` took — the boundary file contains data only for the edges you declared open.
 

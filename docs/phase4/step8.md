@@ -60,9 +60,9 @@ puts the cursor on line N — and set:
 Save: `Ctrl-O`, Enter. Exit: `Ctrl-X`.
 
 !!! check
-```bash
-    grep -nE "define +CANARY_12|define +ONLINE|define +ERA_ECMWF|undef +AROME|^# *(define|undef) +OBC_" cppdefs.h
-```
+    ```bash
+    grep -nE "define +CANARY_12|define +ONLINE|define +ERA_ECMWF|undef +AROME|^# *(define|undef)+OBC_" cppdefs.h
+    ```
 
     You want `CANARY_12` define, `ONLINE` define, `ERA_ECMWF` define, `AROME` undef, `OBC_EAST` undef and the other three OBC define — **and the OBC lines must be the ones immediately below your `CANARY_12` line**, not matches further down.
 

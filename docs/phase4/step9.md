@@ -71,7 +71,7 @@ Replace `<you>` with your username.
 Save: `Ctrl-O`, Enter. Exit: `Ctrl-X`.
 
 !!! check
-```bash
+    ```bash
     grep -nA1 "^time_stepping:" croco.in
     grep -nA2 "^initial:" croco.in
     grep -nA1 "^boundary:" croco.in
@@ -79,7 +79,7 @@ Save: `Ctrl-O`, Enter. Exit: `Ctrl-X`.
     grep -nA2 "^online:" croco.in
     grep -n "XXX" croco.in && echo "STILL HAS XXX" || echo "no XXX left"
     sed -n '2p' croco.in
-```
+    ```
 
     You want: title `CANARY_12 HINDCAST`, time_stepping `2016 300 60 1`, initial pointing at the GLORYS ini with NRREC=1, boundary at the GLORYS bry, sponge `0. 0.`, online `2025 12 24 2025 12` with the ERA5 path, and no `XXX` left.
 
@@ -136,11 +136,10 @@ agree, which makes it the best sanity check in the whole build.
 
 !!! check
     It ends with **`MAIN: DONE`** and writes the output:
-
-```bash
+    ```bash
     ls -lh ${CF}/croco_his.nc ${CF}/croco_avg.nc
     tail -6 run.log
-```
+    ```
 
 !!! warning
     **If it stops with `ERROR in get_bry: cannot read variable 'bry_time'`** near the end, the boundary file ran out — rebuild it with a day's margin at each end. **If numbers go `NaN` or it says `BLOW UP`**, recheck that the open boundaries match the mask and that `dt` isn't too large.

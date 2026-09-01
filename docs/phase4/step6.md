@@ -15,11 +15,10 @@ origin. It reads `crocotools_param.py` and `croco_grd.nc` from `--output_dir`.
 
 !!! check
     Writes `croco_ini_GLORYS_Y2025M12D02.nc` with `s_rho = 50` and `scrum_time` in seconds since **1993**-01-01:
-
-```bash
+    ```bash
     ls -lh ${CF}/croco_ini_GLORYS*.nc
     ncdump -h ${CF}/croco_ini_GLORYS*.nc | grep -E "s_rho = |since|temp"
-```
+    ```
 
     The `since 1993` in the time units is the single best confirmation that `Yorig` propagated correctly.
 
