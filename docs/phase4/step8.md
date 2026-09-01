@@ -19,7 +19,8 @@ nano cppdefs.h
 **Edit 1 — config name.** `Ctrl-W`, type `BENGUELA_LR`, Enter. Change the name on
 that line to `CANARY_12`.
 
-- **What:** names your configuration. **Why:** `param.h`, `croco.in` and `jobcomp`
+- **What:** names your configuration.
+- **Why:** `param.h`, `croco.in` and `jobcomp`
   all key off this name.
 
 **Edit 2 — ONLINE + ERA5.** `Ctrl-W`, type `undef  ONLINE`, Enter — this lands in
@@ -34,7 +35,7 @@ that line to `CANARY_12`.
 ```
 
 - **What:** turns on online forcing and selects the **ERA5 (ECMWF)** file format.
-  **Why different from the forecast:** the forecast reads GFS, which is the default
+- **Why different from the forecast:** the forecast reads GFS, which is the default
   format, so it leaves `ERA_ECMWF` undef. The hindcast reads ERA5, so it must be
   **defined**. This is a compile-time switch, which means a hindcast binary and a
   forecast binary are different builds.
@@ -54,7 +55,8 @@ puts the cursor on line N — and set:
 # undef  OBC_EAST
 ```
 
-- **What:** closes the eastern boundary (the African coast). **Why:** the same
+- **What:** closes the eastern boundary (the African coast). 
+- **Why:** the same
   boundary choice as the forecast — open south, west and north, closed east.
 
 Save: `Ctrl-O`, Enter. Exit: `Ctrl-X`.
@@ -83,7 +85,8 @@ line:
       parameter (LLm0=79,   MMm0=121,   N=50)   ! Canary_12 hindcast
 ```
 
-- **What:** sets the interior grid size. **Why these numbers:** they are `xi_rho−2`
+- **What:** sets the interior grid size.
+- **Why these numbers:** they are `xi_rho−2`
   and `eta_rho−2` from your grid (81→79, 123→121), and `N=50` matches `sigma_params`.
 
 Save `Ctrl-O` Enter, exit `Ctrl-X`. Verify:
