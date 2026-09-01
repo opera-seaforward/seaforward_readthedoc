@@ -308,17 +308,20 @@ if sum(northchk) != 0:
     inputs.jmax = inputs.jmax + 1
     print("==> North limits displacement +1")
 ```
-
 If a coastline crosses near the edge, it shifts the edge outward and retries, looking
 for an edge whose mask is uniform in the boundary-normal direction. In this build it
 pushed the east edge until it was entirely land and the north edge until it was nearly
-so — which is what you want for edges you intended to close, and why the result is
-fine here.
+so. Both were edges you intended to close, so the result is fine.
 
-**It does not check whether the destination makes sense**, though. A solid-land edge
-is perfectly uniform, so it passes the test whether or not you meant that edge to be
-open. Setting `north_obc = False` does not stop the loop either: it runs on mask
-geometry, before the obc flags are considered.
+**It does not check whether that was your intention.** A solid-land edge is perfectly
+uniform, so it passes the test whether or not you meant that edge to be open. An
+earlier attempt at a coastal IGOG child asked for `jmax = 124` (4.21°N) and the loop
+marched it to 133 (4.94°N) — onto the continent — reporting success. Setting
+`north_obc = False` did not stop it: the loop runs on mask geometry, before the obc
+flags are considered.
+
+Both attempts ended at 133. The loop pushes until the edge is uniform, and for this
+parent that happens at the same row whether you start from 124 or 126.
 
 Always compare what you asked for against what `AGRIF_FixedGrids.in` says, and check
 the resulting edges.
