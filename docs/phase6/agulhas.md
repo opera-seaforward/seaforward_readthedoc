@@ -1,10 +1,27 @@
 The Agulhas retroflection region south of South Africa — one of the most energetic
-western-boundary-current systems on Earth. Card to be filled in once the grid and
-forecast are built.
+western-boundary-current systems on Earth.
 
-!!! note
-    **Notes for when it's built.** Box: **17°E–30°E, 38°S–32°S** (a wide, mostly open-ocean domain; the coast runs roughly E–W along the top, so axis-aligned — no rotation needed). Eastern hemisphere → `FIX_GFS_LON=0`. Two things to expect that differ from Canary/IGOG:
+![Agulhas_12 grid and bathymetry](../img/agulhas_12_portrait.png)
 
-!!! important
-    - **Fast currents → smaller timestep.** The Agulhas Current runs at ~2 m/s, one of the strongest western boundary currents on Earth. The CFL condition may require a **smaller `dt`** than the 1/12° default (watch the first steps; reduce `dt` if it blows up).
-    - **Steep bathymetry.** The Agulhas Bank and the sharp shelf break mean the grid smoothing (`rfact`, `rx0`) works harder — check the smoothing output settles near 0.2, and eyeball the bathymetry portrait for over-steepened cells.
+| | |
+|---|---|
+| **Box** | 17°E–30°E, 38°S–32°S |
+| **Resolution** | 1/12°, 50 σ-levels |
+| **Hemisphere** | Eastern → `FIX_GFS_LON=0` |
+| **Distinctive** | The Agulhas Current and its retroflection; a wide, mostly open-ocean domain with the coast running roughly east–west along the top |
+
+**Physical notes.** The Agulhas is a **western boundary current** — fast, narrow and
+deep, running south along the African coast before retroflecting back into the Indian
+Ocean and shedding rings into the Atlantic. That makes it dynamically unlike either
+Canary's eastern-boundary upwelling or IGOG's equatorial regime.
+
+**Per-region gotchas.**
+
+- **Fast currents mean a smaller timestep.** The Agulhas runs at around 2 m/s, among
+  the strongest boundary currents anywhere, so the CFL condition may need a smaller
+  `dt` than the 1/12° default. Watch the first steps and reduce `dt` if it blows up.
+- **Steep bathymetry.** The Agulhas Bank and its sharp shelf break make the grid
+  smoothing work harder — check the smoothing output settles near 0.2, and look at
+  the bathymetry panel above for over-steepened cells.
+
+This region is built end to end, with an AGRIF child, in **Phase 9**.
