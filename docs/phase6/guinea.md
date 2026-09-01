@@ -2,7 +2,7 @@ An equatorial domain in the Bight of Biafra, wrapping the corner of the West-Afr
 coast. Physically distinct from Canary: it straddles the equator and includes the
 Cameroon-Line volcanic islands.
 
-![IGOG_12 grid and bathymetry](../img/guinea.png)
+![IGOG_12 grid and bathymetry](../img/igog_12_portrait.png)
 
 | | |
 |---|---|
@@ -38,7 +38,7 @@ seamount bathymetry.
   corner.
 
 <!-- RESULT PANEL — add once the IGOG forecast has run:
-![IGOG_12 sea-surface temperature](img/igog_12_sst.png)
+![IGOG_12 sea-surface temperature](../img/igog_12_sst.png)
 A forecast SST snapshot: the Guinea Current along the north, the equatorial cold
 tongue, and the shelf/coast structure the 1/12° grid resolves.
 -->

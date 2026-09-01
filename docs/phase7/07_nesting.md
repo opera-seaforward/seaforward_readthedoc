@@ -1,4 +1,4 @@
-# Phase 6 — Nesting (offline)
+# Phase 7 — Nesting (offline)
 
 This phase teaches **offline nesting**: running a finer-resolution "child" model
 inside the domain of a coarser "parent" you already built. It's how you climb the
@@ -24,6 +24,13 @@ Mercator (global)  →  Canary_12 (1/12°)  →  Canary_25 (1/25°)
    the parent of         the parent of          the child
    Canary_12             Canary_25
 ```
+
+![Parent and child domains](../img/canary_nest_vort.png)
+
+*The child's footprint outlined on the parent (left), and the same box run at 1/25°
+(right). Relative vorticity, normalised by f — the child resolves filaments and small
+eddies that the parent smooths into broad patches. That difference is the whole point
+of nesting.*
 
 **A nested child is just a forecast whose "global product" is your own coarser run.**
 Everything you learned in Phase 2 applies — you build a grid, decide boundaries, make
@@ -55,7 +62,7 @@ Once the parent output *looks like* Mercator, the standard Phase-2 machinery bui
 the child inputs without knowing — or caring — that the "global product" is actually
 your own model.
 
-![Where Phase 6 sits in the build chain](../img/run_parent_child.png)
+![Where this phase sits in the build chain](../img/run_parent_child.png)
 
 *Offline nesting: the parent runs to completion first, then its saved output becomes
 the child's ocean.*

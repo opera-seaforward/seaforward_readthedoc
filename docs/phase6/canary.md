@@ -16,5 +16,8 @@ North-West Africa, and the parent for the nesting chapter (Phase 7).
 **Physical notes.** Canary is a classic **eastern-boundary upwelling** region:
 equatorward trade winds drive offshore Ekman transport, cold nutrient-rich water
 upwells along the coast, and the front sheds filaments and eddies westward. The east
-boundary is the African coast (closed); the other three are open ocean where the
-model reads Mercator data. This is the region used end-to-end in Phases 2–6.
+boundary is the African coast, closed; the other three are open ocean where the model
+reads Mercator data.
+
+This is the region the documentation uses throughout — the forecast built in Phase 2
+and run in Phase 3, the output plotted in Phase 5, and the parent nested in Phase 7.
