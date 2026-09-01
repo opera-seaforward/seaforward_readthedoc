@@ -1,40 +1,36 @@
-This is the step that will cost you the most time if you skip it, and it is entirely
-diagnostic — you write no config here, you just interrogate the parent's mask until
-you know where the child can legally go.
+This step is entirely diagnostic — you write no config here. You interrogate the
+parent's mask until you know where the child can go.
 
 !!! important
-    **Do not trust a plot of the parent's SST to tell you where the coast is.** A saturated colour map will happily make dry land look like ocean. Tonight's first box was chosen from an SST figure and turned out to be 300 km inland. The mask is the only authority.
+    **Read the mask, not a plot.** A saturated colour map will make dry land look like ocean. A box chosen from an SST figure can land hundreds of kilometres inland. The mask is the only authority.
 
-There are four checks, in order. Run them from `~/seaforward`.
+Four checks, in order. Run them from `~/seaforward`.
 
-### 1a — What does the parent look like?
+### 1a — The parent's dimensions
 
-Before anything, get the parent's dimensions and extent — every index below is
-relative to this grid:
+Every index below is relative to this grid, so start by reading it:
 
 ```python
 import xarray as xr, numpy as np
-
 g   = xr.open_dataset('forecast/scratch/IGOG_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values
 lat = g.lat_rho.values
 print('IGOG: xi=%d eta=%d, lon %.2f-%.2fE, lat %.2f-%.2fN'
       % (lon.shape[1], lon.shape[0], lon.min(), lon.max(), lat.min(), lat.max()))
 ```
-```
+
+```text
 IGOG: xi=105 eta=141, lon 3.94-12.56E, lat -6.04-5.54N
 ```
 
 ### 1b — Test a candidate box
 
-This is the workhorse. It converts a lon/lat box to parent indices and reports
-everything you need to judge it: the resulting child size, the margin to the parent's
-own edges, the ocean fraction, the depth range, and — the important part — **the
-land/water pattern along each of the four edges**.
+This converts a lon/lat box to parent indices and reports what you need to judge it:
+the child size, the margin to the parent's edges, the ocean fraction, the depth
+range, and the land/water pattern along each of the four edges.
 
 ```python
 import xarray as xr, numpy as np
-
 g   = xr.open_dataset('forecast/scratch/IGOG_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values[0, :]     # 1-D along xi
 lat = g.lat_rho.values[:, 0]     # 1-D along eta
@@ -57,7 +53,6 @@ def check(name, lo0, lo1, la0, la1, coef=3):
           % (imin, m.shape[1]-1-imax, jmin, m.shape[0]-1-jmax))
     print('  ocean: %.1f%%   depth: %.0f-%.0f m'
           % (sm.sum()/sm.size*100, sh.min(), sh.max()))
-
     strip = lambda r: ''.join('O' if v == 1 else '.' for v in r)
     for e, v in [('S', sm[0, :]), ('N', sm[-1, :]),
                  ('W', sm[:, 0]), ('E', sm[:, -1])]:
@@ -74,9 +69,7 @@ check('A) open-ocean SW box',    4.5, 7.5, -4.5, -1.5)
 check('B) Sao Tome / Principe',  5.5, 7.8, -0.5,  1.8)
 ```
 
-Real output from tonight:
-
-```
+```text
 A) open-ocean SW box
   lon 4.5-7.5E lat -4.5--1.5N
   -> imin=7 imax=43 jmin=18 jmax=55
@@ -100,37 +93,32 @@ B) Sao Tome / Principe
     E edge:  29/ 29 ocean (100.0%)  all water -> OPEN
 ```
 
-Box **B** was chosen: all four edges in open water, the islands (that 1.4% land)
-safely interior, and a smaller child (85×85) so the debug cycle is fast. **A** was
-the "safe first attempt" — pure open ocean, no land at all — but B's edges turned out
-just as clean, so there was no reason to take the boring one.
+Box **B** is the one used in this chapter: four clean edges, the islands safely
+interior in that 1.4% land, and a small child (85×85) so the debug cycle is fast.
 
-**What to read from this output:**
+**Reading the output:**
 
 | Field | What it tells you |
 |---|---|
 | `imin/imax/jmin/jmax` | goes straight into the zoom `.ini` |
-| `child at 3x` | the cost — cells scale as the square, and the child sub-steps 3× too |
-| `margin` | parent cells between the child and the parent's own edge. Small margins (<10) mean AGRIF has little room to supply boundary data |
-| `ocean %` | how much of the box is water. Low means you're wasting cells on land |
-| `depth` | the child's `hmax`; also warns of steep bathymetry (see `rx1`) |
-| edge strips | **the decisive check** — see below |
+| `child at 3x` | the cost — cells scale as the square, and the child sub-steps 3× as well |
+| `margin` | parent cells between the child and the parent's own edge; under 10 leaves AGRIF little room to supply boundary data |
+| `ocean %` | how much of the box is water — low means cells spent on land |
+| `depth` | the child's `hmax`, and a warning of steep bathymetry |
+| edge strips | the decisive check — see *Reading the edges* below |
 
 ### 1c — Scan for a clean edge
 
-If an edge comes back MIXED with holes, don't guess at a fix — **scan**. This walks a
-candidate edge across a range of latitudes and flags which ones are contiguous:
+If an edge comes back MIXED with holes, scan rather than guess. This walks a
+candidate edge across a range of latitudes and flags which are contiguous:
 
 ```python
 import xarray as xr, numpy as np
-
 g   = xr.open_dataset('forecast/scratch/IGOG_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values[0, :]; lat = g.lat_rho.values[:, 0]; m = g.mask_rho.values
-
 i0 = int(np.argmin(abs(lon - 6.0)))       # the box's west limit
 i1 = int(np.argmin(abs(lon - 10.5)))      # the box's east limit
 strip = lambda r: ''.join('O' if v == 1 else '.' for v in r)
-
 for la in [4.5, 4.2, 4.0, 3.8, 3.6, 3.4, 3.2, 3.0]:
     j = int(np.argmin(abs(lat - la)))
     v = m[j, i0:i1+1]
@@ -142,37 +130,33 @@ for la in [4.5, 4.2, 4.0, 3.8, 3.6, 3.4, 3.2, 3.0]:
              'CLEAN' if clean else 'has holes'))
 ```
 
-Tonight's output — and it's the whole story of the coastal child:
-
-```
-4.5N:  3/55 water  ..............O.............OO.......  has holes   <- mainland
+```text
+4.5N:  3/55 water  ..............O.............OO.......   has holes   <- mainland
 4.2N: 36/55 water  OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...  CLEAN
 4.0N: 40/55 water  OOOO...OOOO....O.......                  has holes  <- Bioko
-3.8N: 44/55 water  OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...  CLEAN
+3.8N: 44/55 water  OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...  CLEAN
 3.6N: 40/55 water  OOOO....OOOOOOOO......                   has holes  <- Bioko
 3.4N: 42/55 water  OOOO....OOOOOOOOOOO...                   has holes  <- Bioko
 3.2N: 47/55 water  OOOO.OOOOOOOOOOOOOOO..                   has holes  <- Bioko
-3.0N: 48/55 water  OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...  CLEAN
+3.0N: 48/55 water  OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.......  CLEAN
 ```
 
-Three clean options, and the pattern is legible: **Bioko** (≈3.2–4.0°N, 8.7°E) punches
-holes in every edge in that band; the mainland fills 4.5°N. 4.2°N is the highest clean
-edge — it threads between the island and the coast.
+Three clean options, and the pattern is legible. **Bioko** (≈3.2–4.0°N, 8.7°E)
+punches holes in every edge in that band; the mainland fills 4.5°N. 4.2°N is the
+highest clean edge, threading between the island and the coast.
 
-The `clean` test is worth understanding: it checks that all the water is *contiguous
-from the west*, with land only after the last water cell. That's the "open boundary
-that terminates at a coast" shape, which is fine. Holes in the middle are not.
+The `clean` test checks that all the water is contiguous from the west, with land
+only after the last water cell — the "open boundary that terminates at a coast"
+shape, which is fine. Holes in the middle are not.
 
-### 1d — Sanity-check a specific line
+### 1d — Sample a specific line
 
 When a result surprises you, sample along the line directly:
 
 ```python
 import xarray as xr, numpy as np
-
 g   = xr.open_dataset('forecast/scratch/IGOG_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values[0, :]; lat = g.lat_rho.values[:, 0]; m = g.mask_rho.values
-
 for la in [4.5, 3.0]:
     j = int(np.argmin(abs(lat - la)))
     print('=== along %.1fN ===' % lat[j])
@@ -180,14 +164,14 @@ for la in [4.5, 3.0]:
         i = int(np.argmin(abs(lon - lo)))
         print('   %.1fE : %s' % (lon[i], 'OCEAN' if m[j, i] == 1 else 'land'))
 ```
-```
+
+```text
 === along 4.5N ===
-   6.0E : land        <- every single point
+   6.0E : land
    6.5E : land
    7.0E : land
    ...
    10.5E : land
-
 === along 3.0N ===
    6.0E : OCEAN
    6.5E : OCEAN  ...  9.0E : OCEAN
@@ -195,11 +179,10 @@ for la in [4.5, 3.0]:
    10.5E : land
 ```
 
-This is what settled the argument. 4.5°N is not a marginal case or a tuning problem —
-it is the African continent.
+4.5°N is not a marginal case or a tuning problem — it is the African continent.
 
-Note the trap: this coarse 0.5° sampling **missed** the 4.2°N gap that the fine scan
-in 1c found. Use 1d to confirm a suspicion, not to search.
+!!! warning
+    **This coarse 0.5° sampling misses narrow gaps.** It steps straight over the 4.2°N channel that the fine scan in 1c found. Use 1d to confirm a suspicion, not to search.
 
 ### Reading the edges
 
@@ -208,51 +191,27 @@ An AGRIF child edge must be one of:
 | Edge mask | Setting | Verdict |
 |---|---|---|
 | All water | **open** | parent supplies data across the whole edge |
-| All land | **closed** | it's a coastal wall, which is true |
-| Water then land, **contiguous** | open | fine — an open boundary that terminates at a coast |
-| Water with land **holes** in the middle | — | **bad**: the edge slices through an island |
+| All land | **closed** | a coastal wall, which is true |
+| Water then land, **contiguous** | open | an open boundary that terminates at a coast |
+| Water with land **holes** in the middle | — | **bad** — the edge slices through an island |
 
-The last case is the one to avoid. An edge running through an island means parent and
-child disagree about land vs sea exactly where they exchange data.
+The last case is the one to avoid: parent and child disagree about land and sea
+exactly where they exchange data.
 
 **Mixed edges are fine.** The parent IGOG_12's own south boundary is 98% water with
-two land cells at its east end, and it works. So do somisana's operational AGRIF
-children (see below), whose cross-shore edges are up to half land.
+two land cells at its east end, and it works.
 
-The genuinely impossible case is an edge that is **mostly land with a few water
-holes** — you can't close it (those cells are real ocean the parent flows through) and
-you can't open it (there's no parent water behind most of the edge to read from).
-That was 4.5°N: 3 water cells out of 55.
+The case that cannot be made to work is an edge **mostly land with a few water
+holes**. You cannot close it — those cells are real ocean the parent flows through —
+and you cannot open it, because there is no parent water behind most of the edge to
+read from. That was 4.5°N: 3 water cells out of 55.
 
-### Worked example — why the obvious box didn't work
+### What this ruled out
 
-The first attempt here was `6–10.5°E, 2°S–4.5°N`. The parent's SST plot showed
-apparent ocean near 4.5°N. The mask disagreed:
+The first candidate here was `6–10.5°E, 2°S–4.5°N`, chosen because the parent's SST
+plot showed apparent ocean near 4.5°N. The mask gave 3 water cells out of 55 on that
+north edge, and 1d confirmed the whole line was land. Scanning southward (1c) found
+Bioko punching holes through 3.2–4.0°N, with clean edges only at 4.2, 3.8 and 3.0°N.
 
-```
-N edge at 4.5N:   3/55 water
-   ..............O.............OO.........................
-```
-
-Three water cells out of fifty-five — the rest is Cameroon. Sampling along the line
-confirmed it:
-
-```
-along 4.5N:  6.0E land, 6.5E land, 7.0E land, ... 10.5E land
-```
-
-That edge cannot be open (no parent water to read from) and cannot be closed (those
-three cells are real ocean). Scanning southward found where the coast and Bioko
-island actually sit:
-
-```
-4.5N:  3/55 water  ..............O.............OO.........  has holes  <- mainland
-4.2N: 36/55 water  OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO...  CLEAN
-4.0N: 40/55 water  OOOO...OOOO....O.......                  has holes  <- Bioko
-3.6N: 40/55 water  OOOO....OOOOOOOO......                   has holes  <- Bioko
-3.0N: 48/55 water  OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO.......  CLEAN
-```
-
-Bioko (~3.2–4.0°N, 8.7°E) punches holes in every edge in that band. The lesson is
-general: **scan candidate edges at fine latitude spacing rather than guessing**, and
-watch for islands, not just the mainland.
+The general lesson: scan candidate edges at fine latitude spacing rather than
+guessing, and watch for islands, not just the mainland.
