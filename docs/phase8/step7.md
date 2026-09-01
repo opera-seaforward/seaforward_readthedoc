@@ -213,6 +213,3 @@ PYEOF
 outlined on the parent. The equatorial front near 0°N is a smooth gradient in the
 parent and resolves into filaments and small eddies in the child — that structure is
 what the refinement buys.*
-
-!!! note
-    The colour range is taken from the child, so the parent's panel saturates. That shows the detail well but is not a like-for-like comparison. This is also one day from a Mercator cold start — much of the structure is initial adjustment rather than spun-up dynamics.
