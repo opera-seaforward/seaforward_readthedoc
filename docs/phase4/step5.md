@@ -19,11 +19,10 @@ python seaforward.py download_atmosphere_hindcast \
 
 !!! check
     Ten converted files per month in `for_croco/`, named `<VAR>_Y<year>M<month>.nc`:
-
-```bash
+    ```bash
     ls ${HCAST}/downloaded_data/ERA5/for_croco/ | sort
     ls ${HCAST}/downloaded_data/ERA5/for_croco/*.nc | wc -l    # 10 per month
-```
+    ```
 
     Per month you want `T2M`, `Q`, `TP`, `SSR`, `STRD`, `U10M`, `V10M`, `MSL`, `SST` and `LSM`, each with the `_Y2025M12.nc` or `_Y2026M01.nc` suffix.
 
