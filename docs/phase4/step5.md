@@ -28,11 +28,9 @@ python seaforward.py download_atmosphere_hindcast \
 
 !!! warning
     **Zero-pad the month — `M01`, not `M1`.** CROCO's online reader expects a two-digit month for January to September. The converter writes `str(imonth).zfill(2)`, so they come out padded. If you ever see unpadded files, rename them:
-
-```bash
+    ```bash
     for f in *Y2026M1.nc; do mv "$f" "${f%Y2026M1.nc}Y2026M01.nc"; done
-```
-
+    ```
     Months from October on are always two digits, so December's `M12` is never affected.
 
 !!! note

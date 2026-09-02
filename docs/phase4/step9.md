@@ -49,7 +49,7 @@ As in Phase 2, the sponge is off here: the parent product is at the same resolut
 as the model, so the boundary mismatch is small. If energy builds up along an open
 edge, turn it on with `50000.  400.`
 
-**online (ERA5 form)** — `Ctrl-W` `byear  bmonth`, Enter. Set the two lines below the
+**online (ERA5 form)** — `Ctrl-W` `byear`, Enter. Set the two lines below the
 `online:` header — the numbers line, then the data path:
 
 ```
