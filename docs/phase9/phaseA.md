@@ -259,9 +259,12 @@ conda deactivate
 source ~/seaforward/env.sh
 which nf-config          # must be .../opt_seq/bin/nf-config, not conda's
 ./jobcomp 2>&1 | tee compile.log | tail -40
+cp croco croco_plain
 ```
 
-Ends with `CROCO is OK`.
+Ends with `CROCO is OK`. The copy is for later: the driver picks its binary by name,
+and `croco_plain` is the unnested build. Phase B adds `croco_1way` and `croco_2way`
+alongside it. The proof run below uses `croco` directly, so the copy costs nothing now.
 
 ## A13 — prove it runs
 
