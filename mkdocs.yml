@@ -224,7 +224,6 @@ nav:
       - Running operationally: phase12/changes.md
       - Why this framing matters: phase12/why.md
       - References: phase12/references.md
-      - Regenerating the diagram: phase12/regenerating.md
   - Notebooks Toolkit:
       - Overview: notebooks/00_notebooks_overview.md
       - Before you start: notebooks/01_before_you_start.md
