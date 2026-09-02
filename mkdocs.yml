@@ -215,7 +215,6 @@ nav:
       - Step 5 — Recompile CROCO: phase11/7.md
       - Step 6 — A quick 2-day test: phase11/8.md
       - The `--rivers` flag: phase11/9.md
-      - Doing this for a new region: phase11/10.md
       - Notes and gotchas: phase11/11.md
   - Phase 12 — Architecture:
       - Overview: phase12/12_architecture.md
