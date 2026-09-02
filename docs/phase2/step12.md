@@ -70,11 +70,10 @@ grow), and `trd` should be `0`.
 
 !!! check
     It ends with **`MAIN: DONE`** and writes the outputs:
-
-```bash
+    ```bash
     ls -lh ${CF}/croco_his.nc ${CF}/croco_avg.nc
     tail -6 run.log
-```
+    ```
 
 You should see `croco_his.nc` (history) and `croco_avg.nc` (averages). The
 `IEEE_UNDERFLOW` note at the very end is harmless. Your configuration is now
