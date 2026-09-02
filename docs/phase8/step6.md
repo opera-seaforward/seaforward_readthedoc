@@ -59,12 +59,9 @@ dimensions are never written anywhere.
 
 ```bash
 conda deactivate                    # the compiler env, not the python one
-source ./config.sh
+source ~/seaforward/env.sh
 ./jobcomp 2>&1 | tee compile_agrif.log | tail -5
 ```
-
-!!! note
-    **`config.sh` or `env.sh`?** IGOG_AGRIF ships a per-config `config.sh`; configs built the Phase 2 way don't, and use `~/seaforward/env.sh` instead. Both set the compiler and the `opt_seq` NetCDF paths. Use whichever your config directory has.
 
 The AGRIF build is heavier than a normal one: `jobcomp` first builds the **`conv`**
 preprocessor, then runs it over the whole CROCO source to generate AGRIF-aware code.

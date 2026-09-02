@@ -54,7 +54,7 @@ compiled, not a runtime setting.
 
 ```bash
 conda deactivate
-source ./config.sh
+source ~/seaforward/env.sh
 ./jobcomp 2>&1 | tail -3
 # ... CROCO is OK
 cp croco croco_2way

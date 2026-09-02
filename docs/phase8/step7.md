@@ -6,7 +6,7 @@ no feedback yet. Get here before touching `AGRIF_2WAY`.
 ```bash
 cd ~/seaforward/forecast/scratch/IGOG_AGRIF
 conda deactivate                       # the model needs the compiler env, not python
-source ./config.sh
+source ~/seaforward/env.sh
 nohup ./croco croco.in > run_agrif.log 2>&1 &
 ```
 
