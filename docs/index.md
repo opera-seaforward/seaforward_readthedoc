@@ -97,7 +97,7 @@ a 1/12° domain of about 270 × 170 points — three times the size — remains 
 | Start from a ready-made region       | [Phase 6 — Region gallery](phase6/06_regions.md) |
 | Increase resolution — AGRIF nest     | [Phase 8 — AGRIF nesting](phase8/08_agrif.md)    |
 | Add tidal forcing                    | [Phase 10 — Tides](phase10/10_tides.md)          |
-| Add river freshwater forcing         | [Phase 12 — Rivers](phase12/12_rivers.md)        |
+| Add river freshwater forcing         | [Phase 11 — Rivers](phase11/11_rivers.md)        |
 
 ## Context: the OPERA Capacity Development Activities
 

@@ -75,7 +75,7 @@ handful of global datasets, the **upstream data sources**, which you either
 | **Parent ocean model**        | initial state + open-boundary values      | **Mercator**        | `crocotools_param.py` + `make_ini`/`make_bry` (Steps 4–5) |
 | **Atmospheric forcing**       | wind, heat, pressure, rain at the surface | **GFS**             | `cppdefs.h` `ONLINE` + `make_forcing` (Steps 5, 7)        |
 | **Tides** _(optional)_        | tidal rise/fall at the boundaries         | **TPXO**            | `cppdefs.h` `TIDES` + `make_tides` _(Phase 10)_           |
-| **River inputs** _(optional)_ | coastal freshwater                        | **Dai climatology** | `cppdefs.h` `PSOURCE` + `make_river` _(Phase 12)_         |
+| **River inputs** _(optional)_ | coastal freshwater                        | **Dai climatology** | `cppdefs.h` `PSOURCE` + `make_river` _(Phase 11)_         |
 
 Read the roles, because they tell you _where_ each enters:
 
@@ -92,7 +92,7 @@ Read the roles, because they tell you _where_ each enters:
   you add it from TPXO. Deep open-ocean domains skip it.
 - **Rivers** add coastal freshwater as point sources, built once per region as a
   repeating seasonal climatology (Dai & Trenberth) and then staged automatically
-  each cycle with the `--rivers` flag (Phase 12).
+  each cycle with the `--rivers` flag (Phase 11).
 
 Three sources are wired in during this chapter: the bathymetry (Step 2), the
 global ocean (Steps 4–5), and the atmosphere (Steps 5 and 7).

@@ -18,4 +18,4 @@ run a Python script, and what each step produces.
     save with **Ctrl+O** then **Enter**, and exit with **Ctrl+X**.
 
 The figure below highlights where this phase sit on in the SEA-FORWARD entire build chain
-![Phase 12](../img/river_discharges.png)
+![River discharges](../img/river_discharges.png)

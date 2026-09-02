@@ -20,7 +20,7 @@ above — set for this forecast build:
 | global ocean | Mercator (`inputdata='mercator'`) | analysis + forecast, the ocean you refine |
 | atmosphere | GFS (default format) | a hindcast uses ERA5 (`# define ERA_ECMWF`) → Phase 4 |
 | tides | off (`TIDES` undef) | add TPXO tides → Phase 10 |
-| rivers | off (`PSOURCE` undef) | add Dai & Trenberth runoff → Phase 12 |
+| rivers | off (`PSOURCE` undef) | add Dai & Trenberth runoff → Phase 11 |
 | bathymetry | ETOPO2 + GSHHS | no choice — always, at grid build |
 
 For *this* build you leave all of these at their defaults — Mercator, GFS, no tides,

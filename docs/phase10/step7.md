@@ -24,7 +24,7 @@ child 2-way     croco_2way         croco_2way_tides
 ```
 
 The driver also takes `--rivers`, which extends the same scheme —
-`croco_plain_tides_rivers` and so on. Phase 12 covers it.
+`croco_plain_tides_rivers` and so on. Phase 11 covers it.
 
 ### What `--tides` does inside the driver
 

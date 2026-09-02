@@ -204,28 +204,28 @@ nav:
       - Step 6 — Prove it on the parent: phase10/step6.md
       - Step 7 — The operational option: phase10/step7.md
       - Recap: phase10/recap.md
-  - Phase 11 — Architecture:
-      - Overview: phase11/11_architecture.md
-      - Where the reference comes from: phase11/where.md
-      - The value chain and three roles: phase11/value.md
-      - The map — components in the chain: phase11/map.md
-      - Running operationally: phase11/changes.md
-      - Why this framing matters: phase11/why.md
-      - References: phase11/references.md
-      - Regenerating the diagram: phase11/regenerating.md
-  - Phase 12 — River Forcing:
-      - Overview: phase12/12_rivers.md
-      - What are we doing, and why?: phase12/1.md
-      - The Dai & Trenberth climatology: phase12/2.md
-      - Step 1 — Extract your region's rivers: phase12/3.md
-      - Step 2 — Build the runoff file: phase12/4.md
-      - Step 3 — Turn rivers on in `cppdefs.h`: phase12/5.md
-      - Step 4 — List the rivers in `croco.in`: phase12/6.md
-      - Step 5 — Recompile CROCO: phase12/7.md
-      - Step 6 — A quick 2-day test: phase12/8.md
-      - The `--rivers` flag: phase12/9.md
-      - Doing this for a new region: phase12/10.md
-      - Notes and gotchas: phase12/11.md
+  - Phase 11 — River Forcing:
+      - Overview: phase11/11_rivers.md
+      - What are we doing, and why?: phase11/1.md
+      - The Dai & Trenberth climatology: phase11/2.md
+      - Step 1 — Extract your region's rivers: phase11/3.md
+      - Step 2 — Build the runoff file: phase11/4.md
+      - Step 3 — Turn rivers on in `cppdefs.h`: phase11/5.md
+      - Step 4 — List the rivers in `croco.in`: phase11/6.md
+      - Step 5 — Recompile CROCO: phase11/7.md
+      - Step 6 — A quick 2-day test: phase11/8.md
+      - The `--rivers` flag: phase11/9.md
+      - Doing this for a new region: phase11/10.md
+      - Notes and gotchas: phase11/11.md
+  - Phase 12 — Architecture:
+      - Overview: phase12/12_architecture.md
+      - Where the reference comes from: phase12/where.md
+      - The value chain and three roles: phase12/value.md
+      - The map — components in the chain: phase12/map.md
+      - Running operationally: phase12/changes.md
+      - Why this framing matters: phase12/why.md
+      - References: phase12/references.md
+      - Regenerating the diagram: phase12/regenerating.md
   - Notebooks Toolkit:
       - Overview: notebooks/00_notebooks_overview.md
       - Before you start: notebooks/01_before_you_start.md
