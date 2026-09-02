@@ -201,7 +201,7 @@ For completeness, and to show where rivers differ from tides:
   at Step 7 and with tides.
 
 Because rivers touch the data preparation, the compile step *and* `croco.in`, they are
-a chapter of their own. **See Phase 12 (Rivers)** for the full build.
+a chapter of their own. **See Phase 11 (Rivers)** for the full build.
 
 ### 5e — Confirm your inputs are in place
 

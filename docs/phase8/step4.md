@@ -4,24 +4,21 @@ expects to find it — and the naming is the thing people get wrong.
 ### 4a — The `.1` convention
 
 CROCO's AGRIF runtime identifies a child's files by a **`.1` suffix**, not a `1_`
-prefix.
-
-You don't have to take this on faith — **the build told you**. Look at what jobcomp
-left in the run directory after compiling with AGRIF:
+prefix. The build shows it: compiling with AGRIF leaves these in the run directory.
 
 ```bash
 ls ~/seaforward/forecast/scratch/IGOG_AGRIF/
 ```
-```
+
+```text
 kRGB61.txt            kRGB61.txt.1              <- AGRIF made a level-1 copy
 namelist_pisces_cfg   namelist_pisces_cfg.1
 namelist_pisces_ref   namelist_pisces_ref.1
 ```
 
-AGRIF generated `.1` copies of its input files automatically. That's the convention,
-stated by the code itself. croco_pytools follows it too — it wrote `croco_grd.nc.1`,
-not `1_croco_grd.nc`. So does somisana (`GRID.1`, `GLORYS.2`, `croco_grd.nc.3`). And
-so does the template CROCO ships at `code/croco/OCEAN/croco.in.1`.
+AGRIF generated those `.1` copies itself. croco_pytools follows the same convention —
+it wrote `croco_grd.nc.1`, not `1_croco_grd.nc` — as does the template CROCO ships at
+`code/croco/OCEAN/croco.in.1`.
 
 !!! note
     If you find yourself renaming things to `1_croco_grd.nc`, stop — that's a different convention from a different code, and nothing will find your files.
@@ -48,7 +45,7 @@ ls -la $D/CROCO_FILES/
 
 **Which parent IC?** The forecast run left three candidates:
 
-```
+```text
 gen_spinup/CROCO_FILES/croco_ini_MERCATOR_20260713_00.nc   <- from Mercator
 spinup/CROCO_FILES/croco_ini.nc                            <- same, staged
 fcst/CROCO_FILES/croco_ini.nc                              <- the spin-up RESTART
@@ -56,18 +53,18 @@ fcst/CROCO_FILES/croco_ini.nc                              <- the spin-up RESTAR
 
 Take the **Mercator** one. The child's IC came from Mercator at the same instant, so
 using the Mercator parent IC keeps the two clocks aligned. The `fcst` restart is two
-days later and would put the grids out of sync — which is exactly the failure Step 3
-warns about.
+days later and would put the grids out of sync — exactly the failure Step 3 warns
+about.
 
 ### 4c — The layout you should end up with
 
-```
+```text
 scratch/IGOG_AGRIF/
 ├── croco                     the AGRIF-enabled executable (Step 6)
 ├── croco.in                  parent runtime settings
 ├── croco.in.1                child runtime settings          (Step 5)
 ├── AGRIF_FixedGrids.in       <- RUN DIR, not CROCO_FILES
-├── cppdefs.h  param.h  jobcomp  config.sh
+├── cppdefs.h  param.h  jobcomp
 └── CROCO_FILES/
     ├── croco_grd.nc          parent grid
     ├── croco_grd.nc.1        child grid
@@ -77,11 +74,12 @@ scratch/IGOG_AGRIF/
     └── AGRIF_FixedGrids.in   (harmless copy; the run dir one is what's read)
 ```
 
-!!! note
-    Note the symmetry: **every child file is its parent's name plus `.1`** — except `croco_bry.nc`, which has no `.1` counterpart, because AGRIF *is* the child's boundary condition.
+Note the symmetry: **every child file is its parent's name plus `.1`** — except
+`croco_bry.nc`, which has no `.1` counterpart, because AGRIF *is* the child's boundary
+condition.
 
 !!! warning
-    ⚠️ **`AGRIF_FixedGrids.in` belongs in the run directory.** croco_pytools writes it into `croco_files_dir` (next to the grids), but CROCO reads it from where you launch the executable. Leave it only in `CROCO_FILES/` and the model will start as if there were no child at all.
+    **`AGRIF_FixedGrids.in` belongs in the run directory.** croco_pytools writes it into `croco_files_dir`, next to the grids, but CROCO reads it from where you launch the executable. Leave it only in `CROCO_FILES/` and the model starts as if there were no child at all.
 
 ### 4d — What each file does
 

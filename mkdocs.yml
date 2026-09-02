@@ -90,8 +90,8 @@ nav:
       - The two ways to build: phase1/step70.md
       - Download the source tarballs: phase1/step71.md
       - Route A — build with the scripts: phase1/routeA.md
-      - Route B — build by hand: 
-          - phase1/routeB.md
+      - Route B — build by hand:
+          - Overview: phase1/routeB.md
           - HDF5: phase1/step72.md
           - netcdf-c: phase1/step73.md
           - netcdf-fortran: phase1/step74.md
@@ -155,28 +155,28 @@ nav:
       - Through time: phase5/time.md
   - Validation:
       - Validation: phase5/step58_validation.md
-  - Phase 6 — Nesting (offline):
-      - Overview: phase6/06_nesting.md
-      - Step 0 — Session setup: phase6/step0.md
-      - Step 1 — Create the child grid: phase6/step1.md
-      - Step 2 — The child `crocotools_param.py`: phase6/step2.md
-      - Step 3 — Convert the parent output: phase6/step3.md
-      - Step 4 — Child initial and boundary conditions: phase6/step4.md
-      - Step 5 — Build the child config files: phase6/step5.md
-      - Step 6 — Compile the child: phase6/step6.md
-      - Step 7 — Run the nested child: phase6/step7.md
-      - Step 8a — Does the finer grid resolve more?: phase6/partA.md
-      - Step 8b — The nesting driver: phase6/partB.md
-  - Phase 7 — Region Gallery:
-      - Overview: phase7/07_regions.md
-      - Canary — `Canary_12`: phase7/canary.md
-      - Gulf of Guinea — `IGOG_12`: phase7/guinea.md
-      - Agulhas — `Agulhas_12`: phase7/agulhas.md
-      - What changes, what stays the same: phase7/pattern.md
+  - Phase 6 — Region Gallery:
+      - Overview: phase6/06_regions.md
+      - Canary — `Canary_12`: phase6/canary.md
+      - Gulf of Guinea — `IGOG_12`: phase6/guinea.md
+      - Agulhas — `Agulhas_12`: phase6/agulhas.md
+      - What changes, what stays the same: phase6/pattern.md
+  - Phase 7 — Nesting (offline):
+      - Overview: phase7/07_nesting.md
+      - Step 0 — Session setup: phase7/step0.md
+      - Step 1 — Create the child grid: phase7/step1.md
+      - Step 2 — The child `crocotools_param.py`: phase7/step2.md
+      - Step 3 — Convert the parent output: phase7/step3.md
+      - Step 4 — Child initial and boundary conditions: phase7/step4.md
+      - Step 5 — Build the child config files: phase7/step5.md
+      - Step 6 — Compile the child: phase7/step6.md
+      - Step 7 — Run the nested child: phase7/step7.md
+      - Step 8a — Does the finer grid resolve more?: phase7/partA.md
+      - Step 8b — The nesting driver: phase7/partB.md
   - Phase 8 — AGRIF nesting (online):
       - Overview: phase8/08_agrif.md
       - Why two-way nesting?: phase8/bother.md
-      - The hard constraints: phase8/constraint.md
+      - Constraints: phase8/constraint.md
       - Step 1 — Choose the child box: phase8/step1.md
       - Step 2 — Build the child grid: phase8/step2.md
       - Step 3 — The child's initial condition: phase8/step3.md
@@ -185,9 +185,7 @@ nav:
       - Step 6 — Turn AGRIF on and compile: phase8/step6.md
       - Step 7 — Run it (one-way): phase8/step7.md
       - Step 8 — Switch to two-way: phase8/step8.md
-      - Worked example — a coastal child: phase8/example.md
       - Gotchas: phase8/gotchas.md
-      - What this chapter does not cover: phase8/chapter.md
   - Phase 9 — Worked example:
       - Overview: phase9/09_agulhas.md
       - Part A — the parent: phase9/phaseA.md
@@ -205,30 +203,27 @@ nav:
       - Step 5 — Output intervals: phase10/step5.md
       - Step 6 — Prove it on the parent: phase10/step6.md
       - Step 7 — The operational option: phase10/step7.md
-      - What this buys you: phase10/what.md
       - Recap: phase10/recap.md
-  - Phase 11 — Architecture:
-      - Overview: phase11/11_architecture.md
-      - Where the reference comes from: phase11/where.md
-      - The value chain and three roles: phase11/value.md
-      - The map — components in the chain: phase11/map.md
-      - Running operationally: phase11/changes.md
-      - Why this framing matters: phase11/why.md
-      - References: phase11/references.md
-      - Regenerating the diagram: phase11/regenerating.md
-  - Phase 12 — River Forcing:
-      - Overview: phase12/12_rivers.md
-      - What are we doing, and why?: phase12/1.md
-      - The Dai & Trenberth climatology: phase12/2.md
-      - Step 1 — Extract your region's rivers: phase12/3.md
-      - Step 2 — Build the runoff file: phase12/4.md
-      - Step 3 — Turn rivers on in `cppdefs.h`: phase12/5.md
-      - Step 4 — List the rivers in `croco.in`: phase12/6.md
-      - Step 5 — Recompile CROCO: phase12/7.md
-      - Step 6 — A quick 2-day test: phase12/8.md
-      - The `--rivers` flag: phase12/9.md
-      - Doing this for a new region: phase12/10.md
-      - Notes and gotchas: phase12/11.md
+  - Phase 11 — River Forcing:
+      - Overview: phase11/11_rivers.md
+      - What are we doing, and why?: phase11/1.md
+      - The Dai & Trenberth climatology: phase11/2.md
+      - Step 1 — Extract your region's rivers: phase11/3.md
+      - Step 2 — Build the runoff file: phase11/4.md
+      - Step 3 — Turn rivers on in `cppdefs.h`: phase11/5.md
+      - Step 4 — List the rivers in `croco.in`: phase11/6.md
+      - Step 5 — Recompile CROCO: phase11/7.md
+      - Step 6 — A quick 2-day test: phase11/8.md
+      - The `--rivers` flag: phase11/9.md
+      - Notes and gotchas: phase11/11.md
+  - Phase 12 — Architecture:
+      - Overview: phase12/12_architecture.md
+      - Where the reference comes from: phase12/where.md
+      - The value chain and three roles: phase12/value.md
+      - The map — components in the chain: phase12/map.md
+      - Running operationally: phase12/changes.md
+      - Why this framing matters: phase12/why.md
+      - References: phase12/references.md
   - Notebooks Toolkit:
       - Overview: notebooks/00_notebooks_overview.md
       - Before you start: notebooks/01_before_you_start.md

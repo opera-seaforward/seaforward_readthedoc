@@ -8,7 +8,7 @@ island wake — rebuilding the whole thing at fine resolution is expensive and
 usually unnecessary. Instead you add a **child grid**: a finer grid inside the
 parent that resolves the small-scale detail only where you want it.
 
-SEA-FORWARD offers two ways to do this. **Offline nesting** (Phase 6) runs the
+SEA-FORWARD offers two ways to do this. **Offline nesting** (Phase 7) runs the
 parent first, then builds the child's boundaries from the parent's saved output and
 runs the child afterwards. **AGRIF** (Phase 8), described here, runs both grids in
 one execution with the parent feeding the child every timestep.
@@ -69,7 +69,7 @@ Building a nest is its own phase because of this new machinery — the child gri
 index box, the ratio, the `.1` files, the coupling switches. This chapter got you
 the parent that a child needs. To build the child:
 
-- **[Phase 6 — Nesting (offline)](../phase6/06_nesting.md)** builds the child from
+- **[Phase 7 — Nesting (offline)](../phase7/07_nesting.md)** builds the child from
   the parent's saved output, running the two separately. It allows a different
   vertical grid.
 - **[Phase 8 — AGRIF nesting](../phase8/08_agrif.md)** is the step-by-step how-to for

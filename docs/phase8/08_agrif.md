@@ -1,6 +1,6 @@
 # Phase 8 — AGRIF nesting
 
-Phase 6 built an **offline** nest: the parent runs, writes history files, and a
+Phase 7 built an **offline** nest: the parent runs, writes history files, and a
 converter turns those into boundary conditions for a child that runs afterwards.
 Information flows one way, from parent to child, filtered through hourly snapshots.
 
@@ -18,7 +18,7 @@ AGRIF has two modes, and we build them **in order**:
 2. **Two-way** (`AGRIF_2WAY` defined) — the child's solution is averaged back onto
    the parent where they overlap. Step 8 adds this on top.
 
-**Always build one-way first.** This is not ceremony. Two-way can destabilise, and an
+**Always build one-way first.** Two-way can destabilise, and an
 AGRIF nest has plenty of other things to get wrong before you get there — grid
 alignment, file conventions, timestep bookkeeping, initial conditions. If you enable
 feedback from the outset and it fails, you cannot tell which of those it was. One-way
@@ -41,7 +41,7 @@ The nano keys used throughout:
 | Key | Does |
 |---|---|
 | `Ctrl+W` | **Where is** — search. Type the string, press `Enter`. |
-| `Ctrl+W` then `Enter` | repeat the last search — jump to the next match |
+| `Alt+W` | repeat the last search — jump to the next match |
 | `Ctrl+K` | cut the current line |
 | `Ctrl+U` | paste (uncut) the line |
 | `Ctrl+O` then `Enter` | **write Out** — save, keeping the filename |
@@ -63,4 +63,4 @@ run that succeeds while being silently wrong, and the only defence is checking t
 file says what you think it says.
 
 !!! important
-    **This is a parallel workflow, not a flag on the forecast driver.** The AGRIF path uses different tools, different file conventions, and a hand-assembled run directory. `run_forecast_igog.sh` plays no part in it. Read this chapter as a separate recipe, not as an option added to Phase 3.
+    **This chapter builds the nest by hand.** The operational driver *can* run an AGRIF nest — `run_forecast_cycle.sh --child 1way` — but it expects the child grid, its initial condition and its `croco.in.1` to exist already, and a binary compiled with `AGRIF` defined. This chapter is how you make all of those. Once they exist, the driver takes over and runs the nest every cycle.

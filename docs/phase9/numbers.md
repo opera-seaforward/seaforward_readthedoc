@@ -8,8 +8,8 @@
 | parent indices | — | `39 121 24 84`, coef 3 |
 | boundaries | all four **open** | S open, **N closed**, W/E open (mixed) |
 | `rfact` | 0.2 | **0.15** |
-| `rx0` / `rx1` | 0.2001 / **14.84** | *(see the run)* |
+| `rx0` | 0.2001 | 0.2115 |
+| `rx1` | 14.84 | **13.42** — lower, see Phase B |
 | ocean | — | 80.4% |
 | depth | — | 48–5556 m |
-| KE (1-day run) | **2.6e-2** (10× IGOG) | — |
-
+| KE, 1-day run | **2.6e-2** — the Agulhas Current | — |

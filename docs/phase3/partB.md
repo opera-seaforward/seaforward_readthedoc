@@ -170,7 +170,7 @@ Check what you have at any point:
 ls ~/seaforward/forecast/scratch/Canary_12/croco_*
 ```
 
-Full setup for each: **Phase 10** for tides, **Phase 12** for rivers, **Phase 8** for
+Full setup for each: **Phase 10** for tides, **Phase 11** for rivers, **Phase 8** for
 AGRIF — those chapters cover the data files each one also needs, not just the switches.
 
 ## B.4 — Settings at the top of the driver

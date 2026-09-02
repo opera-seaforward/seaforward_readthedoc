@@ -126,7 +126,7 @@ them at launch rather than keeping separate scripts:
 The flags are independent and compose. **`--tides`** generates a tidal-forcing file
 per cycle and switches the output to hourly history and daily averages (full setup in
 **Phase 10**). **`--rivers`** stages the pre-built river climatology into each cycle
-(**Phase 12**). **`--child 1way|2way`** runs the AGRIF nest described just above — the
+(**Phase 11**). **`--child 1way|2way`** runs the AGRIF nest described just above — the
 parent and child together, the parent supplying the child's boundaries each step —
 with `1way` passing information parent→child only and `2way` also feeding the child's
 solution back to the parent.
