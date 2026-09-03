@@ -16,14 +16,15 @@ child timestep   = parent timestep   / coef
 
 From a 1/12° parent (≈9.2 km at the equator) you have exactly two options:
 
-| `coef` | Child grid | At the equator | At 35°S | Child dt (parent 300 s) |
+| `coef` | Child grid | At the equator | At 20°N | Child dt (parent 300 s) |
 |---|---|---|---|---|
-| **3** | 1/36° | ≈3.06 km | ≈2.6 km | 100 s |
-| **5** | 1/60° | ≈1.85 km | ≈1.6 km | 60 s |
+| **3** | 1/36° | ≈3.06 km | ≈2.88 km | 100 s |
+| **5** | 1/60° | ≈1.85 km | ≈1.73 km | 60 s |
 
 The resolution in km depends on **latitude** — a degree of longitude shrinks as
-cos(lat). The same 1/36° grid is 3.06 km at São Tomé (0°N) and 2.5 km at Cape Town
-(34°S). Check the actual metrics after building rather than assuming.
+cos(lat). The same 1/36° grid is 3.06 km at the equator, 2.88 km over the Canary
+upwelling at 20°N, and 2.5 km off Cape Town at 34°S. Check the actual metrics after
+building rather than assuming.
 
 Offline nesting takes any ratio — the Phase 7 nest went 1/12° → 1/25°, a 2.08× jump
 chosen to suit the region. AGRIF takes one of two, and in exchange gives you boundary
@@ -32,11 +33,10 @@ exchange every barotropic step and, if you want it, feedback to the parent.
 **Choosing between them.** Two considerations pull opposite ways.
 
 *What does the physics need?* The question is whether your feature is resolved — you
-want several cells across it, not one. Island wakes and mesoscale eddies live at tens
-of km, so 3 km resolves them well. Submesoscale fronts and filaments want ~1 km, which
-argues for the finer option. The internal Rossby radius is the usual yardstick: at
-mid-latitudes it's 20–30 km, so 3 km gives about 8 cells across it — comfortably
-eddy-resolving.
+want several cells across it, not one. Mesoscale eddies live at tens of km, so 3 km
+resolves them well. Submesoscale fronts and filaments want ~1 km, which argues for the
+finer option. The internal Rossby radius is the usual yardstick: at mid-latitudes it's
+20–30 km, so 3 km gives about 8 cells across it — comfortably eddy-resolving.
 
 *What does it cost?* The cell count scales as `coef²` and the timestep count as
 `coef`, so the total work scales as **`coef³`**:
@@ -58,7 +58,7 @@ a large coarse one for the same cost.
 
 ### 2. The child's `N` must equal the parent's
 
-IGOG_12 has `N=50`, so its AGRIF child has `N=50`. The two grids exchange data every
+Canary_12 has `N=50`, so its AGRIF child has `N=50`. The two grids exchange data every
 barotropic step, and that exchange is column-by-column — mismatched vertical grids
 would need an interpolation AGRIF doesn't do.
 
@@ -70,7 +70,7 @@ in a handful — that is what offline nesting (Phase 7) is for.
 
 ### 3. The child is defined by *parent grid indices*
 
-Not longitude and latitude. `AGRIF_FixedGrids.in` says `20 48 68 96` — parent cells,
+Not longitude and latitude. `AGRIF_FixedGrids.in` says `13 75 50 111` — parent cells,
 not degrees. The child's position, extent and resolution are all derived from the
 parent plus that index box.
 
@@ -85,7 +85,9 @@ touches the parent's own edge has nothing to read from.
 
 How much margin? Enough that the parent's own boundary conditions — themselves
 interpolated from Mercator, and least reliable near the edge — aren't feeding straight
-into the child. The São Tomé child has 19–57 parent cells on each side.
+into the child. The Canary child has 12 parent cells to the west, 49 to the south and
+12 to the north. Its east margin is only 6, which matters less because that edge is
+closed on the African coast and has no interpolation to do.
 
 ### What this means in practice
 

@@ -8,9 +8,12 @@ Mapped onto the Phase 2 build, so you know which step each one extends:
 3. **Param file** *(extends Phase 2 Step 4)* — `crocotools_param_tides.py` alongside
    the Mercator `crocotools_param.py`, in the config's `CROCO_FILES/`.
 4. **Generate and check** *(extends Phase 2 Step 5)* — one command per grid; verify the
-   M2 amplitude is physical and any fill values sit only on land.
-5. **cppdefs** *(edits Phase 2 Step 8)* — `TIDES`, `SSH_TIDES`, `UV_TIDES` and
-   `POT_TIDES` on; `TIDES_MAS` and `USE_CALENDAR` off; recompile and rename the binary.
+   M2 amplitude is physical, and look at where any fill values sit. A handful on the
+   weakest waves at coastal cells is normal; a scatter across the main constituents in
+   open water is not.
+5. **cppdefs** *(edits Phase 2 Step 8)* — `TIDES`, `SSH_TIDES`, `UV_TIDES`, `POT_TIDES`
+   and `TIDERAMP` on; `TIDES_MAS` and `USE_CALENDAR` off; recompile and rename the
+   binary.
 6. **croco.in** *(edits Phase 2 Step 10)* — `forcing:` points at `croco_frc.nc`; no
    `Ntides` section needed.
 7. **Output** *(edits Phase 2 Step 13)* — hourly history, daily average: resolve M2,

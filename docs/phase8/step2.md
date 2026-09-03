@@ -1,6 +1,6 @@
 ### 2a — Why this doesn't use the tool you already know
 
-Phase 2 built IGOG_12's grid with `make_grid.py` and a `grid.ini`. That script
+Phase 2 built Canary_12's grid with `make_grid.py` and a `grid.ini`. That script
 **cannot build a zoom grid** — it has no notion of a parent. The AGRIF logic lives in
 a Python class, `CROCO`, in `code/croco_pytools/prepro/Modules/croco_class.py`, and
 the only thing shipped that drives it is a Jupyter notebook,
@@ -22,16 +22,16 @@ which is what this step does.
 
 ### 2b — Set up the working directory
 
-Don't build the AGRIF child inside `scratch/IGOG_12/`. That directory holds a working,
-compiled forecast configuration; the AGRIF setup needs parent and child files side by
-side and will clutter it. Make a separate one:
+Don't build the AGRIF child inside `scratch/Canary_12/`. That directory holds a
+working, compiled forecast configuration; the AGRIF setup needs parent and child files
+side by side and will clutter it. Make a separate one:
 
 ```bash
-mkdir -p ~/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES
+mkdir -p ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES
 # the child grid is built FROM the parent, so the parent must be there first
-cp ~/seaforward/forecast/scratch/IGOG_12/CROCO_FILES/croco_grd.nc \
-   ~/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES/croco_grd.nc
-ls -la ~/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES/
+cp ~/seaforward/forecast/scratch/Canary_12/CROCO_FILES/croco_grd.nc \
+   ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/croco_grd.nc
+ls -la ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/
 ```
 
 That's a **copy**, deliberately. The zoom config points at it as `parent_grid`, and
@@ -44,24 +44,24 @@ The config goes in the **prepro directory**, because that's where you'll run the
 script from:
 
 ```bash
-nano ~/seaforward/code/croco_pytools/prepro/igog_zoom_agrif.ini
+nano ~/seaforward/code/croco_pytools/prepro/canary_zoom_agrif.ini
 ```
 
-Substitute your own username and your `imin/imax/jmin/jmax` from Step 1:
+Substitute your own username, and your `imin/imax/jmin/jmax` from Step 1:
 
 ```ini
 [Croco_Files]
-croco_files_dir = /home/you/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES
+croco_files_dir = /home/you/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES
 croco_grd_prefix = croco_grd
 
 [Zoom_Options]
 is_zoom = True
 is_agrif = True
 agrif_level = 1
-parent_grid = /home/you/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES/croco_grd.nc
+parent_grid = /home/you/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/croco_grd.nc
 
 [Grid_Zoom_Params]
-north_obc = False
+north_obc = True
 south_obc = True
 west_obc = True
 east_obc = False
@@ -69,10 +69,10 @@ merging_area = 5
 
 [Grid_Zoom_Agrif]
 coef = 3
-imin = 11
-imax = 90
-jmin = 11
-jmax = 126
+imin = 12
+imax = 74
+jmin = 49
+jmax = 110
 
 [Grid_Smoothing_Params]
 hmin = 50.0
@@ -94,9 +94,9 @@ shp_file = /home/you/seaforward/data/DATASETS_CROCOTOOLS/gshhs/GSHHS_shp/i/GSHHS
 
 `Ctrl+O` `Enter`, `Ctrl+X`.
 
-The two closed edges come straight from the parent's mask: IGOG's coast wraps the
-north and east, so `north_obc` and `east_obc` are `False` here exactly as they are in
-the parent's own `cppdefs.h`. Set yours from your Step 1 check, not from this example.
+The one closed edge comes straight from Step 1's mask check: the child's east boundary
+is 0/62 ocean, the African coast, so `east_obc = False` — exactly as the parent's own
+east boundary is closed. Set yours from your own check, not from this example.
 
 !!! warning
     **Pasting long heredocs into a terminal is unreliable.** A `cat > file << 'EOF'` block can collide with whatever you paste after it and truncate the file without saying so. Use nano as above, or a Python block. Either way, check the result with `wc -l` and `tail`.
@@ -133,7 +133,7 @@ the parent's own `cppdefs.h`. Set yours from your Step 1 check, not from this ex
 `topo_file` and `shp_file` should be exactly what built the parent:
 
 ```bash
-grep -iE "shp_file|topo_file|topo_file_reader" ~/seaforward/forecast/configs/IGOG_12/grid.ini
+grep -iE "shp_file|topo_file|topo_file_reader" ~/seaforward/forecast/configs/Canary_12/grid.ini
 ```
 
 **Verify the config parses** before running anything:
@@ -142,7 +142,7 @@ grep -iE "shp_file|topo_file|topo_file_reader" ~/seaforward/forecast/configs/IGO
 cd ~/seaforward/code/croco_pytools/prepro
 python3 << 'PYEOF'
 import configparser
-c = configparser.ConfigParser(); c.read('igog_zoom_agrif.ini')
+c = configparser.ConfigParser(); c.read('canary_zoom_agrif.ini')
 print('sections:', c.sections())
 z = c['Grid_Zoom_Agrif']
 print('box: imin=%s imax=%s jmin=%s jmax=%s coef=%s'
@@ -154,7 +154,7 @@ PYEOF
 ```text
 sections: ['Croco_Files', 'Zoom_Options', 'Grid_Zoom_Params', 'Grid_Zoom_Agrif',
            'Grid_Smoothing_Params', 'Grid_Isolated_Waterbodies', 'Grid_Input_Files']
-box: imin=11 imax=90 jmin=11 jmax=126 coef=3
+box: imin=12 imax=74 jmin=49 jmax=110 coef=3
 agrif: True level 1
 ```
 
@@ -165,7 +165,7 @@ Seven sections. Fewer means the file was truncated — rewrite it.
 Same directory:
 
 ```bash
-nano ~/seaforward/code/croco_pytools/prepro/build_igog_agrif.py
+nano ~/seaforward/code/croco_pytools/prepro/build_canary_agrif.py
 ```
 
 ```python
@@ -174,7 +174,7 @@ matplotlib.use("Agg")            # save figures instead of opening a window
 import matplotlib.pyplot as plt
 from Modules.croco_class import CROCO
 
-INI = "igog_zoom_agrif.ini"
+INI = "canary_zoom_agrif.ini"
 
 print(f"=== loading {INI}")
 croco = CROCO(INI)
@@ -183,21 +183,21 @@ croco = CROCO(INI)
 print("=== create_grid()")
 croco.create_grid()
 croco.plot_grid_outline_zoom()
-plt.savefig("/tmp/agrif_outline.png", dpi=110, bbox_inches="tight")
+plt.savefig("/tmp/can_outline.png", dpi=110, bbox_inches="tight")
 plt.close("all")
 
 # 2. bathymetry + land mask, merged into the parent at the open edges
 print("=== create_mask_and_topo()")
 croco.create_mask_and_topo()
 croco.plot_h_zoom()
-plt.savefig("/tmp/agrif_bathy.png", dpi=110, bbox_inches="tight")
+plt.savefig("/tmp/can_bathy.png", dpi=110, bbox_inches="tight")
 plt.close("all")
 
 # 3. write croco_grd.nc.1 + AGRIF_FixedGrids.in
 print("=== save_grid_nc()")
 croco.save_grid_nc()
 
-print("\nDONE — check /tmp/agrif_outline.png and /tmp/agrif_bathy.png")
+print("\nDONE — check /tmp/can_outline.png and /tmp/can_bathy.png")
 ```
 
 `Ctrl+O` `Enter`, `Ctrl+X`.
@@ -221,23 +221,25 @@ Two requirements: the right directory, and the right conda environment.
 ```bash
 cd ~/seaforward/code/croco_pytools/prepro     # required for the Modules import
 conda activate seaforward                     # the env that built the parent's grid
-python build_igog_agrif.py 2>&1 | tail -20
+python build_canary_agrif.py 2>&1 | tail -20
 ```
 
 ```text
-=== loading igog_zoom_agrif.ini
+=== loading canary_zoom_agrif.ini
 === create_grid()
-Reading CROCO grid: .../IGOG_AGRIF/CROCO_FILES/croco_grd.nc
+Reading CROCO grid: .../Canary_AGRIF/CROCO_FILES/croco_grd.nc
 === create_mask_and_topo()
 Reading topography file: .../DATASETS_CROCOTOOLS/Topo/etopo2.nc
+Bounding indices of the relevant part to be extracted from the entire dataset:
+ imin,imax = 4763 4928 out of 10800 jmin,jmax = 3236 3397 out of 5400
 Interpolating topography to CROCO grid
 Finished interpolating
 Matching Parent and Child mask close to boundary
 Processing mask to close narrow bay and narrow land (1 point wide)
 === save_grid_nc()
-Writting .../IGOG_AGRIF/CROCO_FILES/croco_grd.nc.1 done
+Writting .../Canary_AGRIF/CROCO_FILES/croco_grd.nc.1 done
 Create an AGRIF_FixedGrids.in file
-DONE — check /tmp/agrif_outline.png and /tmp/agrif_bathy.png
+DONE — check /tmp/can_outline.png and /tmp/can_bathy.png
 ```
 
 Two lines there are AGRIF-specific:
@@ -250,7 +252,7 @@ Two lines there are AGRIF-specific:
 ### 2f — What you should now have
 
 ```bash
-ls -la ~/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES/
+ls -la ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/
 ```
 
 ```text
@@ -263,20 +265,18 @@ Note the naming: **`croco_grd.nc.1`**, the `.1` from `agrif_level = 1`. This is
 CROCO's AGRIF convention and it carries through everything — `croco_ini.nc.1`,
 `croco.in.1`, `croco_his.nc.1`. It is not `1_croco_grd.nc`.
 
-![Parent and AGRIF child bathymetry](../img/agrif_bathy.png)
-
-*The child's footprint on the parent (left) and the child grid itself (right). At
-`coef=3` the child covers most of the parent domain — a deliberate choice here.*
+Look at `/tmp/can_outline.png` and `/tmp/can_bathy.png` before going further. They are
+your check that the box landed where you meant it to.
 
 ### `AGRIF_FixedGrids.in`
 
 ```bash
-cat ~/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES/AGRIF_FixedGrids.in
+cat ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/AGRIF_FixedGrids.in
 ```
 
 ```text
     1
-    12    100    11    133    3    3    3    3
+    13    75    50    111    3    3    3    3
     0
 # number of children per parent
 # imin imax jmin jmax spacerefx spacerefy timerefx timerefy
@@ -286,16 +286,15 @@ cat ~/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES/AGRIF_FixedGrids.in
 One child, refined 3× in space and taking 3 sub-steps per parent step. The format
 supports several children off one parent — more rows, each with its own box and ratio.
 
-**Compare that with what was requested:** `11 90 11 126`. Fortran is 1-based, so
-`imin` and `jmin` gaining 1 is expected. But `imax` went from 90 to **100** and `jmax`
-from 126 to **133**. The tool moved two edges by ten and seven parent cells.
+Compare against what was requested — `12 74 49 110`. Every index is exactly one
+higher, which is the Fortran 1-based offset and nothing more. **The box was not
+moved.**
 
 ### The displacement loop
 
-`easygrid.py` **moves your box** and says so only in passing:
+`easygrid.py` sometimes moves your box, and says so only in passing:
 
 ```text
-==> East limits displacement +1
 ==> North limits displacement +1
 ```
 
@@ -308,38 +307,37 @@ if sum(northchk) != 0:
     inputs.jmax = inputs.jmax + 1
     print("==> North limits displacement +1")
 ```
-If a coastline crosses near the edge, it shifts the edge outward and retries, looking
-for an edge whose mask is uniform in the boundary-normal direction. In this build it
-pushed the east edge until it was entirely land and the north edge until it was nearly
-so. Both were edges you intended to close, so the result is fine.
 
-**It does not check whether that was your intention.** A solid-land edge is perfectly
-uniform, so it passes the test whether or not you meant that edge to be open. An
-earlier attempt at a coastal IGOG child asked for `jmax = 124` (4.21°N) and the loop
-marched it to 133 (4.94°N) — onto the continent — reporting success. Setting
-`north_obc = False` did not stop it: the loop runs on mask geometry, before the obc
-flags are considered.
+If a coastline crosses near the edge, it shifts that edge outward and retries, looking
+for one whose mask is uniform in the boundary-normal direction. It can march several
+cells before it settles.
 
-Both attempts ended at 133. The loop pushes until the edge is uniform, and for this
-parent that happens at the same row whether you start from 124 or 126.
+**It didn't fire here**, and the reason is worth understanding: the Canary coast runs
+roughly north–south, *parallel* to the child's east edge, and that edge is already
+uniformly land. The north and south edges each carry land only at their eastern end,
+contiguous rather than crossing. There was nothing for the loop to hunt.
 
-Always compare what you asked for against what `AGRIF_FixedGrids.in` says, and check
-the resulting edges.
+A coast running *diagonally* across an edge the tool is trying to open is what makes
+it march — and it does not check whether the destination makes sense. A solid-land
+edge is perfectly uniform, so it passes the test whether or not you meant that edge to
+be open. Setting `north_obc = False` does not stop it either: the loop runs on mask
+geometry, before the obc flags are considered.
+
+Always compare what you asked for against what `AGRIF_FixedGrids.in` says.
 
 ### Verify the child grid
 
 ```bash
-cd ~/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES
+cd ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES
 python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g = xr.open_dataset('croco_grd.nc.1')
 print('grid: %d x %d' % (g.sizes['xi_rho'], g.sizes['eta_rho']))
-print('lon: %.3f to %.3f E'   % (float(g.lon_rho.min()), float(g.lon_rho.max())))
-print('lat: %.3f to %.3f N'   % (float(g.lat_rho.min()), float(g.lat_rho.max())))
+print('lon: %.2f to %.2f E'   % (float(g.lon_rho.min()), float(g.lon_rho.max())))
+print('lat: %.2f to %.2f N'   % (float(g.lat_rho.min()), float(g.lat_rho.max())))
 print('depth: %.0f to %.0f m' % (float(g.h.min()), float(g.h.max())))
 print('ocean: %.1f%%'         % (float(g.mask_rho.mean()) * 100))
 dx = 1 / g.pm.values          # pm, pn are INVERSE grid spacings
-dy = 1 / g.pn.values
 print('dx: %.2f - %.2f km' % (dx.min()/1000, dx.max()/1000))
 m = g.mask_rho.values
 for n, r in [('south', m[0,:]), ('north', m[-1,:]), ('west', m[:,0]), ('east', m[:,-1])]:
@@ -348,52 +346,47 @@ PYEOF
 ```
 
 ```text
-grid: 266 x 368
-lon: 4.883 to 12.196 E
-lat: -5.187 to 4.935 N
-depth: 49 to 5089 m
-ocean: 65.4%
-dx: 3.05 - 3.06 km
-  south   262/ 266 ocean
-  north    22/ 266 ocean
-  west    368/ 368 ocean
-  east      0/ 368 ocean
+grid: 188 x 185
+lon: -21.09 to -15.82 E
+lat: 18.02 to 23.10 N
+depth: 48 to 4355 m
+ocean: 88.1%
+dx: 2.88 - 2.88 km
+  south   184/ 188 ocean
+  north   175/ 188 ocean
+  west    185/ 185 ocean
+  east      0/ 185 ocean
 ```
 
-The spacing is exactly 1/36°, three times the parent's 1/12° (≈9.2 km), with the small
-spread coming from cos(lat) convergence. The edges match the config: east is solid
-land and correctly closed, north is nearly so, and south and west are open water.
+The edges match the config: east solid land and correctly closed, west fully open,
+north and south mixed where they meet the coast.
 
-| | Parent IGOG_12 | AGRIF child |
+Note the spacing: **2.88 km, not 3.06 km.** Same 1/36° grid, but a degree of longitude
+is shorter at 20°N than at the equator. Always read `pm` and `pn` rather than assuming.
+
+| | Parent Canary_12 | AGRIF child |
 |---|---|---|
-| Resolution | 1/12° ≈ 9.2 km | **1/36° ≈ 3.06 km** |
-| Grid | 105 × 141 × 50 | 266 × 368 × 50 |
+| Resolution | 1/12° ≈ 9.2 km | **1/36° ≈ 2.88 km** |
+| Grid | 81 × 123 × 50 | 188 × 185 × 50 |
 | dt | 300 s | 100 s |
-
-!!! note
-    **This child is large, and that costs.** It covers 89 × 123 of the parent's 105 × 141 cells — about 85% of the domain — so the run costs roughly 27× the parent for most of the same water. A third of its cells are land (65.4% ocean), refined at 3 km for no return.
 
 ### Grid stiffness
 
 When the model runs it reports, for each grid:
 
 ```text
-Maximum grid stiffness ratios:   rx0 =  0.2001   rx1 =  14.816     <- parent
-Maximum grid stiffness ratios:   rx0 =  0.2331   rx1 =  15.781     <- child
+ Maximum grid stiffness ratios:   rx0 = 0.20006   rx1 = 14.836     <- parent
+ Maximum grid stiffness ratios:   rx0 = 0.20000   rx1 = 14.837     <- child
 ```
 
-`rx1`, the Haney number, measures how steeply the sigma layers tilt. Above about 10
-you start getting spurious pressure-gradient forces; these are high but the run is
-stable throughout.
+`rx1`, the Haney number, measures how steeply the sigma layers tilt. High values risk
+spurious pressure-gradient forces; these are on the high side and the run is stable
+throughout.
 
-The child's `rx1` is **higher than its parent's** — 15.78 against 14.82 — which is
-what you would expect: refining resolves the same slopes with thinner layers, so the
-tilt per layer thickness rises. Both grids used `rfact = 0.2`.
+The child's `rx1` is **essentially unchanged from its parent's** — 14.837 against
+14.836. That is worth noting, because refining a grid does not automatically make it
+stiffer: it depends on what the finer grid resolves. Over Canary's shelf break the
+extra resolution did not sharpen the slope enough to matter, while elsewhere it can.
+Phase 9's Agulhas child, built at a lower `rfact`, came out *lower* than its parent.
 
-That is not inevitable. Phase 9's Agulhas child comes out *lower* than its parent —
-13.42 against 14.84 — and it was built with `rfact = 0.15` rather than 0.2. The two
-cases differ in more than `rfact`, so this isn't a controlled comparison, but lowering
-`rfact` on the child is the first thing to try if its `rx1` comes back too high.
-
-`rx0 = 0.233` sits above the requested `rfact = 0.2` because `merging_area` blends the
-parent's bathymetry back in at the edges, partly undoing the smoothing.
+`rx0` landed on the requested `rfact = 0.2` for both grids.

@@ -8,10 +8,10 @@ parent  ──boundaries──▶  child
 The child sees everything the parent knows. The parent sees nothing the child
 computes. From the parent's point of view, the child does not exist.
 
-In the worked example later in this chapter, the child resolves a cyclonic eddy and
-an island wake that the parent renders as a smooth smear. Two different answers, for
-the same water, at the same instant — and in one-way mode the parent keeps its wrong
-one forever, then **advects it downstream** into the rest of the domain.
+Later in this chapter, the child resolves filaments and eddies along the upwelling
+front that the parent renders as a smooth smear. Two different answers for the same
+water at the same instant — and in one-way mode the parent keeps its own and advects
+it downstream.
 
 Two-way closes the loop:
 

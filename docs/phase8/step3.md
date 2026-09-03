@@ -32,20 +32,18 @@ it for the child runs cleanly:
 
 ```bash
 cd ~/seaforward/code/croco_pytools/prepro
-python make_ini.py igog_ibc_zoom_agrif.ini
+python make_ini.py canary_ibc_zoom_agrif.ini
 ```
 
-It reads the child grid correctly (`Reading CROCO grid: .../croco_grd.nc.1`) and writes
-`croco_ini_mercator_Y2026M07.nc.1`. Every sign says success.
+It reads the child grid correctly and writes a `.nc.1` file. Every sign says success.
 
-**And the file is unusable.** Along the way it prints warnings that are easy to scroll
-past:
+**And the file can be unusable.** Along the way it prints warnings that are easy to
+scroll past:
 
 ```text
   Interpolate v from OGCM to CROCO grid on each z level
 [########....] 45/50   Warning: less than 10 good values in this layer
 [#########...] 46/50   Warning: no good data in this layer
-[##########..] 47/50   Warning: no good data in this layer
 ```
 
 Those come from `Modules/interp_tools.py`, in `interp_horiz`:
@@ -62,56 +60,11 @@ elif NGood < 10:
 ```
 
 A whole layer becomes NaN, which netCDF writes as **`9.969e+36`**, the standard float
-`_FillValue`. CROCO reads that as a velocity of 10³⁷ m/s and reports:
+`_FillValue`. CROCO reads that as a velocity of 10³⁷ m/s and reports a kinetic energy
+of around 10⁷¹ at step zero, before a single timestep. That number is the signature:
+the initial condition is broken, and it is not an instability.
 
-```text
-STEP   time[DAYS] KINETIC_ENRG    POTEN_ENRG    TOTAL_ENRG    NET_VOLUME   trd
-   0  9688.00000 1.492439643E+71           NaN           NaN 1.7790546E+14  0
-```
-
-**Kinetic energy of 1.49e+71 at step zero**, before a single timestep. That number is
-the signature: the initial condition is broken, and it is not an instability.
-
-**The source data is not at fault**, which is worth establishing before you spend an
-hour blaming Mercator:
-
-```bash
-cd ~/seaforward
-python3 << 'PYEOF'
-import xarray as xr, numpy as np
-c = xr.open_dataset('forecast/scratch/IGOG_AGRIF/CROCO_FILES/croco_grd.nc.1')
-lo, la = float(c.lon_rho.min()), float(c.lon_rho.max())
-s,  n  = float(c.lat_rho.min()), float(c.lat_rho.max())
-
-MERC = ('forecast/model-runs/IGOG_12/20260713/downloaded_data/'
-        'MERCATOR/MERCATOR_20260713_00.nc')
-d   = xr.open_dataset(MERC)
-sub = d.thetao.isel(time=1).sel(longitude=slice(lo, la), latitude=slice(s, n))
-print('child footprint: %d x %d Mercator points'
-      % (sub.sizes['longitude'], sub.sizes['latitude']))
-for k in [0, 20, 35, 40, 45, 49]:
-    lay = sub.isel(depth=k).values
-    print('  depth %7.1f m: %5d valid of %d'
-          % (float(d.depth[k]), int(np.isfinite(lay).sum()), lay.size))
-PYEOF
-```
-
-```text
-child footprint: 88 x 122 Mercator points
-  depth     0.5 m:  7085 valid of 10736
-  depth    77.9 m:  6137 valid of 10736
-  depth  1062.4 m:  5351 valid of 10736
-  depth  2225.1 m:  4187 valid of 10736
-  depth  3992.5 m:  1218 valid of 10736
-  depth  5727.9 m:     0 valid of 10736
-```
-
-Mercator has ample data through the child's whole depth range — over a thousand valid
-points at 3992 m, against a threshold of ten. Only the deepest level, 5728 m, is empty,
-and that sits below the child's 5089 m seafloor.
-
-So the tool discards layers it has data for. Whatever the trigger, the outcome is
-measurable and the fix is to use the other tool.
+Use SEA-FORWARD's `make_ini` instead, which is what the rest of this step does.
 
 ### 3c — Building the child's IC
 
@@ -119,10 +72,10 @@ measurable and the fix is to use the other tool.
 `croco_grd.nc`, plus a `crocotools_param.py`:
 
 ```bash
-CGEN=~/seaforward/forecast/scratch/IGOG_AGRIF/child_gen/CROCO_FILES
+CGEN=~/seaforward/forecast/scratch/Canary_AGRIF/child_gen/CROCO_FILES
 mkdir -p "$CGEN"
-cp ~/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES/croco_grd.nc.1 "$CGEN/croco_grd.nc"
-cp ~/seaforward/forecast/configs/IGOG_12/crocotools_param.py           "$CGEN/"
+cp ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/croco_grd.nc.1 "$CGEN/croco_grd.nc"
+cp ~/seaforward/forecast/configs/Canary_12/crocotools_param.py           "$CGEN/"
 ```
 
 That rename is the trick: `make_ini` reads whatever `croco_grd.nc` it finds in
@@ -137,36 +90,37 @@ grep -E "obc_dict|sigma_params" "$CGEN/crocotools_param.py"
 
 ```text
 sigma_params = dict(theta_s=7, theta_b=2, N=50, hc=200)
-obc_dict     = dict(south=1, west=1, east=0, north=0)
+obc_dict     = dict(south=1, west=1, east=0, north=1)   # E=African coast (closed); S,W,N open
 ```
 
-For this child those are already right — Step 2's edge check gave east 0/368 and north
-22/266, both coast, matching the parent. A child whose box sits differently may not
-match, so read its mask rather than assuming. `sigma_params` must equal the parent's
-`N=50`, which it will if you copied the parent's file.
+For this child those are already right — Step 2's edge check gave east 0/185, solid
+land, and the other three open, matching the parent. A child whose box sits differently
+may not match, so read its mask rather than assuming. `sigma_params` must equal the
+parent's `N=50`, which it will if you copied the parent's file.
 
 **Run make_ini** with the same arguments the forecast driver uses for the spin-up:
 
 ```bash
-MERC=~/seaforward/forecast/model-runs/IGOG_12/20260713/downloaded_data/MERCATOR/MERCATOR_20260713_00.nc
+MERC=~/seaforward/forecast/scratch/Canary_12/downloaded_data/MERCATOR/MERCATOR_20260711_00.nc
 cd ~/seaforward/sftools
 conda activate seaforward
 python seaforward.py make_ini \
     --input_file "${MERC}" --output_dir "${CGEN}" \
-    --run_date "2026-07-13 00:00:00" --hdays 2 --Yorig 2000
+    --run_date "2026-07-11 00:00:00" --hdays 2 --Yorig 2000
 ```
 
 `--run_date` is the **cycle** date and `--hdays 2` walks back two days, which lands on
-2026-07-11 — the same instant as the parent's IC. See *Matching the clocks* below.
+2026-07-09 — the same instant as the parent's IC. See *Matching the clocks* below.
 
 **Verify before going further:**
 
 ```bash
 python3 << 'PYEOF'
 import xarray as xr, numpy as np, glob, os
-CGEN = os.path.expanduser('~/seaforward/forecast/scratch/IGOG_AGRIF/child_gen/CROCO_FILES')
+CGEN = os.path.expanduser('~/seaforward/forecast/scratch/Canary_AGRIF/child_gen/CROCO_FILES')
 f = sorted(glob.glob(CGEN + '/croco_ini_*.nc'))[-1]
 d = xr.open_dataset(f, decode_times=False)
+print(os.path.basename(f))
 for v in ['temp', 'salt', 'u', 'v', 'zeta']:
     a = d[v].values
     print('%-5s min=%11.4g max=%11.4g nan=%d'
@@ -175,48 +129,48 @@ print('time =', float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
 PYEOF
 ```
 
-You want `u` and `v` within about ±1 m/s, zero NaNs, and the same `scrum_time` as the
-parent's IC. The two tools side by side:
+```text
+croco_ini_MERCATOR_20260711_00.nc
+temp  min=          0 max=      27.47 nan=0
+salt  min=          0 max=      37.31 nan=0
+u     min=    -0.5657 max=     0.3456 nan=0
+v     min=     -0.368 max=     0.6385 nan=0
+zeta  min=     -0.215 max=     0.1355 nan=0
+time = 9686.0 days
+```
 
-| | croco_pytools | SEA-FORWARD `make_ini` |
-|---|---|---|
-| `u` max | `9.969e+36` | **0.6396** |
-| `v` max | `9.969e+36` | **0.3081** |
-| NaNs | present | **0** |
+Velocities within about ±0.6 m/s, zero NaNs, and no `9.969e+36` anywhere. That is a
+usable initial condition.
 
 ### 3d — Matching the clocks
 
 The parent and child ICs must start at the **same instant**. Two traps:
 
 - SEA-FORWARD's forecast ICs are named for the **cycle date**, not their valid time.
-  `croco_ini_MERCATOR_20260713_00.nc` is the ocean state at **2026-07-11**, because the
-  driver runs `--hdays 2` of spin-up before the cycle date.
-- A Mercator download's record 0 may not be the day you assume:
-
-```bash
-python3 -c "
-import xarray as xr
-d = xr.open_dataset('${MERC}')
-print(d.time.values[:4])
-"
-```
+  `croco_ini_MERCATOR_20260711_00.nc` is the ocean state at **2026-07-09**, because
+  the driver runs `--hdays 2` of spin-up before the cycle date.
+- A Mercator download's record 0 may not be the day you assume.
 
 Verify explicitly rather than assume:
 
 ```bash
 python3 << 'PYEOF'
 import xarray as xr, os
-base = os.path.expanduser('~/seaforward/forecast/scratch/IGOG_AGRIF/CROCO_FILES/')
-for f, lbl in [('croco_ini.nc', 'parent'), ('croco_ini.nc.1', 'child ')]:
-    d = xr.open_dataset(base + f, decode_times=False)
+P = os.path.expanduser('~/seaforward/forecast/model-runs/Canary_12/20260711/'
+                       'gen_spinup/CROCO_FILES/croco_ini_MERCATOR_20260711_00.nc')
+C = os.path.expanduser('~/seaforward/forecast/scratch/Canary_AGRIF/child_gen/'
+                       'CROCO_FILES/croco_ini_MERCATOR_20260711_00.nc')
+for f, lbl in [(P, 'parent'), (C, 'child ')]:
+    d = xr.open_dataset(f, decode_times=False)
     print(lbl, float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
 PYEOF
 ```
 
 ```text
-parent 9688.0 days
-child  9688.0 days
+parent 9686.0 days
+child  9686.0 days
 ```
 
 They must match. A mismatch means the child starts from a different ocean than the
-parent, and the nest is wrong from step zero.
+parent, and the nest is wrong from step zero. Here they agree by construction — same
+tool, same Mercator file, same `--hdays`.

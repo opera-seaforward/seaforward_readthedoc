@@ -14,9 +14,9 @@ so a tidal nest is available from one command — each combination needing its o
 ## Where this fits in the build
 
 Tides are **not a separate configuration** — they are additions to the forecast config
-you already built in Phase 2. If you built Canary_12, or any region, following Phase 2,
-you turned tides *off* at three points. This chapter turns them back on and adds the
-tide file. Nothing here replaces Phase 2; it edits the same files.
+you already built in Phase 2. Following Phase 2 you turned tides *off* at three points.
+This chapter turns them back on and adds the tide file. Nothing here replaces Phase 2;
+it edits the same files.
 
 Here is where each tide action lands relative to the Phase 2 steps:
 
@@ -90,3 +90,6 @@ its own `croco_frc.nc`, generated at that cycle's start date — exactly paralle
 
 !!! important
     **The tide file carries a date.** Build it for the wrong day and every wave is out of phase. The driver handles this automatically, running the tide generation at each cycle's spin-up start date. If you generate a tide file by hand, the `--run_date` you pass *is* the phase reference.
+
+!!! note
+    **`TIDERAMP`.** The sub-options block also defines `TIDERAMP`, which ramps the tidal forcing up over the first day rather than switching it on at full strength. That avoids a shock at step zero, when the initial condition carries no tidal signal at all. Leave it defined.

@@ -8,8 +8,32 @@ output settings and its forcing — you are changing only what is genuinely per-
 CROCO also ships a reference at `code/croco/OCEAN/croco.in.1` if you want to compare.
 
 ```bash
-cd ~/seaforward/forecast/scratch/IGOG_AGRIF
+cd ~/seaforward/forecast/scratch/Canary_AGRIF
+cp ~/seaforward/forecast/scratch/Canary_12/{cppdefs.h,param.h,croco.in,jobcomp} .
 cp croco.in croco.in.1
+```
+
+!!! note
+    **First, check the parent's own filenames.** If you copied `croco.in` from a config the driver has run, it points at that cycle's dated files — `croco_ini_MERCATOR_20260711_00.nc` rather than `croco_ini.nc` — while Step 4 staged them under the short names. Fix `croco.in` before going further:
+
+```text
+    boundary: filename
+        CROCO_FILES/croco_bry.nc
+    initial: NRREC / filename
+              1
+        CROCO_FILES/croco_ini.nc
+```
+
+    Then confirm both agree with what is on disk:
+
+```bash
+    ls CROCO_FILES/
+    grep -n "CROCO_FILES/" croco.in | head -8
+```
+
+Now the child's copy:
+
+```bash
 nano croco.in.1
 ```
 
@@ -22,14 +46,14 @@ title text:
 
 ```text
 title:
-        IGOG_12 FORECAST                       <- change this
+        CANARY_12 FORECAST                     <- change this
 ```
 
 to
 
 ```text
 title:
-        IGOG_12 AGRIF ZOOM LEVEL 1
+        CANARY_12 AGRIF ZOOM LEVEL 1
 ```
 
 Cosmetic, but it is how you tell the two grids apart in the log — CROCO prints each
@@ -54,6 +78,10 @@ Change `300` to `100` and **leave `288` alone**:
 
 The asymmetry behind that is explained at the end of this page, and it is the edit
 most worth checking afterwards.
+
+If your parent's `croco.in` still carries the driver's own `NTIMES` — 2016 for a
+seven-day cycle — set both files to 288 for this one-day test, then raise them
+together later.
 
 ### 5c — the grid file
 
@@ -124,22 +152,29 @@ Save and exit: `Ctrl+O` `Enter`, `Ctrl+X`.
 ### Verify
 
 ```bash
-grep -nE -A1 "^title:|^time_stepping:|^grid:|^boundary:|^initial:|^history:" croco.in.1 | head -20
+grep -n "CROCO_FILES/" croco.in.1 | head -8
+grep -n -A1 "^time_stepping:" croco.in.1
+grep -n -A1 "^boundary:" croco.in.1
 ```
 
 ```text
-1:title:
-2-        IGOG_12 AGRIF ZOOM LEVEL 1
+23:    CROCO_FILES/croco_grd.nc.1
+25:    CROCO_FILES/croco_frc.nc
+27:    CROCO_FILES/croco_blk.nc
+29:    CROCO_FILES/croco_clm.nc
+34:    CROCO_FILES/croco_ini.nc.1
+37:    CROCO_FILES/croco_rst.nc.1
+41:    CROCO_FILES/croco_his.nc.1
+44:    CROCO_FILES/croco_avg.nc.1
 3:time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
-4-                 288       100      60      1
-22:grid:  filename
-23-    CROCO_FILES/croco_grd.nc.1
+4-                288     100       60      1
 30:boundary: filename
 31-      XXXXXXXXX
-32:initial: NRREC / filename
-33-          1
-39:history: LDEFHIS, NWRT, NRPFHIS / filename
 ```
+
+Five `.1` filenames, `dt = 100`, and the placeholder where the boundary was. The
+`frc`, `blk` and `clm` lines stay as they are — their CPP switches are off, so CROCO
+prints "Unrecognized keyword … DISREGARDED" and moves on.
 
 Filenames are **explicit** — AGRIF does not append `.1` for you.
 
@@ -166,24 +201,16 @@ Leave `dt = 300` in the child and you get 864 × 300 s = **3 days** while the pa
 runs 1. The child races ahead, pulls atmospheric forcing from two days in the parent's
 future, and finishes "successfully".
 
-The symptom, if you go looking:
-
-```text
-715  9690.48264   <- child, day 9690.5
-238  9688.82639   <- parent, day 9688.8      1.65 days apart
-ONLINE_BULK -- Read file for time = 9690.    <- child reading future GFS
-```
-
-**Verify the clocks in the log after starting the run.** Parent step 25 and child step
-75 must report the same time:
+**Verify the clocks in the log after starting the run.** Parent step 12 and child step
+36 must report the same time:
 
 ```bash
-grep -E "^ +(25|75) +9688\." run_agrif.log
+grep -E "^ +(12|36) +9686\." run_agrif.log
 ```
 
 ```text
-25  9688.08681     <- parent
-75  9688.08681     <- child, locked
+      12  9686.04167 ...      <- parent
+      36  9686.04167 ...      <- child, locked
 ```
 
 If they diverge, stop the run (`pkill -f "croco croco.in"`), fix `dt`, and start again.
