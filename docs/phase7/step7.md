@@ -58,11 +58,10 @@ error flag.
 
 !!! check
     The kinetic-energy column stays small and steady — around 1.4×10⁻³, not growing — `trd = 0` on every row, and it ends with **`MAIN: DONE`**:
-
-```bash
+    ```bash
     ls -lh ${CF}/croco_his.nc
     tail -5 run.log
-```
+    ```
 
 !!! warning
     **If it blows up** — `BLOW UP`, `NaN`, or kinetic energy climbing — at 1/25° this usually means the timestep is too large or the boundaries are reflecting. In order: turn the **sponge on** (`X_SPONGE 25000. 400.`) if you had it off; reduce `dt` to 120 with `NTIMES=3600`; then re-check the open boundaries match the mask. Sponge and timestep are run-time values, so no recompile is needed — re-stage `croco.in` and rerun.

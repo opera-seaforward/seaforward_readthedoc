@@ -20,8 +20,7 @@ import sftools.nesting as nest
 nest.croco_to_mercator(
     '${SEA_FORWARD_ROOT}/forecast/model-runs/Canary_12/20260712/fcst/CROCO_FILES/croco_his.nc',
     '${FCAST}/downloaded_data/PARENT/parent_20260712.nc',
-    Yorig=2000)
-"
+    Yorig=2000)"
 ```
 
 **What this does:** reads the 1/12° output; interpolates temperature, salinity and
@@ -45,8 +44,7 @@ d = xr.open_dataset('${FCAST}/downloaded_data/PARENT/parent_20260712.nc')
 print('vars:', list(d.data_vars))
 print('dims:', dict(d.sizes))
 print('times:', str(d.time.values[0])[:10], '..', str(d.time.values[-1])[:10])
-print('surface temp mean:', round(float(d.thetao.isel(time=0, depth=0).mean()), 2))
-"
+print('surface temp mean:', round(float(d.thetao.isel(time=0, depth=0).mean()), 2))"
 ```
 
 !!! check

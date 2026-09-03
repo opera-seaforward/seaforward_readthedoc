@@ -43,10 +43,10 @@ print('PARENT lon %.2f..%.2f  lat %.2f..%.2f' % f(p))
 
 !!! check
     For Canary_25 against Canary_12:
-
-```
+    ```
     CHILD  lon -21.81..-15.69  lat 14.26..23.72
     PARENT lon -22.15..-15.35  lat 13.94..24.04
-```
-
-    The child is inside the parent on all four sides, with roughly 0.3° of margin. If any child edge falls outside, the boundary interpolation has no parent data to work from and the child will fail or produce nonsense at that edge.
+    ```
+    The child is inside the parent on all four sides, with roughly 0.3° of margin. If any child
+    edge falls outside, the boundary interpolation has no parent data to work from and the child
+    will fail or produce nonsense at that edge.
