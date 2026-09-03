@@ -34,6 +34,12 @@ pp.hovmoller(ds, var, kind="time_lat",   lon0=...)
 pp.hovmoller(ds, var, kind="time_lon",   lat0=...)
 ```
 
+The `...` marks where your own values go. Replaced:
+
+```python
+pp.hovmoller(ds, "temp", kind="time_depth", lon0=-19.0, lat0=21.0)
+```
+
 !!! note
     **`hovmoller` works on `temp`, `salt` and `zeta`.** It reads the variable straight from the file and indexes on the rho grid, so `u` and `v` — which live on their own staggered grids — and the derived fields are not available here. Use `pp.timeseries()` for those.
 
@@ -90,6 +96,8 @@ transient events and any drift show up.
 ```python
 pp.timeseries(ds, var, lon0, lat0, surface_only=True, depth_m=None)
 ```
+
+For example, `pp.timeseries(ds, "temp", -19.0, 21.0, depth_m=50)`.
 
 Unlike `hovmoller`, this handles derived fields and the staggered-grid velocities.
 

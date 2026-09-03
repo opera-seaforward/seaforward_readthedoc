@@ -113,6 +113,8 @@ pl.plot_map(pp.field(ds, "temp"), ds=ds, uv=(se, sn), uv_kind="wind",
 
 ## The extractors
 
+Signatures rather than runnable lines — substitute your own variable name and values:
+
 ```python
 pp.field(ds, var, depth_m=None, tindex=-1)      # unified: surface, or a true depth
 pp.field_map(ds, var, tindex=-1, level=-1)      # a sigma-level slice
@@ -120,4 +122,5 @@ pp.field_at_depth(ds, var, depth_m, tindex=-1)  # a true depth, interpolated
 pp.surface(ds, var, tindex=-1)                  # top sigma level of a 3D field
 ```
 
-`tindex=-1` is the last record; pass any index to plot an earlier time.
+So `pp.field(ds, "temp", depth_m=100)` gives temperature at 100 m. `tindex=-1` is the
+last record; pass any index for an earlier time.

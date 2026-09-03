@@ -43,6 +43,7 @@ cells left blank.
 ```python
 pp.section(ds, var, lon0, lat0, lon1, lat1, tindex=-1, npts=200)
 ```
+For example, `pp.section(ds, "temp", -21.0, 21.0, -17.2, 21.0)`.
 
 !!! warning
     **The order is `lon0, lat0, lon1, lat1`** — start point, then end point. Not all the longitudes followed by all the latitudes. Getting it wrong gives a transect somewhere unintended, usually without any error.
@@ -113,6 +114,8 @@ mixed-layer depth and where the gradients sit.
 ```python
 pp.profile(ds, var, lon0, lat0, tindex=-1)
 ```
+
+For example, `pp.section(ds, "temp", -21.0, 21.0, -17.2, 21.0)`.
 
 ### Temperature
 
