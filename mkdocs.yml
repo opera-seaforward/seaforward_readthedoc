@@ -153,14 +153,8 @@ nav:
       - Dynamics: phase5/dynamics.md
       - Vertical structure: phase5/vertical.md
       - Through time: phase5/time.md
-  - Validation:
-      - Validation: phase5/step58_validation.md
-  - Phase 6 — Region Gallery:
-      - Overview: phase6/06_regions.md
-      - Canary — `Canary_12`: phase6/canary.md
-      - Gulf of Guinea — `IGOG_12`: phase6/guinea.md
-      - Agulhas — `Agulhas_12`: phase6/agulhas.md
-      - What changes, what stays the same: phase6/pattern.md
+  - Phase 6 — Validation:
+      - Validation: phase6_validation/06_validation.md
   - Phase 7 — Nesting (offline):
       - Overview: phase7/07_nesting.md
       - Step 0 — Session setup: phase7/step0.md
@@ -224,6 +218,12 @@ nav:
       - Running operationally: phase12/changes.md
       - Why this framing matters: phase12/why.md
       - References: phase12/references.md
+  - Region Gallery:
+      - Overview: regions/overview.md
+      - Canary — `Canary_12`: regions/canary.md
+      - Gulf of Guinea — `IGOG_12`: regions/guinea.md
+      - Agulhas — `Agulhas_12`: regions/agulhas.md
+      - What changes, what stays the same: regions/pattern.md  
   - Notebooks Toolkit:
       - Overview: notebooks/00_notebooks_overview.md
       - Before you start: notebooks/01_before_you_start.md
