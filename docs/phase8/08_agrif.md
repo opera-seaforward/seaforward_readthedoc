@@ -58,9 +58,9 @@ that means: open the file, search for `AGRIF_2WAY`, edit the line the cursor lan
 on, save, exit.
 
 **After every edit, verify with `grep`.** The chapter shows the grep and the expected
-output. This is not optional — one of the gotchas below (the child's `dt`) produces a
-run that succeeds while being silently wrong, and the only defence is checking the
-file says what you think it says.
+output each time. One of the gotchas below — the child's `dt` — produces a run that
+finishes normally while being wrong, so checking the file says what you think it says
+is the only defence.
 
 !!! important
     **This chapter builds the nest by hand.** The operational driver *can* run an AGRIF nest — `run_forecast_cycle.sh --child 1way` — but it expects the child grid, its initial condition and its `croco.in.1` to exist already, and a binary compiled with `AGRIF` defined. This chapter is how you make all of those. Once they exist, the driver takes over and runs the nest every cycle.

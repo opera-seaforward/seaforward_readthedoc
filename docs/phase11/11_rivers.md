@@ -5,6 +5,11 @@ CROCO domain. It is written for someone new to CROCO and to Linux, so every comm
 need to type is shown, with a note on when to edit a file, when to run a script, and
 what each step produces.
 
+The worked example is Canary_12, which contains exactly one river of any size — the
+Senegal. That keeps the mechanics clear: one point source, one row in the config, one
+plume to look for afterwards. A domain with a dozen rivers follows the same steps with
+a longer list.
+
 !!! note
     **Conventions.** Grey boxes are commands you type into the terminal, then press Enter. `~` is your home directory, for example `/home/yourname`. "Activate the environment" means running `conda activate seaforward` once per terminal session, which makes the right Python and libraries available. Text files are edited with `nano`: save with **Ctrl+O** then Enter, exit with **Ctrl+X**.
 

@@ -1,7 +1,7 @@
 ### 6a — `cppdefs.h`
 
 ```bash
-cd ~/seaforward/forecast/scratch/IGOG_AGRIF
+cd ~/seaforward/forecast/scratch/Canary_AGRIF
 nano cppdefs.h
 ```
 
@@ -14,7 +14,7 @@ your config's own block:
 ```
 
 !!! warning
-    **Do not edit the match near line 1066.** `Ctrl+W` `Enter` again lands on it:
+    **Do not edit the match near line 1066.** `Alt+W` jumps to it:
 
 ```text
     !                       Baroclinic Vortex Example (TEST AGRIF)
@@ -27,15 +27,17 @@ your config's own block:
 Save: `Ctrl+O` `Enter`, `Ctrl+X`. Verify:
 
 ```bash
-grep -n "AGRIF" cppdefs.h | head -2
+grep -n "AGRIF" cppdefs.h | head -3
 ```
 
 ```text
 80:# define AGRIF
 81:# undef  AGRIF_2WAY
+1066:!                       Baroclinic Vortex Example (TEST AGRIF)
 ```
 
-**`AGRIF` on, `AGRIF_2WAY` off** — one-way, the first milestone.
+**`AGRIF` on, `AGRIF_2WAY` off** — one-way, the first milestone. Line 1066 is the
+VORTEX block, left alone.
 
 ### 6b — `param.h` needs no edit
 
@@ -52,14 +54,15 @@ This surprises people coming from offline nesting, where the child needed its ow
 
 With `AGRIF` defined, `LLm` and `MMm` stop being compile-time parameters and become
 **runtime variables**, computed per grid from `AGRIF_FixedGrids.in`. `param.h` keeps
-the parent's values — `LLm0=103, MMm0=139, N=50` for IGOG_12 — and the child's
-dimensions are never written anywhere.
+the parent's values — `LLm0=79, MMm0=121, N=50` for Canary_12 — and the child's
+188 × 185 is never written anywhere.
 
 ### 6c — compile
 
 ```bash
 conda deactivate                    # the compiler env, not the python one
 source ~/seaforward/env.sh
+which nf-config                     # must be .../opt_seq/bin/nf-config
 ./jobcomp 2>&1 | tee compile_agrif.log | tail -5
 ```
 
@@ -67,7 +70,7 @@ The AGRIF build is heavier than a normal one: `jobcomp` first builds the **`conv
 preprocessor, then runs it over the whole CROCO source to generate AGRIF-aware code.
 It takes noticeably longer.
 
-Success looks like `-lagrif` in the link line, then:
+Success looks like `-lagrif` in the link line, then a small ASCII crocodile and:
 
 ```text
 CROCO is OK
@@ -75,12 +78,16 @@ CROCO is OK
 
 If it fails, `compile_agrif.log` has the detail — the `conv` step is the usual suspect.
 
+!!! warning
+    **`which nf-config` must point into `opt_seq`.** `jobcomp` takes the NetCDF library from whatever is on your PATH, so with the conda environment still active it links against conda's instead. That is why `conda deactivate` comes first.
+
 ### Keep the binary
 
 Rename it before building anything else, so the two modes don't overwrite each other:
 
 ```bash
 cp croco croco_1way
+ls -lh croco croco_1way
 ```
 
 Step 8 builds `croco_2way` the same way, and the driver picks between them by name.

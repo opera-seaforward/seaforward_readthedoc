@@ -10,7 +10,13 @@ DATASETS_CROCOTOOLS/TPXO10/
 ```
 
 The atlas format means `multi_files = True`, `waves_separated = True`, and filename
-templates with `<tides>` where the wave name goes. The tide param file:
+templates with `<tides>` where the wave name goes.
+
+Write the param file into your config's `CROCO_FILES/`, alongside the Mercator one:
+
+```bash
+nano ~/seaforward/forecast/scratch/Canary_12/CROCO_FILES/crocotools_param_tides.py
+```
 
 ```python
 # crocotools_param_tides.py — TPXO10 atlas

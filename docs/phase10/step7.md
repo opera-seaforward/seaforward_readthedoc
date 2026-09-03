@@ -15,6 +15,11 @@ child 1-way     croco_1way         croco_1way_tides
 child 2-way     croco_2way         croco_2way_tides
 ```
 
+You only build the ones you use. Following this documentation through gives you
+`croco_plain` and `croco_plain_tides` in the parent's config directory, and
+`croco_1way` and `croco_2way` in the AGRIF one — the tidal nest combinations are the
+same recipe with both switches on.
+
 ```bash
 ./run_forecast_cycle.sh                        # parent only, no tide
 ./run_forecast_cycle.sh --tides                # parent only, with tide

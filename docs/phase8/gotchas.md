@@ -5,10 +5,11 @@
 | **`easygrid.py` displacement loop** | box silently moved; a boundary lands on land | compare the request against `AGRIF_FixedGrids.in`; re-check edges after building |
 | **`.1` suffix vs `1_` prefix** | files not found | `croco_grd.nc.1`, not `1_croco_grd.nc` |
 | **IC clocks mismatched** | child starts days from the parent | check `scrum_time` in both ICs before running |
-| **IC named for the cycle date** | off by two days | `croco_ini_MERCATOR_20260713_00.nc` is valid at 2026-07-11, from `--hdays 2` |
+| **IC named for the cycle date** | off by two days | `croco_ini_MERCATOR_20260711_00.nc` is valid at 2026-07-09, from `--hdays 2` |
+| **config points at dated filenames** | `croco.in` copied from a driver-run config names `croco_ini_MERCATOR_*.nc`, not the staged `croco_ini.nc` | make the config and the staged files agree — see Step 5 |
 | **`AGRIF_FixedGrids.in` in `CROCO_FILES/`** | not read; the model runs as if there were no child | it belongs in the **run** directory |
 | **binary not renamed** | driver reports "binary not found" | `cp croco croco_1way` after each build; the driver selects by name |
 | **child N ≠ parent N** | rejected | AGRIF requires equal vertical grids |
 | **ratio not 3 or 5** | rejected | only 3 or 5 |
-| **output intervals not scaled** | parent and child write different numbers of records | multiply the child's `NWRT`, `NAVG`, `NRST` by `timeref` |
-| **high `rx1`** | possible instability over steep bathymetry | the IGOG child reports 15.78; watch it, and above about 20 lower `rfact` |
+| **output intervals not scaled** | parent and child write different numbers of records — 5 against 13 in this chapter's run | multiply the child's `NWRT`, `NAVG`, `NRST` by `timeref` |
+| **high `rx1`** | possible instability over steep bathymetry | Canary's parent and child both report ~14.84 and run stably; if a child blows up mid-run, lower its `rfact` |

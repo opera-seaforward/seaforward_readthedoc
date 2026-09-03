@@ -23,6 +23,22 @@ is a TPXO tag, which would clash with the `'mercator'` that `make_ini` and `make
 expect from *their* param file. Keeping the tide params in their own directory avoids
 the collision entirely.
 
+It works through the waves one at a time, printing each:
+
+```text
+-----------------------
+ Processing *Mm* wave
+-----------------------
+  tides Mm is in the list
+  Period of the wave Mm is 661.309208
+  Processing tidal elevation
+  Processing tidal currents
+  Processing equilibrium tidal potential
+```
+
+Three blocks per wave, because `cur=True` and `pot=True` in the param file. Ten waves,
+so thirty blocks.
+
 <figure style="text-align: center; margin: 20px 0;">
   <img src="../../img/tides_U4.png" alt="TPXO atlas and the model grid combined into a per-cycle tide file" style="max-width: 100%; height: auto;">
   <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">

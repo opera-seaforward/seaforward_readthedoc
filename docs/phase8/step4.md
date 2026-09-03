@@ -7,7 +7,7 @@ CROCO's AGRIF runtime identifies a child's files by a **`.1` suffix**, not a `1_
 prefix. The build shows it: compiling with AGRIF leaves these in the run directory.
 
 ```bash
-ls ~/seaforward/forecast/scratch/IGOG_AGRIF/
+ls ~/seaforward/forecast/scratch/Canary_AGRIF/
 ```
 
 ```text
@@ -26,27 +26,27 @@ it wrote `croco_grd.nc.1`, not `1_croco_grd.nc` — as does the template CROCO s
 ### 4b — Stage the files
 
 ```bash
-D=~/seaforward/forecast/scratch/IGOG_AGRIF
+D=~/seaforward/forecast/scratch/Canary_AGRIF
 CGEN=$D/child_gen/CROCO_FILES
+RUN=~/seaforward/forecast/model-runs/Canary_12/20260711/gen_spinup/CROCO_FILES
 
 # child IC -> .1
-cp $CGEN/croco_ini_MERCATOR_20260713_00.nc  $D/CROCO_FILES/croco_ini.nc.1
+cp $CGEN/croco_ini_MERCATOR_20260711_00.nc  $D/CROCO_FILES/croco_ini.nc.1
 
 # parent IC + bry, from the forecast run that already made them
-RUN=~/seaforward/forecast/model-runs/IGOG_12/20260713/gen_spinup/CROCO_FILES
-cp $RUN/croco_ini_MERCATOR_20260713_00.nc   $D/CROCO_FILES/croco_ini.nc
-cp $RUN/croco_bry_MERCATOR_20260713_00.nc   $D/CROCO_FILES/croco_bry.nc
+cp $RUN/croco_ini_MERCATOR_20260711_00.nc   $D/CROCO_FILES/croco_ini.nc
+cp $RUN/croco_bry_MERCATOR_20260711_00.nc   $D/CROCO_FILES/croco_bry.nc
 
 # AGRIF_FixedGrids.in must sit in the RUN dir, not CROCO_FILES
 cp $D/CROCO_FILES/AGRIF_FixedGrids.in       $D/
 
-ls -la $D/CROCO_FILES/
+ls -la $D/CROCO_FILES/ $D/
 ```
 
-**Which parent IC?** The forecast run left three candidates:
+**Which parent IC?** The forecast run left more than one candidate:
 
 ```text
-gen_spinup/CROCO_FILES/croco_ini_MERCATOR_20260713_00.nc   <- from Mercator
+gen_spinup/CROCO_FILES/croco_ini_MERCATOR_20260711_00.nc   <- from Mercator
 spinup/CROCO_FILES/croco_ini.nc                            <- same, staged
 fcst/CROCO_FILES/croco_ini.nc                              <- the spin-up RESTART
 ```
@@ -56,10 +56,14 @@ using the Mercator parent IC keeps the two clocks aligned. The `fcst` restart is
 days later and would put the grids out of sync — exactly the failure Step 3 warns
 about.
 
+Note the short names on the left of each `cp`. The files arrive with the dated Mercator
+name; staging them as `croco_ini.nc` and `croco_ini.nc.1` is what lets Step 5's
+`croco.in` and `croco.in.1` refer to them cleanly.
+
 ### 4c — The layout you should end up with
 
 ```text
-scratch/IGOG_AGRIF/
+scratch/Canary_AGRIF/
 ├── croco                     the AGRIF-enabled executable (Step 6)
 ├── croco.in                  parent runtime settings
 ├── croco.in.1                child runtime settings          (Step 5)
@@ -69,7 +73,7 @@ scratch/IGOG_AGRIF/
     ├── croco_grd.nc          parent grid
     ├── croco_grd.nc.1        child grid
     ├── croco_ini.nc          parent IC       ┐ same instant,
-    ├── croco_ini.nc.1        child IC        ┘ day 9688
+    ├── croco_ini.nc.1        child IC        ┘ day 9686
     ├── croco_bry.nc          parent boundaries only
     └── AGRIF_FixedGrids.in   (harmless copy; the run dir one is what's read)
 ```

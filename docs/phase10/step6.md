@@ -7,43 +7,54 @@ python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 
-D = 'forecast/model-runs/IGOG_12/20260726_plain_tides/fcst/CROCO_FILES/'
+D = 'forecast/scratch/Canary_12/CROCO_FILES/'
 d = xr.open_dataset(D + 'croco_his.nc', decode_times=False)
 
-# a shelf point: wet, and the shallowest cell deeper than 30 m
-h = d.h.values; m = d.mask_rho.values
-j, i = np.unravel_index(np.argmin(np.where((m > 0) & (h > 30), h, 1e9)), h.shape)
+lon = d.lon_rho.values; lat = d.lat_rho.values
+h   = d.h.values;       m   = d.mask_rho.values > 0
+
+# nearest wet cell to a point on the shelf
+dist = np.where(m, (lon + 16.5)**2 + (lat - 23.0)**2, 1e9)
+j, i = np.unravel_index(np.argmin(dist), dist.shape)
+
 z = d.zeta.isel(eta_rho=j, xi_rho=i).values
 t = (d.scrum_time.values - d.scrum_time.values[0]) / 3600.
-print('point: %.2fE %.2fN, depth %.0f m' % (d.lon_rho[j,i], d.lat_rho[j,i], h[j,i]))
+print('point: %.2fW %.2fN, depth %.0f m' % (-lon[j,i], lat[j,i], h[j,i]))
+print('%d records, %.1f hours' % (len(z), t[-1]))
 print('swing over the run: %.3f m' % (z.max() - z.min()))
 
 fig, ax = plt.subplots(figsize=(11, 4))
 ax.plot(t, z, lw=1.5)
 ax.axhline(0, color='0.7', lw=0.8)
 ax.set_xlabel('hours into the run'); ax.set_ylabel('sea level (m)')
-ax.set_title('Tidal sea level at %.2f°E %.2f°S, %.0f m depth'
-             % (d.lon_rho[j,i], -d.lat_rho[j,i], h[j,i]))
+ax.set_title('Tidal sea level at %.2f°W %.2f°N, %.0f m depth'
+             % (-lon[j,i], lat[j,i], h[j,i]))
 ax.grid(alpha=0.3)
 fig.savefig('docs/img/tides_timeseries.png', dpi=110, bbox_inches='tight')
 PYEOF
 ```
 
 ```text
-point: 11.98E -6.03N, depth 50 m
-swing over the run: 1.321 m
+point: 16.47W 23.03N, depth 81 m
+169 records, 168.0 hours
 ```
 
 ![Tidal sea level at a shelf point](../img/tides_timeseries.png)
 
-*Sea level at 11.98°E, 6.03°S in 50 m of water, hourly through the forecast.*
+*Sea level at 16.47°W, 23.03°N in 81 m of water, hourly through the seven-day run.*
 
-Ten rise-and-fall cycles in five days — **that is M2**, at a 12.4-hour period. A
+Fourteen rise-and-fall cycles in seven days — **that is M2**, at a 12.4-hour period. A
 tide-free run at the same point drifts slowly with no oscillation; this one breathes.
 
-Look also at the envelope: the amplitude grows from about ±0.3 m at the start to ±0.6 m
-by the end. That is M2 and S2 drifting into phase with each other — the spring–neap
-cycle, and evidence that the multi-constituent forcing is working rather than M2 alone.
+The **envelope** is the other thing to see. The amplitude grows steadily across the
+week, from about ±0.15 m in the first day to ±0.9 m by the seventh. That is M2 and S2
+drifting into phase with each other — the **spring–neap cycle** — and it is evidence
+that the multi-constituent forcing is working rather than M2 alone. A one-day run shows
+the oscillation but not this; it is the reason to run a week.
+
+The first few hours are also worth noticing: the signal starts small and irregular
+before settling into a clean rhythm. That is `TIDERAMP` easing the forcing in, since
+the initial condition carries no tidal signal at all.
 
 ### Where the tide is largest
 
@@ -54,13 +65,12 @@ import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 from matplotlib.colors import ListedColormap
 
-D = 'forecast/model-runs/IGOG_12/20260726_plain_tides/fcst/CROCO_FILES/'
+D = 'forecast/scratch/Canary_12/CROCO_FILES/'
 d = xr.open_dataset(D + 'croco_his.nc', decode_times=False)
 z   = d.zeta.where(d.mask_rho == 1)
 rng = (z.max('time') - z.min('time'))
 
-print('tidal range: mean %.2f m   max %.2f m'
-      % (float(rng.mean()), float(rng.max())))
+print('tidal range: mean %.2f m   max %.2f m' % (float(rng.mean()), float(rng.max())))
 h = d.h.values; m = d.mask_rho.values > 0
 for lo, hi in [(0,100), (100,500), (500,2000), (2000,9000)]:
     s = m & (h >= lo) & (h < hi)
@@ -68,7 +78,7 @@ for lo, hi in [(0,100), (100,500), (500,2000), (2000,9000)]:
           % (lo, hi, np.nanmean(rng.values[s]), s.sum()))
 
 lo = float(np.nanpercentile(rng, 2))      # scale to the data, not to zero,
-hi = float(np.nanpercentile(rng, 98))     # or a near-uniform field looks flat
+hi = float(np.nanpercentile(rng, 98))     # or the field looks flat
 
 fig, ax = plt.subplots(figsize=(7, 7))
 ax.pcolormesh(d.lon_rho, d.lat_rho, np.where(d.mask_rho.values == 0, 1, np.nan),
@@ -77,7 +87,7 @@ mm = ax.pcolormesh(d.lon_rho, d.lat_rho, rng, cmap='YlOrRd', vmin=lo, vmax=hi)
 ax.contour(d.lon_rho, d.lat_rho, d.h, levels=[200], colors='k', linewidths=0.8)
 ax.set_aspect('equal')
 ax.set_xlabel('longitude'); ax.set_ylabel('latitude')
-ax.set_title('Tidal range over the forecast')
+ax.set_title('Tidal range over the run')
 fig.colorbar(mm, ax=ax, label='max - min sea level (m)', shrink=0.8, pad=0.02,
              extend='both')
 fig.savefig('docs/img/tides_range.png', dpi=110, bbox_inches='tight')
@@ -85,26 +95,28 @@ PYEOF
 ```
 
 ```text
-tidal range: mean 1.38 m   max 1.84 m
-      0-  100 m: mean range 1.47 m  (715 cells)
-    100-  500 m: mean range 1.43 m  (815 cells)
-    500- 2000 m: mean range 1.42 m  (1466 cells)
-   2000- 9000 m: mean range 1.35 m  (6753 cells)
+tidal range: mean 1.22 m   max 2.22 m
+      0-  100 m: mean range 1.55 m  (505 cells)
+    100-  500 m: mean range 1.42 m  (587 cells)
+    500- 2000 m: mean range 1.36 m  (728 cells)
+   2000- 9000 m: mean range 1.16 m  (6571 cells)
 ```
 
 ![Tidal range across the domain](../img/tides_range.png)
 
-*Maximum minus minimum sea level over the forecast, with the 200 m isobath.*
+*Maximum minus minimum sea level over the run, with the 200 m isobath.*
 
-The range grows from about 1.28 m in the south-west to over 1.55 m in the north-east
-corner of the Bight — the tidal wave amplifying as it propagates into the embayment.
-The variation with depth is small, 1.47 m on the shelf against 1.35 m in deep water,
-because this domain has little shelf. A wide, shallow shelf gives a far stronger
-contrast: tides amplify as they shoal, since the same energy is squeezed into less
-water.
+**The range grows toward the coast**: 1.16 m in water deeper than 2000 m, 1.55 m on the
+shelf inside 100 m, and a maximum of 2.22 m. The map shows where the change happens —
+the dark band hugs the 200 m contour and widens where the shelf widens, north of 22°N
+and around 20°N.
 
-Note the colour scale is set from the data's own range rather than from zero. A
-near-uniform field plotted from zero looks flat and tells you nothing.
+That is the defining behaviour of a shelf tide. The wave amplifies as it shoals,
+because the same energy is squeezed into less water, so the isobath is not a
+coincidence: it is the mechanism drawn on the map.
+
+Note the colour scale is set from the data's own range rather than from zero. A field
+that never approaches zero looks flat when plotted from it.
 
 ### Does the daily mean still match Mercator?
 
@@ -112,4 +124,4 @@ Compare the daily-mean SSH against Mercator's, and against the same comparison f
 tide-free run. If adding tides hasn't degraded the slow ocean, the two should be close.
 
 !!! important
-    **Compare daily means, not hourly.** Mercator has no tides, so an hourly comparison shows the whole tidal signal as error — metres on a shelf. Averaging over 24 hours removes it, which makes the daily mean the only fair comparison.
+    **Compare daily means, not hourly.** Mercator has no tides, so an hourly comparison shows the whole tidal signal as error — over two metres on this shelf. Averaging over 24 hours removes it, which makes the daily mean the only fair comparison.
