@@ -53,12 +53,11 @@ nano croco.in
 
 !!! warning
     **Every path you write into `croco.in` must be literal.** The file is read by Fortran, which does not expand shell variables. The `${CF}` and `${FCAST}` used in the commands on these pages are a shell convenience and mean nothing inside the file — a line reading `${SEA_FORWARD_ROOT}/forecast/...` is taken as a directory whose name begins with those characters, and the run stops at startup:
-
-```text
+    ```text
     ONLINE_GET_BULK - ERROR: unable to open forcing NetCDF file:
       ${SEA_FORWARD_ROOT}/forecast/model-runs/Canary_12/.../TEMPERATURE_HEIGHT_ABOVE_GROUND_Y9999M01.nc
     ERROR: Abnormal termination: netCDF INPUT
-```
+    ```
 
     Write your home directory out in full, and check afterwards with `grep`.
 
