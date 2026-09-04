@@ -14,15 +14,15 @@ nano param.h
 
 `Ctrl-W` → `CANARY_12`. Add a **new branch below** the parent's:
 
-```
+```fortran
 # elif defined  CANARY_12
       parameter (LLm0=79,   MMm0=121,   N=50)   ! Canary_12  81x123
 # elif defined  CANARY_25
       parameter (LLm0=148,  MMm0=236,   N=75)   ! Canary_25  150x238
 ```
 
-**What / Why:** the child is 150×238 (interior 148×236) with 75 levels — from Step
-1's grid and Step 2's `N`. The name `CANARY_25` must match `cppdefs.h`.
+**What / Why:** the child is 150×238 (interior 148×236) with 75 levels — from Step 1's
+grid and Step 2's `N`. The name `CANARY_25` must match `cppdefs.h`.
 
 Verify:
 
@@ -42,8 +42,8 @@ nano cppdefs.h
 `Ctrl-W` → `define CANARY_12`, change to `# define CANARY_25`.
 
 **What / Why:** just the name. **Everything else stays** — the child has the same
-boundaries (east closed), the same forcing (`ONLINE` reading GFS) and the same
-physics as the parent. Only the identity changes.
+boundaries (east closed), the same forcing (`ONLINE` reading GFS) and the same physics
+as the parent. Only the identity changes.
 
 ### 5.3 — `croco.in`: timestep, sponge, files
 
@@ -51,13 +51,24 @@ physics as the parent. Only the identity changes.
 nano croco.in
 ```
 
+!!! warning
+    **Every path you write into `croco.in` must be literal.** The file is read by Fortran, which does not expand shell variables. The `${CF}` and `${FCAST}` used in the commands on these pages are a shell convenience and mean nothing inside the file — a line reading `${SEA_FORWARD_ROOT}/forecast/...` is taken as a directory whose name begins with those characters, and the run stops at startup:
+
+```text
+    ONLINE_GET_BULK - ERROR: unable to open forcing NetCDF file:
+      ${SEA_FORWARD_ROOT}/forecast/model-runs/Canary_12/.../TEMPERATURE_HEIGHT_ABOVE_GROUND_Y9999M01.nc
+    ERROR: Abnormal termination: netCDF INPUT
+```
+
+    Write your home directory out in full, and check afterwards with `grep`.
+
 **Title** (`Ctrl-W` → `CANARY_12`): change to `CANARY_25 NEST`.
 
 **S-coord** (`Ctrl-W` → `S-coord`): confirm `7.0d0  2.0d0  200.0d0`, matching `N=75`.
 
 **time_stepping** (`Ctrl-W` → `time_stepping:`), the line below:
 
-```
+```text
                 2880      150      60      1
 ```
 
@@ -66,20 +77,20 @@ nano croco.in
 
 **boundary** (`Ctrl-W` → `boundary:`), the filename line:
 
-```
+```text
     CROCO_FILES/croco_bry_NEST_20260712_00.nc
 ```
 
 **initial** (`Ctrl-W` → `initial:`), NRREC then the filename:
 
-```
+```text
           1
     CROCO_FILES/croco_ini_NEST_20260712_00.nc
 ```
 
 **sponge** (`Ctrl-W` → `X_SPONGE`), the line below:
 
-```
+```text
                     25000.            400.
 ```
 
@@ -88,13 +99,22 @@ nano croco.in
 
 **online** (`Ctrl-W` → `online:`), the two lines below the header:
 
-```
+```text
            9999   1      24            9999     1
-    ${SEA_FORWARD_ROOT}/forecast/model-runs/Canary_12/<DATE>/downloaded_data/GFS/for_croco/
+    /home/you/seaforward/forecast/model-runs/Canary_12/<DATE>/downloaded_data/GFS/for_croco/
 ```
 
-Replace `<DATE>` with the parent forecast's folder name — `20260712`, or
-`20260712_plain` for a run made by the current driver.
+Replace `/home/you` with your own home directory, and `<DATE>` with the parent
+forecast's folder name — `20260712`, or `20260712_plain` for a run made by the current
+driver.
+
+Then check what actually went into the file:
+
+```bash
+grep -n -A2 "^online:" croco.in
+```
+
+The path on that second line must start with `/home/`, not `${`.
 
 !!! warning
     **Use the parent's per-cycle GFS, not the scratch copy.** Point at `model-runs/<parent>/<date>/downloaded_data/GFS/for_croco/` — the forcing the parent's forecast actually ran with, which covers the full window. A stale `scratch/<parent>/…` copy can be shorter and will cut the child off early with `ONLINE_GET_BULK ... dataset ... missing`.
@@ -102,11 +122,11 @@ Replace `<DATE>` with the parent forecast's folder name — `20260712`, or
 **Why the atmosphere isn't converted, when the ocean was.** The two use different
 mechanisms. The **ocean** is interpolated *offline*, ahead of the run, into
 grid-specific ini and bry files — so it had to be regridded onto the child's exact
-grid. The **atmosphere** uses CROCO's `ONLINE` feature, which interpolates the raw
-GFS onto whatever grid is running, live, every timestep. CROCO therefore regrids the
-same GFS onto the finer child grid automatically. The only requirement is that the
-GFS box covers the child domain, which it does, since the child sits inside the
-parent whose GFS was downloaded for the larger box.
+grid. The **atmosphere** uses CROCO's `ONLINE` feature, which interpolates the raw GFS
+onto whatever grid is running, live, every timestep. CROCO therefore regrids the same
+GFS onto the finer child grid automatically. The only requirement is that the GFS box
+covers the child domain, which it does, since the child sits inside the parent whose
+GFS was downloaded for the larger box.
 
 One consequence worth noticing: the child's *atmosphere* is at the same resolution as
 the parent's. Nesting refines the **ocean**, not the weather driving it.
@@ -117,5 +137,9 @@ the parent's. Nesting refines the **ocean**, not the weather driving it.
 grep "SOURCE1=" jobcomp
 ```
 
-It should read `SOURCE1=${SEA_FORWARD_ROOT}/code/croco/OCEAN`, the same as the
-parent's. If not, `nano jobcomp` and fix it.
+It should read `SOURCE1=${SEA_FORWARD_ROOT}/code/croco/OCEAN`, the same as the parent's.
+If not, `nano jobcomp` and fix it.
+
+`jobcomp` is a **shell script**, so the variable does expand there — unlike `croco.in`.
+That distinction is the one to remember: shell scripts expand, CROCO's input files do
+not.
