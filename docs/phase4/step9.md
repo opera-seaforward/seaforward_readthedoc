@@ -33,7 +33,7 @@ your GLORYS ini, leaving the `1` on the NRREC line above it:
 GLORYS bry:
 
 ```
-    CROCO_FILES/croco_bry_GLORYS_Y2025M12D01_to_Y2025M12D10.nc
+    CROCO_FILES/croco_bry_GLORYS_Y2025M12D02_to_Y2025M12D30.nc
 ```
 
 !!! warning

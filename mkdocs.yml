@@ -6,8 +6,8 @@ theme:
   logo: assets/sf.png
   features:
     - navigation.collapse
-    #- navigation.expand
-    - navigation.indexes
+    - navigation.expand
+    #- navigation.indexes
     #- navigation.top
     - navigation.instant
     - navigation.footer
@@ -90,11 +90,7 @@ nav:
       - The two ways to build: phase1/step70.md
       - Download the source tarballs: phase1/step71.md
       - Route A — build with the scripts: phase1/routeA.md
-      - Route B — build by hand:
-          - Overview: phase1/routeB.md
-          - HDF5: phase1/step72.md
-          - netcdf-c: phase1/step73.md
-          - netcdf-fortran: phase1/step74.md
+      - Route B — build by hand: phase1/routeB.md
       - Verify the stack: phase1/step75.md
       - Get CROCO and croco_pytools: phase1/step8.md
       - Reference data: phase1/step9.md
@@ -154,7 +150,13 @@ nav:
       - Vertical structure: phase5/vertical.md
       - Through time: phase5/time.md
   - Phase 6 — Validation:
-      - Validation: phase6_validation/06_validation.md
+      - Overview: phase6_validation/06_validation.md
+      - The references: phase6_validation/references.md
+      - Against observations: phase6_validation/observations.md
+      - Forecast skill: phase6_validation/skill.md
+      - Against an analysis: phase6_validation/analysis.md
+      - Below the surface: phase6_validation/depth.md
+      - Doing this for your own run: phase6_validation/recipes.md
   - Phase 7 — Nesting (offline):
       - Overview: phase7/07_nesting.md
       - Step 0 — Session setup: phase7/step0.md
