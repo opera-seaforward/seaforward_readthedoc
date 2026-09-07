@@ -153,6 +153,7 @@ nav:
       - Overview: phase6_validation/06_validation.md
       - The references: phase6_validation/references.md
       - Against observations: phase6_validation/observations.md
+      - Metrics agains observations:  phase6_validation/observations_suite.md
       - Forecast skill: phase6_validation/skill.md
       - Against an analysis: phase6_validation/analysis.md
       - Below the surface: phase6_validation/depth.md
@@ -229,11 +230,9 @@ nav:
   - Notebooks Toolkit:
       - Overview: notebooks/00_notebooks_overview.md
       - Before you start: notebooks/01_before_you_start.md
-      - Demo data: notebooks/02_demo_data.md
-      - Validation engine: notebooks/03_validation_engine.md
-      - Run validation (one cycle): notebooks/04_run_validation_one_cycle.md
-      - Validate all cycles (batch): notebooks/05_validate_all_cycles.md
-      - Validation crontab: notebooks/06_validation_crontab.md
+      - Validation engine: notebooks/02_validation_engine.md
+      - Composite validation: notebooks/03_composite_validation.md
+      - Guided exercises: notebooks/04_guided_exercises.md
+      - Sensitivity analysis: notebooks/05_sensitivity_analysis.md
+      - Animation: notebooks/06_animation.md
       - Notebook notes and language: notebooks/07_notebook_notes_and_language.md
-      - Guided exercises: notebooks/08_guided_exercises.md
-      - Sensitivity analysis: notebooks/09_sensitivity_analysis.md

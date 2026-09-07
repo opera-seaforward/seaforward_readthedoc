@@ -9,38 +9,114 @@ One call, sized to the run being validated. It reads the run's dates and grid, w
 them slightly, and fetches only that:
 
 ```python
-import sftools.validation_obs as vo
+from datetime import datetime, timedelta
 
-HIS = "forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc"
+clon_full, clat_full, _ = pp.lonlatmask(ds)
+DOMAIN = (float(np.nanmin(clon_full)), float(np.nanmax(clon_full)),
+         float(np.nanmin(clat_full)), float(np.nanmax(clat_full)))
+model_times = pd.to_datetime(pp.times(ds))
+START_DATE = model_times[0].to_pydatetime()
+END_DATE = model_times[-1].to_pydatetime()
+CYCLE_DATE = datetime.strptime(CYCLE, "%Y%m%d")
+print(f"Domain: {DOMAIN}")
+print(f"Cycle window: {START_DATE} -> {END_DATE}")
 
-ost = vo.download_obs(HIS, "ostia", "~/seaforward/data/OBS", Yorig=2000)
+# every distinct calendar day covered by this forecast cycle -- Sections 2, 3
+# and 4 below each save one figure PER DAY (matching the Section 7 satellite
+# comparisons), rather than one figure for just the cycle's last time step.
+CYCLE_DAYS = sorted(set(model_times.strftime('%Y-%m-%d')))
+print(f"Domain: {DOMAIN}")
+print(f"Cycle window: {START_DATE} -> {END_DATE}")
+# ---- (i) Copernicus Marine Forecast (Mercator anfc), combined reference file ----
+print("\n-- Copernicus Marine Forecast --")
+# Daily-mean (P1D-m), not hourly -- the hourly product is far heavier and
+# isn't needed here. max_step_hours=30: an existing file's median time step
+# should be ~24h (daily) -- anything much coarser means it's a stale/broken
+# file, and must be re-downloaded even though its date range looks fine.
+if not AVAIL['mercator_forecast']:
+    print("unavailable on the CMEMS platform - Sections 2/2b will be skipped.")
+elif cmems.netcdf_covers_time_range(REFERENCE, START_DATE, END_DATE, max_step_hours=30):
+    print(f"already downloaded and covers the full cycle window at the expected "
+         f"resolution: {REFERENCE}")
+else:
+    if os.path.exists(REFERENCE):
+        print(f"{REFERENCE} exists but either doesn't cover the full cycle window "
+             f"({START_DATE.date()} -> {END_DATE.date()}) or is at a coarser "
+             f"resolution than expected -- re-downloading.")
+        os.remove(REFERENCE)
+    mercator_dir = os.path.dirname(REFERENCE)
+    fdays = max((END_DATE.date() - CYCLE_DATE.date()).days, 0)
+    cmems.download_mercator_ops(DOMAIN, CYCLE_DATE, hdays=0, fdays=fdays, outputDir=mercator_dir)
+
+    if cmems.netcdf_covers_time_range(REFERENCE, START_DATE, END_DATE, max_step_hours=30):
+        print(f"downloaded -> {REFERENCE}")
+    elif os.path.exists(REFERENCE):                                     print(f"download ran but {REFERENCE} still doesn't cover the full cycle window "                                                     f"at the expected resolution -- one or more variable downloads may have "                                                       f"failed; check the log above.")
+    else:                                                               print(f"download ran but {REFERENCE} wasn't produced - check {mercator_dir} for the actual filename.")
+                                                                # ---- (ii) Satellite SST: OSTIA & ODYSSEA, one file per day ----                                                               print("\n-- Satellite SST --")
+SAT_FILES = {}                                                  for product in ("OSTIA", "ODYSSEA"):
+    sat_dir = _paths.satellite_dir(MAIN_DIR, CONFIG, CYCLE, product)
+    SAT_FILES[product] = cmems.download_satellite_sst(product, DOMAIN, START_DATE, END_DATE, sat_dir)                           
+# ---- (ii-b) Satellite SSS: SMOS L4, one file per day ----     print("\n-- Satellite SSS (SMOS) --")
+if not AVAIL['smos_l4_sss']:
+    print("unavailable on the CMEMS platform - Section 7b will be skipped.")
+    SAT_FILES['SMOS'] = {}
+else:                                                               smos_dir = _paths.satellite_dir(MAIN_DIR, CONFIG, CYCLE, "SMOS")                                                                SAT_FILES['SMOS'] = cmems.download_satellite_sst("SMOS", DOMAIN, START_DATE, END_DATE, smos_dir)  
+
+    if cmems.netcdf_covers_time_range(REFERENCE, START_DATE, END_DATE, max_step_hours=30):
+        print(f"downloaded -> {REFERENCE}")
+    elif os.path.exists(REFERENCE):                                     print(f"download ran but {REFERENCE} still doesn't cover the full cycle window "                                                     f"at the expected resolution -- one or more variable downloads may have "                                                       f"failed; check the log above.")
+    else:                                                               print(f"download ran but {REFERENCE} wasn't produced - check {mercator_dir} for the actual filename.")
+                                                                # ---- (ii) Satellite SST: OSTIA & ODYSSEA, one file per day ----                                                               print("\n-- Satellite SST --")
+SAT_FILES = {}                                                  for product in ("OSTIA", "ODYSSEA"):
+    sat_dir = _paths.satellite_dir(MAIN_DIR, CONFIG, CYCLE, product)
+    SAT_FILES[product] = cmems.download_satellite_sst(product, DOMAIN, START_DATE, END_DATE, sat_dir)                           
+# ---- (ii-b) Satellite SSS: SMOS L4, one file per day ----     print("\n-- Satellite SSS (SMOS) --")
+if not AVAIL['smos_l4_sss']:
+    print("unavailable on the CMEMS platform - Section 7b will be skipped.")
+    SAT_FILES['SMOS'] = {}
+else:                                                               smos_dir = _paths.satellite_dir(MAIN_DIR, CONFIG, CYCLE, "SMOS")                                                                SAT_FILES['SMOS'] = cmems.download_satellite_sst("SMOS", DOMAIN, START_DATE, END_DATE, smos_dir)  
 ```
 
 ```text
-ostia: METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2
-  2026-07-10 .. 2026-07-17   lon -22.65..-14.85  lat 13.44..24.54
-```
+Fetching catalogue 1: 100%|██████████████████████████| 2/2 [00:09<00:00,  4.72s/it]
+Domain: (-22.152978897094727, -15.34702205657959, 13.937745094299316, 24.041303634643555)                                       Cycle window: 2026-07-11 00:00:00 -> 2026-07-16 00:00:00
+Domain: (-22.152978897094727, -15.34702205657959, 13.937745094299316, 24.041303634643555)
+Cycle window: 2026-07-11 00:00:00 -> 2026-07-16 00:00:00
 
-The filename carries the window — `ostia_2026-07-10_2026-07-17.nc` — so a second cycle
-does not overwrite the first.
+-- Copernicus Marine Forecast --                                already downloaded and covers the full cycle window at the expected resolution: /home/${USER}/seaforward/forecast/model-runs/Canary_12/20260711/downloaded_data/MERCATOR/MERCATOR_20260711_00.nc
+-- Satellite SST --
+Fetching catalogue 1:   0%|                                  | 0/2 [00:00<?, ?it/s]
+Fetching products:   0%|                                     | 0/1 [00:00<?, ?it/s]
+Fetching products: 100%|█████████████████████████████| 1/1 [00:02<00:00,  2.04s/it]
+Fetching catalogue 1:  50%|█████████████             | 1/2 [00:08<00:08,  8.29s/it]INFO - 2026-09-05T09:03:56Z - Checking if credentials are valid.
+  CMEMS product 'ostia_l4' (METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2): available
+INFO - 2026-09-05T09:04:01Z - Valid credentials from configuration file.
+Fetching catalogue 1: 100%|██████████████████████████| 2/2 [00:18<00:00,  9.23s/it]                                                                                                                                                                             Fetching catalogue 1: 100%|██████████████████████████| 2/2 [00:08<00:00,  4.11s/it]                                               CMEMS product 'odyssea_l3s' (IFREMER-GLOB-SST-L3-NRT-OBS_FULL_TIME_SERIE): available                                          Fetching catalogue 1:   0%|                                  | 0/2 [00:00<?, ?it/s]
+Fetching products:   0%|                                     | 0/1 [00:00<?, ?it/s]                                             Fetching products: 100%|█████████████████████████████| 1/1 [00:02<00:00,  2.03s/it]                                             Fetching catalogue 1:  50%|█████████████             | 1/2 [00:09<00:09,  9.44s/it]
+  CMEMS product 'smos_l4_sss' (cmems_obs-mob_glo_phy-sss_nrt_multi_P1D): available
+                                                             Fetching catalogue 1: 100%|██████████████████████████| 2/2 [00:13<00:00,  6.70s/it]                                             CMEMS: already logged in.
+  [OSTIA] 2026-07-11: already downloaded - 2026-07-11.nc          
+...
+...
+```   
 
-`track="nrt"` is the default, for forecasts. Hindcasts want `track="my"`, the multi-year
-reprocessed twin, the same split as Mercator and GLORYS.
-
-!!! warning
-    **`Yorig` is required.** A CROCO file written without CF time units carries raw seconds, and without a reference year the download would silently request the wrong decade. Pass 2000 for the forecast track, 1993 for hindcasts. Every function in the module raises rather than guessing.
+The filename carries the window — `2026-07-11_2026-07-16` — so a second cycle does not overwrite the first.
 
 To see what a reference provides before using it:
 
 ```python
-vo.describe("armor3d")
+REFERENCE
+```
+
+```text
+'/home/${USER}/seaforward/forecast/model-runs/Canary_12/20260711/downloaded_data/MERCATOR/MERCATOR_20260711_00.nc'
 ```
 
 ## What each one is
 
 ### OSTIA — SST, gap-free
 
-`SST_GLO_SST_L4_NRT_OBSERVATIONS_010_001`, 0.05°, daily.
+`METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2`, 0.05°, daily.
 
 An analysis: satellite infrared and microwave observations plus in-situ, optimally
 interpolated to fill cloud gaps. Finer than a 1/12° model, so comparing against it
@@ -53,7 +129,7 @@ independent of your boundary conditions.
 
 ### ODYSSEA — SST, observations only
 
-`SST_GLO_SST_L3S_NRT_OBSERVATIONS_010_010`, 0.1°, daily.
+`IFREMER-GLOB-SST-L3-NRT-OBS_FULL_TIME_SERIE`, 0.1°, daily.
 
 Merged satellite observations, inter-calibrated across sensors but not interpolated.
 Cloud leaves gaps: coverage over the Canary domain in July runs 46–69% of the grid.
@@ -69,6 +145,30 @@ flag_meanings: missing invalid not_used not_used not_used clear
 
 so only level 5 is used. `download_obs` fetches the flag automatically and the
 comparison applies it.
+
+### SMOS — SSS, gap-free
+
+`cmems_obs-mob_glo_phy-sss_nrt_multi_P1D`, 0.125°, daily.
+
+Passive-microwave salinity retrieval, gridded and gap-filled onto a regular grid the
+same way OSTIA gap-fills SST. Salinity retrievals are noisier than SST ones — the
+brightness-temperature signal SMOS measures is far less sensitive to salinity than to
+temperature — so day-to-day SMOS variability includes more retrieval noise than day-to-day
+CROCO variability does; a mismatch on a single day is weaker evidence of a real model
+error than the same-size SST mismatch against OSTIA would be.
+
+Coastal cells are the weak point: L-band retrievals near land are contaminated by
+land-emission in the antenna footprint, so SMOS is systematically less reliable close to
+shore — exactly the region a coastal-upwelling configuration like this one cares about
+most. Treat open-ocean SMOS agreement as more informative than coastal SMOS agreement.
+
+### Mercator and GLORYS — the parent
+
+The product that supplied the initial and boundary conditions. Mercator's
+analysis-and-forecast for the forecast track, GLORYS reanalysis for hindcasts.
+
+!!! tips
+The following are downloaded via `sftools.validation_obs.download_obs`
 
 ### DUACS — sea level
 
@@ -107,20 +207,18 @@ makes a subsurface comparison possible at all.
 !!! warning
     **ARMOR3D over a shelf is unreliable.** Argo floats avoid shallow water, so the covariances it relies on are thin there, and at 1/8° a narrow shelf is barely resolved. Comparing at 100 m over the Canary slope gives a bias of +1.2 °C against −0.3 °C in deep water — the difference is a property of the reference, not the model. Use `min_depth=500` to exclude it.
 
-### Mercator and GLORYS — the parent
 
-The product that supplied the initial and boundary conditions. Mercator's
-analysis-and-forecast for the forecast track, GLORYS reanalysis for hindcasts.
-
+!!! note
 Used two ways in this chapter, and the difference matters:
 
-**As a reference**, it measures consistency — did the downscaling stay close to what
+- **As a reference**, it measures consistency — did the downscaling stay close to what
 forced it. Useful for catching a run that has gone somewhere strange, but agreement is
 partly guaranteed.
 
-**As a competitor**, scored against the same independent observations as the model. That
+- **As a competitor**, scored against the same independent observations as the model. That
 is the comparison that answers whether the downscaling improved anything, and it is what
 the skill page does.
+
 
 ## Which to use for what
 
@@ -128,6 +226,7 @@ the skill page does.
 |---|---|---|
 | SST map, error growth | OSTIA | fine, gap-free, straightforward |
 | SST skill | ODYSSEA | independent of in-situ, so the harder test |
+| SSS map | SMOS | sea surface salinity observation product |
 | Sea level | DUACS | the only altimetry option, but smoothed |
 | Surface currents | GlobCurrent | total flow, matching what the model produces |
 | Profiles, sections, error against depth | ARMOR3D | the only depth-resolved observation-based product |
@@ -136,26 +235,5 @@ the skill page does.
 
 ## Sizing the download to the run
 
-`download_obs` derives its request from the run itself:
+When several cycles are being compared together, one file covering all of them is simpler than one per cycle: the files are merged then meaned by leading day `(sp1, sp2, fcst1, fcst2, ...)`
 
-```python
-vo.run_window(HIS, Yorig=2000)     # ('2026-07-10', '2026-07-17')
-vo.run_domain(HIS, Yorig=2000)     # (-22.65, -14.85, 13.44, 24.54)
-```
-
-The window is padded by a day on each side, because a daily mean is centred at noon
-while a run starts at midnight — the first model record needs the previous day's field
-to bracket it. The domain is widened by 0.5°, so interpolation onto the model grid has
-reference points beyond the edge rather than extrapolating.
-
-When several cycles are being compared together, one file covering all of them is
-simpler than one per cycle:
-
-```python
-# the last cycle runs latest; pad backwards to reach the first cycle's start
-vo.download_obs(LAST_HIS, "odyssea", "~/seaforward/data/OBS",
-                Yorig=2000, pad_days=6)
-```
-
-!!! note
-    A reference that does not span the run raises rather than substituting the nearest available day. That guard exists because a silent nearest-match compares one day's model against another day's observations and reports it as a result — the difference is small enough to look plausible and large enough to change the answer.

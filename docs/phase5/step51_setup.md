@@ -6,7 +6,7 @@ environment:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-jupyter lab            # or python3, or a script — the toolkit does not need Jupyter
+jupyter-lab            # or python3, or a script — the toolkit does not need Jupyter
 ```
 
 ## The modules

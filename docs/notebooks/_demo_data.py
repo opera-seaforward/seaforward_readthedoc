@@ -1,6 +1,16 @@
 """
 notebooks/_demo_data.py — SEA-FORWARD demo/fallback data.
 
+*** DEPRECATED — superseded by `_paths.py`. ***
+None of the current notebooks (01_seaforward_postprocess_plot.ipynb,
+02_validation.ipynb, 03_composite_validation.ipynb, 04_exercises.ipynb,
+05_sensitivity.ipynb, 06_animation.ipynb) import this module any more —
+they all use `_paths.py` (SEAFORWARD_CONFIG / SEAFORWARD_MAIN_DIR /
+SEAFORWARD_CYCLE) instead, and none of them has a synthetic-data fallback.
+This file is kept only for reference / any external scripts that may still
+import it; do not add new dependents. See docs/notebooks/02_demo_data.md
+for the current cycle-discovery mechanism.
+
 DCC processes: supports D1 (Downstream Applications / notebooks).
 
 Not a deliverable notebook itself — a small shared helper the four notebooks

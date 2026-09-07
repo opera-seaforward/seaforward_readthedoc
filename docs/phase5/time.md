@@ -148,6 +148,10 @@ fig = pl.plot(pp.timeseries(ds, "speed", lon0=plon, lat0=plat, depth_m=50),
 
 ## Animations
 
+See also `06_animation.ipynb` (Notebooks Toolkit) for these same five calls
+run end-to-end against a real forecast/hindcast cycle, discovered the same
+way as `01_seaforward_postprocess_plot.ipynb` and `02_validation.ipynb`.
+
 The most direct way to see time: play the field forward. `sftools.animation` reuses
 the same colour scales and overlays as the static plots, and resolves the limits
 once across the whole series so the scale doesn't flicker between frames.
