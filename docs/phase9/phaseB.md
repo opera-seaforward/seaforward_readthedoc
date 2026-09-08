@@ -115,7 +115,6 @@ mkdir -p ~/seaforward/forecast/scratch/Agulhas_AGRIF/CROCO_FILES
 cp ~/seaforward/forecast/scratch/Agulhas_12/CROCO_FILES/croco_grd.nc \
    ~/seaforward/forecast/scratch/Agulhas_AGRIF/CROCO_FILES/croco_grd.nc
 
-```bash
 cd ~/seaforward/code/croco_pytools/prepro
 nano build_agulhas_agrif.py
 ```
