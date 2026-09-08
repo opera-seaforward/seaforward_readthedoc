@@ -238,11 +238,11 @@ html {
         margin-left: 420px !important; 
     }
     .wy-side-nav-search {
-        width: 400px !important; 
+        width: 420px !important; 
     }
-    /*.wy-form {
+    .wy-form {
         width: 380px !important; 
-    }*/
+    }
     .wy-menu-vertical a.current{
         width: 420px !important; 
     }
