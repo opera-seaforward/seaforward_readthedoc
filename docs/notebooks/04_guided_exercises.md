@@ -1,8 +1,8 @@
-# 03 -- Guided exercises (DCC process **D1**)
+# 04 -- Guided exercises (DCC process **D1**)
 
 **SEA-FORWARD** OceanPrediction-A toolkit
 
-Scaffolded exercises for Step 5.2 of the operational workflow, owned by Python Dev 1/2 under the Visualisation Notebook component (process **D1**). Each exercise takes you from raw CROCO output to a physically meaningful coastal-ocean diagnostic, using only building blocks already in `sftools.postprocess`.
+Scaffolded exercises for Step 5.2 of the operational workflow. Each exercise takes you from raw CROCO output to a physically meaningful coastal-ocean diagnostic, using only building blocks already in `sftools.postprocess`.
 
 | Exercise | Concept | Relevance |
 |---|---|---|
@@ -17,7 +17,6 @@ statements confirming the result is physically sensible (right sign, right order
 *Why not blank-out the lines outright?* This shipped notebook must execute end-to-end without errors from a fresh kernel restart (QA requirement, Testing and Validation Plan Section 9.1) -- a literal fill-in-the-blank version would fail that by construction. If your course/workshop wants a
 truly blanked student handout, generate one from this notebook by deleting the marked answer lines; this version is the instructor/reference copy.
 
-*Language note (FR-09):* markdown and docstrings are in English; French translation is coordinated separately with the documentation team.
 
 ```python
 import sys, os
@@ -27,17 +26,27 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.ndimage import maximum_filter, minimum_filter
 
+from scipy.ndimage import maximum_filter, minimum_filter
+
 import sftools.postprocess as pp
 import sftools.validation as val
+import _paths
 
-import _demo_data
+CONFIG   = os.environ.get("SEAFORWARD_CONFIG", "Canary_12")
+MAIN_DIR = os.environ.get("SEAFORWARD_MAIN_DIR", "~/seaforward/forecast/model-runs")
+AVAILABLE_CYCLES = _paths.list_cycles(os.path.expanduser(MAIN_DIR), CONFIG)
 
-CROCO_HIS, _, YORIG, IS_DEMO = _demo_data.get_paths()
-if IS_DEMO:
-    print("!! DEMO DATA !! see notebooks/_demo_data.py -- numbers below are")
-    print("   illustrative only, not from a real CROCO run.")
+# >>> SET THIS to the cycle you want to run these exercises on, e.g. CYCLE = "20260711" <<<
+CYCLE = os.environ.get("SEAFORWARD_CYCLE", AVAILABLE_CYCLES[-1] if AVAILABLE_CYCLES else "")
+
+CROCO_HIS, REFERENCE, MAIN_DIR = _paths.get_paths(cycle=CYCLE, config=CONFIG, main_dir=MAIN_DIR)
+YORIG = 2000   # forecast runs from the Copernicus Marine Forecast / Mercator anfc
 
 ds = pp.open_history(CROCO_HIS, Yorig=YORIG)
+clon, clat, cmask = pp.lonlatmask(ds)
+
+LON0, LAT0 = None, None   # set your own reference coastal point here, or leave
+                          # None to auto-pick one in the middle of the domain
 clon, clat, cmask = pp.lonlatmask(ds)
 print(f"Grid: {clon.shape}, domain lon [{np.nanmin(clon):.2f}, {np.nanmax(clon):.2f}], "
      f"lat [{np.nanmin(clat):.2f}, {np.nanmax(clat):.2f}]")
@@ -257,15 +266,15 @@ print("self-check passed")
 
 You have derived four standard coastal-ocean diagnostics directly from CROCO output: an upwelling index from wind alone, a mixed-layer depth from a temperature profile, a coastal-jet core from a velocity section, and candidate eddy centres from SSH extrema.
 
-Continue to **`04_sensitivity.ipynb`** to see how the upwelling index you just computed responds when the wind forcing itself is perturbed (Step 5.3, U2 -> C1 -> D1).
+Continue to **`05_sensitivity.ipynb`** to see how the upwelling index you just computed responds when the wind forcing itself is perturbed (Step 5.3, U3 -> C1 -> D1).
 
 ```python
 ds.close()
 ```
 
 <div style="display:flex; justify-content:center; margin:10px 0 14px 0;">
-   <a href="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/03_exercises.ipynb" data-download-url="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/03_exercises.ipynb" data-download-filename="03_exercises.ipynb" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 10px 24px rgba(0,0,0,0.18)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';" style="display:inline-flex; align-items:center; justify-content:center; gap:16px; min-width: 80px; padding:20px 20px; border-radius:10px; background:linear-gradient(to bottom, #ffffcc 0%, #f4f797de 100%); color:#000000; text-decoration:none; font-size:1.2rem; line-height:1.1; text-align:center; transition:transform 0.18s ease, box-shadow 0.18s ease; transform-origin:center;">
+   <a href="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/04_exercises.ipynb" data-download-url="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/04_exercises.ipynb" data-download-filename="04_exercises.ipynb" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 10px 24px rgba(0,0,0,0.18)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';" style="display:inline-flex; align-items:center; justify-content:center; gap:16px; min-width: 80px; padding:20px 20px; border-radius:10px; background:linear-gradient(to bottom, #ffffcc 0%, #f4f797de 100%); color:#000000; text-decoration:none; font-size:1.2rem; line-height:1.1; text-align:center; transition:transform 0.18s ease, box-shadow 0.18s ease; transform-origin:center;">
       <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/download.svg" alt="" aria-hidden="true" style="width:25px; height:25px; color:#000000; font-weight:bold filter:invert(1);" />
-      <span>Download notebook 03_exercises.ipynb</span>
+      <span>Download notebook 04_exercises.ipynb</span>
    </a>
 </div>

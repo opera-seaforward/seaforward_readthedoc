@@ -156,3 +156,6 @@ resolves everything, is worth a different explanation from one along the upwelli
 Here the bias changes sign between 11 and 15 July — +0.13 to −0.09 — while the RMSE barely
 moves. That is the initial warm offset washing out, leaving pattern error that the maps
 show sitting along the front.
+
+!!! note
+See more validation figures (scatter plots, Taylor diagram, etc.) in the two related notebooks: `02_validation.ipynb` and `03_composite_validation.ipynb`.

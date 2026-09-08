@@ -36,3 +36,9 @@ The extractor builds temperature at 50 m; the plotter draws and labels it — th
 the colour scale, the units and the depth all come from the data's own attributes.
 Those two functions cover most of this chapter: `pp.field()` for the data,
 `pl.plot()` for the figure.
+<div style="display:flex; justify-content:center; margin:10px 0 14px 0;">
+   <a href="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/01_seaforward_postprocess_plot.ipynb" data-download-url="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/01_seaforward_postprocess_plot.ipynb" data-download-filename="01_seaforward_postprocess_plot.ipynb" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 10px 24px rgba(0,0,0,0.18)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';" style="display:inline-flex; align-items:center; justify-content:center; gap:16px; min-width: 80px; padding:20px 20px; border-radius:10px; background:linear-gradient(to bottom, #ffffcc 0%, #f4f797de 100%); color:#000000; text-decoration:none; font-size:1.2rem; line-height:1.1; text-align:center; transition:transform 0.18s ease, box-shadow 0.18s ease; transform-origin:center;">
+      <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/download.svg" alt="" aria-hidden="true" style="width:25px; height:25px; color:#000000; font-weight:bold filter:invert(1);" />
+      <span>Download notebook 01_seaforward_postprocess_plot.ipynb</span>
+   </a>
+</div>

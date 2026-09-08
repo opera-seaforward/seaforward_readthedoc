@@ -3,24 +3,48 @@
 Guided, interactive counterparts to the automated pipeline (Steps 1-5 of the
 operational workflow, `sftools.cli` / `sftools/run_validation.py`). Owned by
 Python Dev 1/2, DCC processes **V1** (validation) and **D1** (downstream
-exercises, sensitivity analysis, animation).
+post-processing, exercises, sensitivity analysis, animation).
 
 ```
 notebooks/
-├── 01_visualisation.ipynb   ← maps, sections, animations (not in this package)
-├── 02_validation.ipynb      ← bias maps, scatter plots, Taylor diagrams, time
-│                               series, optional in-situ scoring, batch history (V1)
-├── 03_exercises.ipynb       ← guided exercises: upwelling, MLD, coastal jet, eddies (D1)
-├── 04_sensitivity.ipynb     ← wind-forcing sensitivity study, Step 5.3 (U2 -> C1 -> D1)
-├── 05_animation.ipynb       ← SSH+eddies, currents, scalar fields, particle
-│                               advection (D1, needs py-eddy-tracker)
-├── _demo_data.py            ← shared helper, NOT a notebook — see below
-└── region_cells.py          ← region-picker helper cells
+├── 01_seaforward_postprocess_plot.ipynb  ← maps, sections, profiles, Hovmöller,
+│                                            time series (D1)
+├── 02_validation.ipynb                   ← single-cycle validation: bias maps,
+│                                            scatter plots, Taylor diagrams, time
+│                                            series, pass/fail summary, optional
+│                                            in-situ scoring, HTML report, batch
+│                                            history across cycles (V1)
+├── 03_composite_validation.ipynb         ← multi-cycle validation, merged and
+│                                            indexed by forecast LEAD TIME rather
+│                                            than calendar date (V1)
+├── 04_exercises.ipynb                    ← guided exercises: upwelling index,
+│                                            MLD, coastal jet, eddy detection (D1)
+├── 05_sensitivity.ipynb                  ← wind-forcing sensitivity study,
+│                                            Step 5.3 (U3 -> C1 -> D1)
+├── 06_animation.ipynb                    ← 5 animations built on a single entry
+│                                            point, sftools.animation.animate()
+│                                            (D1)
+├── _paths.py                             ← shared helper, NOT a notebook — cycle
+│                                            discovery + path resolution, see below
+└── region_cells.py                       ← region-picker helper cells
 
 sftools/
-├── validation.py                 ← grid-level CROCO-vs-reference comparisons (class 1/2)
-├── validation_godae.py           ← GODAE OceanView scorecard + optional in-situ (class 4)
-├── animate.py                    ← SSH/eddy, current, scalar, particle animations
+├── validation.py                 ← single module for every single-cycle validation
+│                                    building block: bias maps, profiles, scatter,
+│                                    GODAE scorecard/Taylor diagram, satellite
+│                                    SST/SSS, optional in-situ, HTML summary
+│                                    (imported as `val` in 02_validation.ipynb and
+│                                    03_composite_validation.ipynb — some of that
+│                                    module's docstrings/prose refer to logical
+│                                    sub-areas as "validation_godae"/
+│                                    "validation_satellite"; there is no separate
+│                                    top-level module by either of those names)
+├── validation_composite.py       ← lead-time compositing across cycles (imported
+│                                    as `vc` in 03_composite_validation.ipynb only)
+├── download/cmems.py             ← Copernicus Marine availability checks + downloads
+│                                    (`from sftools.download import cmems`)
+├── animation.py                  ← sftools.animation.animate() — the single entry
+│                                    point behind every animation in 06_animation.ipynb
 └── run_validation.py             ← validates ONE cycle (Step 4.1) -- see below
 
 forecast/
@@ -28,14 +52,22 @@ forecast/
 └── install_validation_crontab.sh    ← schedules validate_all_cycles.sh via cron
 
 validation/
-└── test_sftools_animate_validation.py   ← pytest suite for validation_godae.py / animate.py
+└── test_sftools_animate_validation.py   ← pytest suite for validation_godae.py / animation.py
 ```
 
-**A note on that last change:** `validation_godae.py` and `animate.py` used
-to also have stale duplicate copies under `validation/` (left over from
-early development, before they were finalised) — those have been removed.
-`sftools/` is now the single source of truth for every importable module;
-`validation/` holds only the test suite.
+!!! warning
+    **Module name: `sftools.animation`, not `sftools.animate`.** `06_animation.ipynb`
+    imports `sftools.animation` — if your checkout only has an older
+    `sftools/animate.py`, update to the revision that ships `sftools/animation.py`,
+    or adjust the notebook's import. Older material (including some pages in this
+    Toolkit section) may still say `animate.py`; treat `sftools.animation` as
+    current.
+
+**A note on `validation/`:** `validation_godae.py` and (the historical)
+`animate.py` used to also have stale duplicate copies under `validation/`
+(left over from early development, before they were finalised) — those have
+been removed. `sftools/` is the single source of truth for every importable
+module; `validation/` holds only the test suite.
 
 ## Before you start
 
@@ -55,50 +87,78 @@ early development, before they were finalised) — those have been removed.
    what *doesn't* work is launching from anywhere else and browsing in, since
    Jupyter's working directory (not the file's location) is what `..`
    resolves against.
-3. Run notebooks **in numeric order** (02 before 03 before 04) the first
-   time — later notebooks reuse conventions (the reference coastal point,
-   the Bakun index) introduced earlier, and 04 explicitly assumes you've
-   seen 03's Exercise 1. `05_animation.ipynb` is independent of 03/04 and
-   can be run any time after 02, but needs **py-eddy-tracker** installed
-   (`pip install pyEddyTracker`, already in `environment.yml`) — see that
-   notebook's own header cell if the import fails.
+3. Run notebooks **in numeric order** (02 before 03 before 04 before 05)
+   the first time — later notebooks reuse conventions (the reference
+   coastal point, the Bakun index) introduced earlier, and `05_sensitivity.ipynb`
+   explicitly assumes you've run `04_exercises.ipynb`'s Exercise 1 first.
+   `06_animation.ipynb` is independent of 03/04/05 and can be run any time
+   after `02_validation.ipynb`; it only needs the same environment as every
+   other notebook (`sftools.animation`) — no extra package like
+   py-eddy-tracker is required.
+4. Every notebook discovers its forecast cycle(s) itself via `_paths.py`
+   (`SEAFORWARD_CONFIG`, `SEAFORWARD_MAIN_DIR`, `SEAFORWARD_CYCLE`
+   environment variables, defaulting to region `Canary_12` and the most
+   recent cycle found on disk) — there is no separate synthetic/demo-data
+   fallback in the current notebooks. If no forecast cycles are found under
+   `MAIN_DIR/CONFIG`, the notebook prints an empty cycle list and later
+   cells will fail with a clear missing-file error; run a forecast (Phase 3)
+   or point the environment variables at an existing `model-runs/` tree
+   before continuing. See "Demo Data" for how to override the defaults.
 
-## Demo data — read this if a notebook complains about missing files
+## Demo data / paths — read this if a notebook complains about missing files
 
-`_demo_data.py` is a shared helper (not a notebook) that every notebook
-imports as `import _demo_data`. On first run, each notebook calls
-`_demo_data.get_paths()` (02/03/05) or `_demo_data.get_sensitivity_paths()`
-(04), which:
+Read this if a notebook complains about a missing file or an empty cycle list.
 
-- looks for real data at the paths configured near the top of
-  `_demo_data.py` (`SEAFORWARD_CROCO_HIS`, `SEAFORWARD_GLORYS` environment
-  variables, or the hard-coded defaults pointing into `../hindcast/`);
-- if not found, **auto-generates a small synthetic stand-in** (a fake
-  CROCO history file with an idealised coastal-upwelling signature, a fake
-  GLORYS-like reference, a fake wind field) under `notebooks/_demo_cache/`,
-  and reuses it on subsequent runs.
+!!! warning "This page used to describe `_demo_data.py` / synthetic demo data"
+    Earlier revisions of this Toolkit generated a small synthetic stand-in
+    (fake CROCO history, fake GLORYS reference, fake wind field) whenever
+    real data wasn't found, and printed a `!! DEMO DATA !!` banner. **The
+    current notebooks (`02_validation.ipynb` through `06_animation.ipynb`)
+    no longer do this** — there is no `_demo_data.py` and no synthetic
+    fallback. If your checkout still has `notebooks/_demo_data.py` and
+    notebooks that import it, you're looking at an older revision of the
+    toolkit; the rest of this page describes the current behaviour.
 
-Every notebook prints a loud `!! DEMO DATA !!` banner whenever this
-fallback is active. **Treat any numbers or pass/fail results from a demo
-run as illustrative only** — they exist so the toolkit can be graded/tested
-before the real D10.2 (Forcing Data Archive) / D10.3 (Reference Results
-Dataset) are downloaded from Zenodo, not as a substitute for real
-validation.
+Every current notebook imports the shared helper `_paths.py` (not a
+notebook itself) instead. Each notebook's setup cell reads three
+environment variables, all optional:
 
-To force a clean rebuild of the demo cache after editing `_demo_data.py`,
-delete `notebooks/_demo_cache/` and re-run.
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `SEAFORWARD_CONFIG` | `Canary_12` | region/configuration name |
+| `SEAFORWARD_MAIN_DIR` | `~/seaforward/forecast/model-runs` (`~/seaforward/hindcast/model-runs` for hindcast-mode notebooks) | root of the `model-runs/<CONFIG>/<CYCLE>/...` tree |
+| `SEAFORWARD_CYCLE` | the most recent cycle `_paths.list_cycles()` finds under `MAIN_DIR/CONFIG` | which `YYYYMMDD` cycle directory to open |
 
-To point a notebook at your own real run instead of the defaults, either
-edit the paths directly in that notebook's setup cell, or set the
-environment variables before launching Jupyter:
+`_paths.list_cycles(main_dir, config)` scans `MAIN_DIR/CONFIG` for
+subdirectories named `YYYYMMDD` and returns the ones that actually contain
+a `CROCO_FILES/croco_his.nc` — this is what every notebook prints near the
+top ("forecast cycles found under ..."). `_paths.get_paths(cycle=, config=,
+main_dir=)` resolves the exact `CROCO_HIS` / `REFERENCE` file paths for one
+cycle.
+
+**If the printed cycle list is empty**, there is no synthetic fallback any
+more — later cells will fail with a plain missing-file error (or, in
+`02_validation.ipynb`/`03_composite_validation.ipynb`, the availability
+guard will simply skip every reference-product comparison). Either:
+
+- run a forecast first (Phase 3) so a real cycle exists under the default
+  path, or
+- point the environment variables at an existing `model-runs/` tree before
+  launching Jupyter:
 
 ```bash
-export SEAFORWARD_CROCO_HIS=../hindcast/model-runs/Canary_12/20251225/hcast/CROCO_FILES/croco_his.nc
-export SEAFORWARD_GLORYS=../hindcast/downloaded_data/GLORYS/2025_12.nc
+export SEAFORWARD_CONFIG=Canary_12
+export SEAFORWARD_MAIN_DIR=~/seaforward/forecast/model-runs
+export SEAFORWARD_CYCLE=20260711
 jupyter lab
 ```
 
-## Validation: one engine, three ways to run it
+`06_animation.ipynb` uses the same `_paths.py` pattern but additionally
+sets `SEAFORWARD_RUN_TYPE` (`fcst` or `hcast`, default `fcst`) to pick
+between the forecast and hindcast trees, since its example historically
+pointed at a hindcast run.
+
+## Validation: one engine, several ways to run it
 
 `sftools.validation_godae` -- the GODAE OceanView scorecard (bias, RMSD,
 unbiased RMSD, correlation, two scatter-index variants, std-ratio) plus
@@ -112,151 +172,115 @@ sftools.validation_godae.validate_against_insitu()           <- grid vs CMEMS in
 
 ...used identically by:
 
-1. **`02_validation.ipynb`** (interactive, Sections 4-7) — builds the same
-   scorecard, draws the Taylor diagram, and (Section 7, optional) scores
-   against in-situ obs.
-2. **`sftools/run_validation.py`** (automated, one cycle at a time — see
+1. **`02_validation.ipynb`** (interactive, single cycle, Sections 2-4) —
+   builds the same scorecard, draws the Taylor diagram, and (Section 8,
+   optional) scores against in-situ obs.
+2. **`03_composite_validation.ipynb`** (interactive, multi-cycle) — the
+   same single-cycle building blocks from `sftools.validation`, called
+   through `sftools.validation_composite` (module `vc`) to merge several
+   cycles by **forecast lead time** rather than calendar date — see
+   "Composite (multi-cycle) validation".
+3. **`sftools/run_validation.py`** (automated, one cycle at a time — see
    below) — the exact same calls, headless, written to a JSON/text report
    plus a Taylor diagram PNG.
-3. **`forecast/validate_all_cycles.sh`** (batch — see below) — calls
+4. **`forecast/validate_all_cycles.sh`** (batch — see below) — calls
    `run_validation.py` for every not-yet-validated cycle.
 
-Because all three go through the same two functions, they can't silently
+Because all four go through the same statistics engine, they can't silently
 disagree with each other. One correctness note worth knowing: CROCO's
-`zeta` has no absolute geoid reference, so `godae_scorecard_croco_vs_glorys`
-compares SSH **anomalies** (domain mean removed from both fields) by
-default (`ssh_anomaly=True`) rather than raw levels — otherwise an
-arbitrary offset between CROCO's and the reference's reference level would
-show up as spurious "bias" that isn't a real skill difference.
+`zeta` has no absolute geoid reference, so the SSH comparison is done on
+**anomalies** (domain mean removed from both fields) rather than raw
+levels — otherwise an arbitrary offset between CROCO's and the reference's
+reference level would show up as spurious "bias" that isn't a real skill
+difference.
 
-### `02_validation.ipynb` — Section 6 (pass/fail) and Section 7 (in-situ)
+## 02_validation.ipynb — section map
 
-Section 6's automated pass/fail summary reads directly from the Section 4
-GODAE scorecard (`report`/`rows`) — not a separately-computed set of
-statistics — so it can't drift out of sync with the Taylor diagram above
-it, or with `run_validation.py`'s own report.
+The notebook's actual section numbering (current revision):
 
-Section 7 is **optional and off by default** (`INSITU_FILES = None`): set
-it to a glob pattern (e.g. CMEMS in-situ TAC files) to also score against
-real observations, per GODAE depth layer. A cycle/region with no matching
-in-situ profiles isn't a failure — the section just reports "nothing to
-score" and moves on.
+| Section | What it does |
+| --- | --- |
+| 1 | Load model output, grid/time sanity check, numerical-stability check |
+| 1b | Reference-product availability (Copernicus Marine: forecast parent, OSTIA, ODYSSEA, SMOS) — a metadata-only check, nothing is skipped here yet |
+| 1c | Downloads the reference products for this cycle into `downloaded_data/` |
+| 2 | Bias maps — CROCO vs Copernicus Marine Forecast parent (SST, SSH, currents, SSS) |
+| 2b / 2b-bis | Vertical profile & error-vs-depth, point and full-domain |
+| 2c | Depth-resolved comparison at 4 levels (surface, 120 m, 300 m, 1000 m) |
+| 3 | Scatter plots, pointwise CROCO vs parent |
+| 4 | GODAE scorecard + Taylor diagram |
+| **5** | **Automated pass/fail summary (V1)** — reads directly from the Section 4 scorecard, so it can't drift out of sync with the Taylor diagram or with `run_validation.py`'s own report |
+| 6 / 6b / 6c | Time series and domain-wide bias boxplots, vs parent and vs satellite |
+| 7 / 7b | Satellite SST (OSTIA, ODYSSEA) and SSS (SMOS) validation |
+| **8** | **In-situ validation (optional)** — off by default; a cycle/region with no matching in-situ profiles isn't a failure, the section just reports "nothing to score" and moves on |
+| 9 | Self-contained HTML summary report (`index.html`) |
+| 10 | Batch validation across every forecast cycle, via `forecast/validate_all_cycles.sh` |
 
-### `sftools/run_validation.py` (Step 4.1, one cycle)
+Every reference-product comparison in Sections 2 onward is
+**availability-guarded**: if `AVAIL['mercator_forecast']` (or the relevant
+satellite flag) is `False`, that section is skipped and says why, rather
+than raising an error — a temporary CMEMS outage or missing credentials is
+not a V1 validation failure.
 
-Writes, under `--out`:
-
-- `validation_report.json` / `.txt` — the GODAE scorecard for
-  temp/ssh/salt/speed, the Section 9.3 pass/fail criteria, numerical-
-  stability check, and (if `--insitu-files` was given) the in-situ
-  scorecard.
-- `taylor_diagram.png` — combined Taylor diagram, all scored variables
-  (skip with `--no-plots`).
-
-In-situ scoring is **informational only** by default — a cycle with no
-matching obs still passes/fails purely on the Section 9.3 grid criteria.
-Add `--require-insitu-pass` to also gate `all_pass` on an in-situ
-surface-temperature check (note: this uses a separate, deliberately
-looser ±1.0 degC tolerance, not a Section 9.3 number — point-obs bias and
-gridded-product RMSE aren't the same statistic).
-
-Exit code: `0` = all criteria passed, `1` = at least one failed (reports
-still written), `2` = validation itself couldn't run (missing/corrupt
-input — no reports written).
-
-```bash
-python -m sftools.run_validation \
-    --croco-his forecast/model-runs/Canary_12/20260714/fcst/CROCO_FILES/croco_his.nc \
-    --reference forecast/model-runs/Canary_12/20260714/downloaded_data/MERCATOR/MERCATOR_20260714_00.nc \
-    --out forecast/model-runs/Canary_12/20260714/fcst/validation \
-    --yorig 2000 --region Canary_12 --cycle-tag 20260714
-
-# also score against in-situ obs, and require them to pass too:
-python -m sftools.run_validation --croco-his ... --reference ... --out ... \
-    --insitu-files "downloaded_data/INSITU/2026-07-1*.nc" --require-insitu-pass
-```
-
-### `forecast/validate_all_cycles.sh` (batch, every cycle)
-
-Finds every cycle directory under `forecast/model-runs/<REGION>/` (or every
-region if `--region` is omitted), skips any that already has a
-`validation_report.json` (unless `--force`), and calls `run_validation.py`
-on the rest. Appends one row per cycle to a running `validation_summary.csv`
-per region — this is what `02_validation.ipynb` Section 8 loads to plot
-criteria trends across cycles. Handles both existing cycle-directory naming
-conventions in this repo (`run_forecast_cycle.sh`'s plain `YYYYMMDD`, and
-the AGRIF matrix driver `run_forecast_cycle.sh`'s suffixed
-`YYYYMMDD_plain`-style names). One bad cycle never aborts the batch; a
-timestamped log goes to `forecast/logs/`.
-
-```bash
-cd forecast
-./validate_all_cycles.sh                      # every region, every cycle
-./validate_all_cycles.sh --region Canary_12    # one region only
-./validate_all_cycles.sh --since 20260701      # skip cycles before this date
-./validate_all_cycles.sh --force               # re-validate everything
-./validate_all_cycles.sh --dry-run             # show what WOULD run, do nothing
-./validate_all_cycles.sh --phase hcast --root ../hindcast/model-runs
-                                                # same script, hindcast tree
-./validate_all_cycles.sh --insitu-files "../hindcast/downloaded_data/INSITU/*.nc"
-                                                # also score every cycle against in-situ obs
-                                                # (add --require-insitu-pass to gate on it too)
-```
-
-### `forecast/install_validation_crontab.sh` (schedule the batch)
-
-Installs (or updates) one cron entry that runs `validate_all_cycles.sh` on
-a schedule, so new cycles get validated automatically without anyone
-running the script by hand. Idempotent — re-running it replaces the
-previous SEA-FORWARD-managed entry rather than adding a duplicate (a
-marker comment tags the managed lines so any other cron jobs you have are
-left untouched), and wraps the command in `flock` so a slow validation run
-can never overlap with the next scheduled one.
-
-```bash
-cd forecast
-./install_validation_crontab.sh                              # daily at 06:00 UTC
-./install_validation_crontab.sh --schedule "0 */6 * * *"     # every 6 hours
-./install_validation_crontab.sh --region Canary_12            # passed through to validate_all_cycles.sh
-./install_validation_crontab.sh --remove                      # uninstall
-crontab -l                                                     # verify
-```
+<div style="display:flex; justify-content:center; margin:10px 0 14px 0;">
+   <a href="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/02_validation.ipynb" data-download-url="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/02_validation.ipynb" data-download-filename="02_validation.ipynb" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 10px 24px rgba(0,0,0,0.18)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';" style="display:inline-flex; align-items:center; justify-content:center; gap:16px; min-width: 80px; padding:20px 20px; border-radius:10px; background:linear-gradient(to bottom, #ffffcc 0%, #f4f797de 100%); color:#000000; text-decoration:none; font-size:1.2rem; line-height:1.1; text-align:center; transition:transform 0.18s ease, box-shadow 0.18s ease; transform-origin:center;">
+      <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/download.svg" alt="" aria-hidden="true" style="width:25px; height:25px; color:#000000; font-weight:bold filter:invert(1);" />
+      <span>Download notebook 02_validation.ipynb</span>
+   </a>
+</div>
 
 ## Notebook-by-notebook notes
 
-**`02_validation.ipynb`** — safe to run standalone. See "Validation: one
-engine, three ways to run it" above for what's new; Section 8 is the
-batch-history view (trigger `validate_all_cycles.sh` from the notebook,
-or just load the CSV it produces).
+!!! warning "Superseded claims removed from this page"
+    Earlier revisions of this page described a synthetic "demo mode"
+    (`_demo_data.py`), a py-eddy-tracker-based animation notebook with
+    eddy detection and particle advection, and notebooks numbered
+    `03_exercises.ipynb` / `04_sensitivity.ipynb` / `05_animation.ipynb`.
+    None of that matches the current notebook set — see below.
 
-**`03_exercises.ipynb`** — safe to run standalone, but references
+**`01_seaforward_postprocess_plot.ipynb`** — safe to run standalone.
+Static maps, sections, profiles, Hovmöller diagrams and time series built
+on `sftools.postprocess` (`pp`) and `sftools.plotting` (`pl`); see Phase 5
+for the full narrative walkthrough.
+
+**`02_validation.ipynb`** — safe to run standalone. See "Validation: one
+engine, several ways to run it" for the section map; Section 10 is the
+batch view across every forecast cycle (`forecast/validate_all_cycles.sh`).
+
+**`03_composite_validation.ipynb`** — merges **two or more** cycles
+(`SEAFORWARD_CYCLES`, comma-separated, or every cycle found under
+`MAIN_DIR/CONFIG` if left unset) into one lead-time-indexed composite. Safe
+to run standalone after at least one forecast cycle exists; see "Composite
+(multi-cycle) validation".
+
+**`04_exercises.ipynb`** — safe to run standalone, but references
 `02_validation.ipynb`'s framing in its markdown. Each exercise's main code
 cell is a fully worked reference implementation with `# TODO` comments
 marking the physics/API lines to study; a short `assert`-based self-check
 cell follows each one. This ships as the instructor/reference copy (it has
 to execute cleanly end-to-end per the QA plan); to make a blanked
-student handout, delete the marked answer lines yourself.
+student handout, delete the marked answer lines yourself. Ends by pointing
+you at `05_sensitivity.ipynb`.
 
-**`04_sensitivity.ipynb`** — Part A (perturb the wind forcing) and Part C
-(compare the response) run for real in every mode. **Part B (the actual
-CROCO re-run) is a genuine external step in real-data mode** — the
-notebook cannot and does not fake it; it asserts clearly if the perturbed
-run's output isn't found yet and tells you what to do. In demo mode, Part
-B is skipped automatically and Part C compares against an auto-generated
-synthetic "perturbed" run instead, so the notebook still executes
-end-to-end.
+**`05_sensitivity.ipynb`** — Part A (perturb the wind forcing, ×1.5 per
+Technical Specification Step 5.3) and Part C (compare the response) run
+against whichever forecast cycle you point it at. **Part B (the actual
+CROCO re-run) is a genuine external step** run outside the notebook, using
+the same forecast orchestration script as Phase 3, pointed at the
+perturbed forcing file Part A wrote — the notebook asserts clearly if
+`fcst_wind1.5/CROCO_FILES/croco_his.nc` isn't found yet and tells you what
+to do. Requires `04_exercises.ipynb` (at least Exercise 1) to have been run
+first, since Part C reuses its Bakun-index calculation unchanged.
 
-**`05_animation.ipynb`** — safe to run standalone; needs **py-eddy-tracker**
-(see "Before you start", above). Four animations built on `sftools.animate`:
-SSH with detected eddies, current vectors, scalar fields (temperature/
-salinity), and Lagrangian particle advection. Picks whichever matplotlib
-animation writer is actually available (`ffmpeg` -> `.mp4`, else `pillow`
--> `.gif`) and displays the result inline; outputs land in
-`notebooks/_animation_outputs/` (not committed — regenerate as needed).
-Regridding the curvilinear CROCO grid every frame makes this noticeably
-slower than the other notebooks on a full-size regional run.
+**`06_animation.ipynb`** — safe to run standalone; no extra dependency
+beyond the rest of the toolkit (in particular, **no py-eddy-tracker** — an
+earlier revision's animation notebook did eddy detection and particle
+advection, the current one doesn't). Five animations built on the single
+entry point `sftools.animation.animate()`: SST + wind stress, SSH +
+currents, current speed + quivers, zonal current, meridional current. See
+"Animation" for the section-by-section walkthrough and Phase 5's "Through
+time" page for the full option reference.
 
-## Language note (FR-09)
+## Language Note (FR-09)
 
 All markdown and docstrings in this folder are written in English.
 French translation of the user-facing narrative text is coordinated
