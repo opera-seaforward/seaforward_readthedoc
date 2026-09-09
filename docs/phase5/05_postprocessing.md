@@ -27,6 +27,7 @@ So a typical call reads:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp

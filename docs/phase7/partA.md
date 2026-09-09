@@ -4,24 +4,47 @@ grids**, use `compare_resolution` — *not* the plain `compare_sst` and friends,
 expect a Mercator-format parent and will fail with `KeyError: 'thetao'` on CROCO
 output.
 
-```python
+```bash
+cd ~/seaforward
+conda activate seaforward
+
+# the parent cycle folder carries the driver's flag tag, so take the
+# most recent rather than typing a date
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+
+python3 << PY
+import matplotlib; matplotlib.use("Agg")
 import sftools.validation as val
 
 CHILD  = "forecast/scratch/Canary_25/CROCO_FILES/croco_his.nc"
-PARENT = "forecast/model-runs/Canary_12/20260712/fcst/CROCO_FILES/croco_his.nc"
+PARENT = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 
 # both are forecast runs -> Yorig=2000; tindex=-1 is the last record, past spin-up
-val.compare_resolution(CHILD, PARENT, var="temp",   Yorig=2000)   # SST
-val.compare_resolution(CHILD, PARENT, var="vort_f", Yorig=2000)   # vorticity/f — eddies
-val.compare_resolution(CHILD, PARENT, var="speed",  Yorig=2000)   # surface currents
-
-# nicer figures: real coastline plus a difference panel
+# diff=True adds a third panel showing child minus parent
 val.compare_resolution(CHILD, PARENT, var="temp", Yorig=2000,
-                       coastline=True, diff=True)
+                       coastline=True, diff=True,
+                       out="nest_temp.png")
+val.compare_resolution(CHILD, PARENT, var="vort_f", Yorig=2000,
+                       coastline=True,
+                       out="nest_vort.png")
+PY
 ```
 
-Adjust the parent path to the folder you have — runs from the current driver carry
-its flag tag, `20260712_plain` rather than the bare date.
+![Child and parent SST, with the difference](../img/nest_temp.png)
+
+*Temperature: the same large-scale field, but the child's fronts are sharper.*
+
+![Child and parent vorticity](../img/nest_vort.png)
+
+*Normalised vorticity — where the difference is starkest.*
+
+Both figures are written into `~/seaforward` — open them with any image viewer.
+`matplotlib.use("Agg")` renders to a file rather than a window, which is what makes
+this work over SSH and in WSL.
+
+`CYCLE` picks the most recent run automatically, whatever it is called — the driver
+tags each folder with its flags, so a plain run is `20260712_plain` and a nested one
+with tides `20260712_1way_tides`.
 
 !!! check
     **What you should see.** Both panels share the **same large-scale pattern** — the same cold tongue, the same warm pool, eddies in the same places. That consistency is the nesting working. But the child **resolves finer detail**: sharper SST fronts, a visibly rolled-up cyclonic eddy at the upwelling front, thin cold filaments peeling off the coast.

@@ -101,12 +101,19 @@ parent's `N=50`, which it will if you copied the parent's file.
 **Run make_ini** with the same arguments the forecast driver uses for the spin-up:
 
 ```bash
-MERC=~/seaforward/forecast/scratch/Canary_12/downloaded_data/MERCATOR/MERCATOR_20260711_00.nc
+# The child's IC must come from the SAME Mercator file the parent used, or
+# the two start from different oceans — see 3d below. So find the parent
+# cycle first, then take its own download. Each cycle keeps a copy.
+PCYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+MERC=$(ls ${PCYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc | head -1)
+TAG=$(basename ${MERC} | sed 's/^MERCATOR_//; s/_[0-9]*\.nc$//')
+RUN_DT="${TAG:0:4}-${TAG:4:2}-${TAG:6:2} 00:00:00"
+echo "parent cycle $(basename ${PCYCLE})  ->  run_date ${RUN_DT}"
 cd ~/seaforward/sftools
 conda activate seaforward
 python seaforward.py make_ini \
     --input_file "${MERC}" --output_dir "${CGEN}" \
-    --run_date "2026-07-11 00:00:00" --hdays 2 --Yorig 2000
+    --run_date "${RUN_DT}" --hdays 2 --Yorig 2000
 ```
 
 `--run_date` is the **cycle** date and `--hdays 2` walks back two days, which lands on
@@ -161,11 +168,15 @@ cd ~/seaforward
 conda activate seaforward
 
 python3 << 'PYEOF'
-import xarray as xr, os
-P = os.path.expanduser('~/seaforward/forecast/model-runs/Canary_12/20260711/'
-                       'gen_spinup/CROCO_FILES/croco_ini_MERCATOR_20260711_00.nc')
-C = os.path.expanduser('~/seaforward/forecast/scratch/Canary_AGRIF/child_gen/'
-                       'CROCO_FILES/croco_ini_MERCATOR_20260711_00.nc')
+import xarray as xr, os, glob
+# glob rather than name them: the filenames carry the cycle date, and the
+# parent's folder carries the driver's flag tag too (20260711_plain)
+P = sorted(glob.glob(os.path.expanduser(
+    '~/seaforward/forecast/model-runs/Canary_12/*/gen_spinup/CROCO_FILES/'
+    'croco_ini_MERCATOR_*.nc')))[-1]
+C = sorted(glob.glob(os.path.expanduser(
+    '~/seaforward/forecast/scratch/Canary_AGRIF/child_gen/CROCO_FILES/'
+    'croco_ini_MERCATOR_*.nc')))[-1]
 for f, lbl in [(P, 'parent'), (C, 'child ')]:
     d = xr.open_dataset(f, decode_times=False)
     print(lbl, float(d.scrum_time.values.ravel()[0]) / 86400, 'days')

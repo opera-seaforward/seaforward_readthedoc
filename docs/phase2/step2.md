@@ -45,6 +45,7 @@ above were in the prepro directory, so change back first:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.plotting as pl

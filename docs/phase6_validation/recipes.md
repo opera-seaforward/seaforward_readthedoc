@@ -27,6 +27,7 @@ mkdir -p ~/seaforward/data/OBS
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import sftools.validation_obs as vo
 
@@ -46,6 +47,7 @@ against the *last* cycle and pad backwards far enough to reach the first:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import sftools.validation_obs as vo
 
@@ -70,6 +72,7 @@ the resolution and the coastline all follow:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
@@ -99,6 +102,7 @@ Two changes: the multi-year reference track, and the year origin.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo

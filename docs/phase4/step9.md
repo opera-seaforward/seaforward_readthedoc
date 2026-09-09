@@ -37,7 +37,7 @@ GLORYS bry:
 ```
 
 !!! warning
-    **Build the bry with a window that extends one day past the run at each end** — Dec 1 → Dec 10 for a Dec 2 → Dec 9 run. CROCO needs a boundary record bracketing every timestep; without the margin it stops at the last step with `ERROR in get_bry: cannot read variable 'bry_time'`. Generate it with `make_bry_hindcast --start_date 2025-12-01 --end_date 2025-12-10`.
+    **The filename above carries *your* dates, not these.** It is whatever Step 7's `make_bry_hindcast` produced — check with `ls ${CF}/croco_bry_*.nc`. Step 7's Dec 02 → Dec 30 window covers this 7-day run comfortably; if you build a narrower one, extend it a day past the run at each end. CROCO needs a boundary record bracketing every timestep, and without the margin it stops at the last step with `ERROR in get_bry: cannot read variable 'bry_time'`.
 
 **sponge** — `Ctrl-W` `X_SPONGE`, Enter. Replace the `XXX  XXX` values line:
 

@@ -53,6 +53,7 @@ dates and grid and fetches only that:
 ```bash
 mkdir -p ~/seaforward/data/OBS
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import sftools.validation_obs as vo
 

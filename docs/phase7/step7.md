@@ -25,20 +25,34 @@ simply ended early.
 Check a folder's coverage before running:
 
 ```bash
-python3 << 'PYEOF'
-import xarray as xr, glob, os
-GFS_DIR = os.path.expanduser(
-    '~/seaforward/forecast/model-runs/Canary_12/20260712/downloaded_data/GFS/for_croco')
-fs = sorted(glob.glob(GFS_DIR + '/*.nc'))
+cd ~/seaforward
+conda activate seaforward
+
+# the most recent cycle — its folder is named <date>_<binary>,
+# so do not type a date
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+ls ${CYCLE}downloaded_data/GFS/for_croco/ | head
+
+python3 << PY
+import xarray as xr, glob
+fs = sorted(glob.glob("${CYCLE}downloaded_data/GFS/for_croco/*.nc"))
 g  = xr.open_dataset(fs[0], decode_times=False)
 tv = [v for v in ('bulk_time', 'time', 'tair_time') if v in g.variables][0]
 t  = g[tv].values
 print('GFS covers %.2f .. %.2f days' % (t.min(), t.max()))
-PYEOF
+PY
 ```
 
 !!! warning
     **Run the child for 4 days, not the parent's full 5.** The parent's boundary output and its GFS both span exactly `[today, today+5]`. A limited-area model cannot integrate to the very last instant of its forcing: to advance the final step *to* `today+5` it needs a record *beyond* it, and there isn't one. Pushing to the exact end gives `ERROR in get_bry: cannot read variable 'bry_time'` a few hours short. So `FDAYS=4` — comfortably inside the window, finishing cleanly at `MAIN: DONE`. A full 5-day child would need the parent run for 6.
+
+    In `croco.in` that is `NTIMES = 4 x 86400 / 150 = 2304` at the child's
+    `dt = 150`:
+
+    ``` { .text .no-copy }
+    time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
+                    2304      150      60      1
+    ```
 
 ## Run it
 

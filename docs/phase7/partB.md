@@ -14,13 +14,12 @@ cd ~/seaforward/forecast
 ```
 
 !!! warning
-    **The nesting driver expects an untagged parent folder.** It looks for `model-runs/<parent>/<date>/fcst/`, but the forecast driver now writes `<date>_plain` (or `<date>_plain_tides`, and so on). Until the two are reconciled, either rename the parent's output folder to the bare date, or run Steps 3–7 by hand as above.
+    **Run them in that order — the child cannot go first.** `run_nest_today.sh` reads the parent's `croco_his.nc` and its GFS forcing, so on its own it stops with `ERROR: no parent cycle under model-runs/Canary_12/`. By default it takes the most recent parent cycle, whatever the driver tagged it — `20260713_plain`, `20260713_1way_tides` — so you never type a date. To nest inside a particular one, name it: `PARENT_TAG=20260711_plain ./run_nest_today.sh`. If the tag does not match, it lists the cycles you have.
 
 ## Running it so it survives a closed terminal
 
-These runs take a while — the child especially — so run them in the background with
-a log file, using `nohup`. That detaches the job from your terminal: it keeps going
-if the terminal closes, and the output is captured to a log you can watch.
+These runs take a while, the child especially. `nohup` detaches them from the
+terminal, so closing it does not kill the run.
 
 ```bash
 cd ~/seaforward/forecast
@@ -32,13 +31,10 @@ nohup ./run_nest_today.sh     > run_nest_$(date -u +%Y%m%d).log   2>&1 &
 tail -f run_nest_$(date -u +%Y%m%d).log
 ```
 
-- `nohup … &` runs the script detached and in the background, so closing the terminal
-  or logging out doesn't kill it.
-- `> file 2>&1` sends both normal output and errors to the log.
-- `tail -f file` follows the log live; `Ctrl-C` stops watching while the run
-  continues.
-- To run them in sequence unattended, so the child starts only after the parent
-  finishes, chain with `&&`:
+`> file 2>&1` captures output and errors; `tail -f` follows the log, and `Ctrl-C`
+stops watching rather than stopping the run.
+
+To run them unattended in sequence, chain with `&&`:
 
 ```bash
     nohup bash -c './run_forecast_cycle.sh && ./run_nest_today.sh' \
@@ -74,9 +70,9 @@ tail -f run_nest_$(date -u +%Y%m%d).log
 [6/6] run the child      →  croco_his.nc
 ```
 
-The date is simply **today** — the same `date -u +%Y%m%d` the forecast driver uses.
-The parent ran today, so the child runs today's window too; there is nothing to read
-from files. The only nesting-specific parts are the ocean source (the parent's
+The cycle comes from the parent's own folder — the most recent, or the one named in
+`PARENT_TAG` — so the child always runs the window its parent ran, whether that was
+today or last week. The only nesting-specific parts are the ocean source (the parent's
 output, converted) and reusing the parent's per-cycle GFS.
 
 **The settings block, to edit for your setup:**
@@ -129,20 +125,47 @@ three swaps you already know from Phase 4:
 
 Concretely, to nest the `20251225` hindcast cycle:
 
-```python
-# Step 3 — convert the HINDCAST parent (note Yorig=1993)
-import sftools.nesting as nest
-nest.croco_to_mercator(
-    ".../hindcast/model-runs/Canary_12/20251225/hcast/CROCO_FILES/croco_his.nc",
-    "${FCAST}/downloaded_data/PARENT/parent_20251225.nc", Yorig=1993)
+```bash
+cd ~/seaforward
+source ~/seaforward/env.sh
+source ~/seaforward/forecast/track.sh   # sets CROCO_RUNS_ROOT
+conda activate seaforward
+
+# A hindcast nest targets a cycle you choose, so name it here — unlike the
+# forecast nest, which takes the most recent.
+export CYCLE_TAG=20251225
+export CONFIG_NAME=Canary_25
+export FCAST=${CROCO_RUNS_ROOT}/${CONFIG_NAME}
+export CF=${FCAST}/CROCO_FILES
+export PARENT_HIS=~/seaforward/hindcast/model-runs/Canary_12/${CYCLE_TAG}/hcast/CROCO_FILES/croco_his.nc
+export PARENT=${FCAST}/downloaded_data/PARENT/parent_${CYCLE_TAG}.nc
+export RUN_DT="${CYCLE_TAG:0:4}-${CYCLE_TAG:4:2}-${CYCLE_TAG:6:2} 00:00:00"
+
+mkdir -p $(dirname ${PARENT})
+ls -lh ${PARENT_HIS}
 ```
 
+**Step 3 — convert the hindcast parent** to Mercator format. Note `Yorig=1993`:
+
 ```bash
-# Step 4 — make_ini/make_bry from it (Yorig 1993; run_date = the cycle's start)
-python seaforward.py make_ini --input_file .../parent_20251225.nc --output_dir ${CF} \
-    --run_date "2025-12-25 00:00:00" --hdays 0 --Yorig 1993
-python seaforward.py make_bry --input_file .../parent_20251225.nc --output_dir ${CF} \
-    --run_date "2025-12-25 00:00:00" --hdays 0 --fdays 5 --Yorig 1993
+python3 << PY
+import sftools.nesting as nest
+nest.croco_to_mercator("${PARENT_HIS}", "${PARENT}", Yorig=1993)
+PY
+```
+
+**Step 4 — build the child's ini and bry** from it:
+
+```bash
+cd ~/seaforward/sftools
+
+python seaforward.py make_ini \
+    --input_file ${PARENT} --output_dir ${CF} \
+    --run_date "${RUN_DT}" --hdays 0 --Yorig 1993
+
+python seaforward.py make_bry \
+    --input_file ${PARENT} --output_dir ${CF} \
+    --run_date "${RUN_DT}" --hdays 0 --fdays 5 --Yorig 1993
 ```
 
 Then Steps 5–7 as before, with the child's `online:` block pointing at that cycle's

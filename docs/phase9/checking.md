@@ -31,6 +31,7 @@ comparison needs interpolating.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
@@ -90,6 +91,7 @@ confesses.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -191,6 +193,7 @@ contains more easy ocean.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import xarray as xr, numpy as np, pandas as pd
 MERC = ('forecast/model-runs/Agulhas_AGRIF/20260717_1way/'

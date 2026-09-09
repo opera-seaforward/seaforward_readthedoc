@@ -18,6 +18,7 @@ three curves are directly comparable.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo

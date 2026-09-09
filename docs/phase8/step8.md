@@ -113,6 +113,7 @@ different instant:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import xarray as xr
 B = 'forecast/scratch/Canary_AGRIF/'
@@ -133,6 +134,7 @@ Then plot:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np

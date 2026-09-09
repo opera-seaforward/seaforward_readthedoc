@@ -206,6 +206,12 @@ cd ${CONFIG_DIR}
 cp ${CROCO_MODEL_DIR}/OCEAN/{cppdefs.h,param.h,croco.in,jobcomp} .
 ```
 
+Open it:
+
+```bash
+nano cppdefs.h
+```
+
 **`cppdefs.h`** — two edits, not three:
 
 | | edit |
@@ -224,6 +230,12 @@ sed -n '185,192p' cppdefs.h        # ONLINE on, AROME and ERA_ECMWF off
 !!! warning
     `grep -n "define ONLINE"` finds nothing even when it is correct — the file has `# define  ONLINE` with **two** spaces. Grep for `ONLINE` alone.
 
+Open it:
+
+```bash
+nano param.h
+```
+
 **`param.h`** — add a branch **above `# else`**:
 
 ```fortran
@@ -241,6 +253,12 @@ cpp -DREGIONAL -DAGULHAS_12 param.h 2>/dev/null | grep "parameter (LLm0"
 parameter (LLm0=157, MMm0=97, N=50) ! Agulhas_12 159x99
 ```
 
+Open it:
+
+```bash
+nano croco.in
+```
+
 **`croco.in`** — title to `AGULHAS_12 FORECAST`; check the S-coord is
 `7.0d0 2.0d0 200.0d0`, matching `sigma_params`; sponge to `0. 0.`
 
@@ -248,7 +266,17 @@ parameter (LLm0=157, MMm0=97, N=50) ! Agulhas_12 159x99
 grep -n "XXX" croco.in && echo "STILL HAS XXX" || echo "no XXX left"
 ```
 
-**`jobcomp`** — `SOURCE1=/home/you/seaforward/code/croco/OCEAN`
+Open it:
+
+```bash
+nano jobcomp
+```
+
+**`jobcomp`** — set `SOURCE1` to your own path:
+
+``` { .bash .no-copy }
+SOURCE1=/home/you/seaforward/code/croco/OCEAN
+```
 
 The `time_stepping`, `initial`, `boundary` and `online` lines stay as placeholders —
 the driver sets them per run.
@@ -275,8 +303,16 @@ alongside it. The proof run below uses `croco` directly, so the copy costs nothi
 seventh of the time.
 
 ```bash
+# A0's exports must still be set — re-run them in a new terminal.
+# The sed lines below write FCAST's value into croco.in, so an
+# empty FCAST silently produces a broken forcing path.
+: "${FCAST:?run A0 exports first}"
 cd ${FCAST}
-TODAY=$(date -u +%Y%m%d)
+
+# the ini and bry carry the cycle they were built for, which is not
+# necessarily today — read it off the files rather than assuming
+TODAY=$(basename $(ls ${CF}/croco_ini_MERCATOR_*.nc | tail -1) | sed 's/croco_ini_MERCATOR_//; s/_00.nc//')
+echo "using cycle ${TODAY}"
 sed -i '/^time_stepping:/{n; s/.*/                 288     300       60      1/}' croco.in
 sed -i "/^initial:/{n; n; s|.*|    CROCO_FILES/croco_ini_MERCATOR_${TODAY}_00.nc|}" croco.in
 sed -i "/^boundary:/{n;   s|.*|    CROCO_FILES/croco_bry_MERCATOR_${TODAY}_00.nc|}" croco.in
@@ -331,6 +367,7 @@ gets `dt = 100` and therefore even more headroom.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import sftools.postprocess as pp
 import sftools.plotting as pl
@@ -381,10 +418,14 @@ directly.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
-import xarray as xr
+import xarray as xr, glob
 import sftools.postprocess as pp
-d = xr.open_dataset('forecast/scratch/Agulhas_12/downloaded_data/MERCATOR/MERCATOR_20260717_00.nc')
+# the filename carries your download's date, so find it
+f = sorted(glob.glob('forecast/scratch/Agulhas_12/downloaded_data/MERCATOR/MERCATOR_*.nc'))[-1]
+d = xr.open_dataset(f)
+print('using', f.split('/')[-1])
 print('mercator records:', len(d.time))
 for i, t in enumerate(d.time.values):
     print(' ', i, t)
@@ -406,10 +447,11 @@ cycle date. Check rather than assume.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import xarray as xr, numpy as np
+import xarray as xr, numpy as np, glob
 
 # CROCO: last record, surface sigma layer
 c = xr.open_dataset('forecast/scratch/Agulhas_12/CROCO_FILES/croco_his.nc',
@@ -418,7 +460,8 @@ sst_c = c.temp.isel(time=-1, s_rho=-1).where(c.mask_rho == 1)
 lon2d = c.lon_rho.values; lat2d = c.lat_rho.values
 
 # MERCATOR: the matching date, surface level
-m = xr.open_dataset('forecast/scratch/Agulhas_12/downloaded_data/MERCATOR/MERCATOR_20260717_00.nc')
+m = xr.open_dataset(sorted(glob.glob(
+    'forecast/scratch/Agulhas_12/downloaded_data/MERCATOR/MERCATOR_*.nc'))[-1])
 sst_m = m.thetao.isel(time=2, depth=0)
 
 # regrid Mercator onto CROCO's curvilinear grid

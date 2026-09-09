@@ -7,6 +7,7 @@ edge.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g = xr.open_dataset('forecast/scratch/Agulhas_12/CROCO_FILES/croco_grd.nc')
@@ -152,6 +153,7 @@ For a clearer view of the same thing, with the child's footprint drawn on the pa
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
@@ -262,12 +264,16 @@ nano "$CGEN/crocotools_param.py"
 #   Ctrl+W obc_dict ->
 #   obc_dict = dict(south=1, west=1, east=1, north=0)   # child: N closed (coast)
 
-MERC=~/seaforward/forecast/scratch/Agulhas_12/downloaded_data/MERCATOR/MERCATOR_20260717_00.nc
+# find the download rather than typing its date — run_date must match it
+MERC=$(ls ~/seaforward/forecast/scratch/Agulhas_12/downloaded_data/MERCATOR/MERCATOR_*.nc | tail -1)
+TAG=$(basename ${MERC} | sed 's/^MERCATOR_//; s/_[0-9]*\.nc$//')
+RUN_DT="${TAG:0:4}-${TAG:4:2}-${TAG:6:2} 00:00:00"
+echo "cycle ${TAG}  ->  run_date ${RUN_DT}"
 cd ~/seaforward/sftools
 conda activate seaforward
 python seaforward.py make_ini \
     --input_file "${MERC}" --output_dir "${CGEN}" \
-    --run_date "2026-07-17 00:00:00" --hdays 2 --Yorig 2000
+    --run_date "${RUN_DT}" --hdays 2 --Yorig 2000
 ```
 
 The child grid renamed to `croco_grd.nc` is the whole trick — `make_ini` reads whatever
@@ -294,11 +300,11 @@ cd ~/seaforward
 conda activate seaforward
 
 python3 << 'PYEOF'
-import xarray as xr, os
+import xarray as xr, os, glob
 H = os.path.expanduser('~/seaforward/forecast/scratch/')
 for f, lbl in [
-    (H + 'Agulhas_12/CROCO_FILES/croco_ini_MERCATOR_20260717_00.nc', 'parent'),
-    (H + 'Agulhas_AGRIF/child_gen/CROCO_FILES/croco_ini_MERCATOR_20260717_00.nc', 'child ')]:
+    (sorted(glob.glob(H + 'Agulhas_12/CROCO_FILES/croco_ini_MERCATOR_*.nc'))[-1], 'parent'),
+    (sorted(glob.glob(H + 'Agulhas_AGRIF/child_gen/CROCO_FILES/croco_ini_MERCATOR_*.nc'))[-1], 'child ')]:
     d = xr.open_dataset(f, decode_times=False)
     print(lbl, float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
 PYEOF
@@ -398,7 +404,10 @@ the unnested parent from A12. Skip the rename and it reports `binary not found`.
 Once the model runs, both grids report their stiffness:
 
 ```bash
-grep -i stiffness ~/seaforward/forecast/model-runs/Agulhas_AGRIF/20260717_1way/spinup/croco_spinup.out
+# the cycle folder is named for the day it ran and the binary used,
+# so find it rather than typing it
+RUN=$(ls -d ~/seaforward/forecast/model-runs/Agulhas_AGRIF/*/ | sort | tail -1)
+grep -i stiffness ${RUN}spinup/croco_spinup.out
 ```
 
 ``` { .text .no-copy }

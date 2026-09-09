@@ -9,6 +9,7 @@ other way: sample the model at each observed point.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
@@ -35,6 +36,7 @@ Statistics per day, no figure:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import sftools.validation_obs as vo
 
@@ -81,6 +83,7 @@ If they disagreed about the model, neither could be trusted. They do not:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import sftools.validation_obs as vo
 

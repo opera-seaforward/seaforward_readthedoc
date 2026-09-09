@@ -10,6 +10,7 @@ Three views, all in `sftools.validation`.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation as val
@@ -40,6 +41,7 @@ you want to see, occupies the top tenth of the figure.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation as val
@@ -65,6 +67,7 @@ near the coast and near the surface, which is where the finer grid does its work
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation as val
@@ -91,6 +94,7 @@ each point:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import numpy as np, glob
 import sftools.postprocess as pp
