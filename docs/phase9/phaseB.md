@@ -31,7 +31,7 @@ for e, v in [('S', sm[0,:]), ('N', sm[-1,:]), ('W', sm[:,0]), ('E', sm[:,-1])]:
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 imin=39 imax=119 jmin=23 jmax=83
 child at 3x: 241 x 181 x 50
 margin: W=39 E=39 S=23 N=15 parent cells
@@ -193,7 +193,7 @@ echo "requested:  39  119  23  83"
 cat AGRIF_FixedGrids.in
 ```
 
-```text
+``` { .text .no-copy }
 requested:  39  119   23   83
 written:    39  121   24   84        <- imax +2, jmin +1, jmax +1
 ```
@@ -207,6 +207,9 @@ edge, and that edge is closed on solid land. A coast running *diagonally* across
 edge the tool is trying to open is what makes it march, sometimes by ten cells or more.
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+
 python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g = xr.open_dataset('croco_grd.nc.1'); m = g.mask_rho.values
@@ -225,7 +228,7 @@ for e, v in [('S', m[0,:]), ('N', m[-1,:]), ('W', m[:,0]), ('E', m[:,-1])]:
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 child: 248 x 182   ocean 80.4%
 box: 20.04-27.04E  -38.12--33.09N
 depth 48-5556 m
@@ -272,7 +275,7 @@ grid it finds in `--output_dir` and neither knows nor cares that it is a child.
 
 **Verify:**
 
-```text
+``` { .text .no-copy }
 temp  min=          0  max=      23.44  nan=0
 salt  min=          0  max=       35.6  nan=0
 u     min=     -1.831  max=       1.21  nan=0
@@ -287,6 +290,9 @@ in the initial condition — the interpolation captured it rather than smearing 
 **Clocks:**
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+
 python3 << 'PYEOF'
 import xarray as xr, os
 H = os.path.expanduser('~/seaforward/forecast/scratch/')
@@ -298,7 +304,7 @@ for f, lbl in [
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 parent 9692.0 days
 child  9692.0 days
 ```
@@ -317,7 +323,7 @@ nano croco.in.1
 
 Six edits, as in Phase 8 Step 5. The one that matters:
 
-```text
+``` { .text .no-copy }
 time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
                  288     100       60      1
                          ^^^ = 300/3.  NTIMES stays 288 -- AGRIF multiplies it.
@@ -330,7 +336,7 @@ parent's output:
 grep -n "CROCO_FILES/" croco.in.1
 ```
 
-```text
+``` { .text .no-copy }
 23:    CROCO_FILES/croco_grd.nc.1     <- required
 34:    CROCO_FILES/croco_ini.nc.1     <- required
 37:    CROCO_FILES/croco_rst.nc.1     <- required
@@ -395,7 +401,7 @@ Once the model runs, both grids report their stiffness:
 grep -i stiffness ~/seaforward/forecast/model-runs/Agulhas_AGRIF/20260717_1way/spinup/croco_spinup.out
 ```
 
-```text
+``` { .text .no-copy }
  Maximum grid stiffness ratios:   rx0 = 0.2001   rx1 = 14.836     <- parent
  Maximum grid stiffness ratios:   rx0 = 0.2115   rx1 = 13.416     <- child
 ```
@@ -422,7 +428,7 @@ cp CROCO_FILES/AGRIF_FixedGrids.in .          # RUN dir, not CROCO_FILES
 grep -H obc_dict CROCO_FILES/crocotools_param.py CROCO_FILES/crocotools_param_child.py
 ```
 
-```text
+``` { .text .no-copy }
 crocotools_param.py:       obc_dict = dict(south=1, west=1, east=1, north=1)
 crocotools_param_child.py: obc_dict = dict(south=1, west=1, east=1, north=0)
 ```

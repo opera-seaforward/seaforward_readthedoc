@@ -1,6 +1,6 @@
 In one-way nesting, offline *or* AGRIF, information flows in exactly one direction:
 
-```text
+``` { .text .no-copy }
 parent  ──boundaries──▶  child
         ◀── nothing ───
 ```
@@ -15,7 +15,7 @@ it downstream.
 
 Two-way closes the loop:
 
-```text
+``` { .text .no-copy }
 parent  ──boundaries──▶  child
         ◀──feedback────
 ```

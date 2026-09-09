@@ -22,7 +22,7 @@ the northern boundary is land.
 
 **The target:**
 
-```text
+``` { .text .no-copy }
 parent  Agulhas_12      17-30 E,  40-32 S    1/12 deg  (~9 km)
 child   AGRIF level 1   20-27 E,  38-33 S    1/36 deg  (~2.5 km)   coef=3
 ```

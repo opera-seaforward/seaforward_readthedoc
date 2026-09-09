@@ -20,7 +20,7 @@ for f, l in [('/tmp/ag_p.nc', 'parent'), ('/tmp/ag_c.nc', 'child ')]:
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 parent 6 records, t = [9692.0, 9692.25, 9692.5, 9692.75, 9693.0, 9693.25]
 child  6 records, t = [9692.0, 9692.25, 9692.5, 9692.75, 9693.0, 9693.25]
 ```
@@ -160,7 +160,7 @@ which is what matters.
 
 *Both grids against Mercator, surface temperature.*
 
-```text
+``` { .text .no-copy }
 parent RMSE = 0.2443     child RMSE = 0.2233
 ```
 
@@ -173,7 +173,7 @@ spin-up.
 
 *Both grids against Mercator, sea-surface height anomaly.*
 
-```text
+``` { .text .no-copy }
 parent RMSE = 0.0521     child RMSE = 0.0677
 ```
 
@@ -228,7 +228,7 @@ for var, src in [('temp', m.thetao.isel(time=k, depth=0)), ('zeta', m.zos.isel(t
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 parent cells inside the child box: 5177
 
 TEMP

@@ -1,14 +1,14 @@
 Tides fold into the forecast driver as a runtime flag, `--tides`, composing with the
 existing child axis:
 
-```text
+``` { .text .no-copy }
 --child none|1way|2way     no nest / one-way AGRIF / two-way AGRIF
 --tides                    add TPXO tidal forcing
 ```
 
 Both are compile-time in CROCO, so each combination needs its own pre-built binary:
 
-```text
+``` { .text .no-copy }
                 no tide            with tide
 no child        croco_plain        croco_plain_tides
 child 1-way     croco_1way         croco_1way_tides

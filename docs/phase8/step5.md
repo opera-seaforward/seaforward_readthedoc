@@ -16,7 +16,7 @@ cp croco.in croco.in.1
 !!! note
     **First, check the parent's own filenames.** If you copied `croco.in` from a config the driver has run, it points at that cycle's dated files — `croco_ini_MERCATOR_20260711_00.nc` rather than `croco_ini.nc` — while Step 4 staged them under the short names. Fix `croco.in` before going further:
 
-```text
+``` { .text .no-copy }
     boundary: filename
         CROCO_FILES/croco_bry.nc
     initial: NRREC / filename
@@ -44,14 +44,14 @@ Six edits follow. Take them in order.
 `Ctrl+W` `title` `Enter`. The cursor lands on line 1; the line **below** it is the
 title text:
 
-```text
+``` { .text .no-copy }
 title:
         CANARY_12 FORECAST                     <- change this
 ```
 
 to
 
-```text
+``` { .text .no-copy }
 title:
         CANARY_12 AGRIF ZOOM LEVEL 1
 ```
@@ -64,7 +64,7 @@ grid's title as it initialises.
 `Ctrl+W` `time_stepping` `Enter`. **There are two matches.** The first is the one you
 want:
 
-```text
+``` { .text .no-copy }
 time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
                  288       300      60      1     <- this line
 time_stepping_nbq: NDTNBQ    CSOUND_NBQ    VISC2_NBQ    <- NOT this one
@@ -72,7 +72,7 @@ time_stepping_nbq: NDTNBQ    CSOUND_NBQ    VISC2_NBQ    <- NOT this one
 
 Change `300` to `100` and **leave `288` alone**:
 
-```text
+``` { .text .no-copy }
                  288       100      60      1
 ```
 
@@ -87,14 +87,14 @@ together later.
 
 `Ctrl+W` `grid:` `Enter`:
 
-```text
+``` { .text .no-copy }
 grid:  filename
     CROCO_FILES/croco_grd.nc          <- add .1
 ```
 
 becomes
 
-```text
+``` { .text .no-copy }
 grid:  filename
     CROCO_FILES/croco_grd.nc.1
 ```
@@ -103,14 +103,14 @@ grid:  filename
 
 `Ctrl+W` `boundary:` `Enter`:
 
-```text
+``` { .text .no-copy }
 boundary: filename
     CROCO_FILES/croco_bry.nc          <- replace with the placeholder
 ```
 
 becomes
 
-```text
+``` { .text .no-copy }
 boundary: filename
       XXXXXXXXX
 ```
@@ -126,7 +126,7 @@ Do the same for `climatology:` if your parent has one.
 
 `Ctrl+W` `initial:` `Enter`:
 
-```text
+``` { .text .no-copy }
 initial: NRREC / filename
           1
     CROCO_FILES/croco_ini.nc          <- add .1
@@ -139,7 +139,7 @@ becomes `CROCO_FILES/croco_ini.nc.1`.
 Three more: `Ctrl+W` `history:`, then `averages:`, then `restart:`. Each has a
 filename on the line below — append `.1` to all three:
 
-```text
+``` { .text .no-copy }
     CROCO_FILES/croco_his.nc.1
     CROCO_FILES/croco_avg.nc.1
     CROCO_FILES/croco_rst.nc.1
@@ -157,7 +157,7 @@ grep -n -A1 "^time_stepping:" croco.in.1
 grep -n -A1 "^boundary:" croco.in.1
 ```
 
-```text
+``` { .text .no-copy }
 23:    CROCO_FILES/croco_grd.nc.1
 25:    CROCO_FILES/croco_frc.nc
 27:    CROCO_FILES/croco_blk.nc
@@ -192,7 +192,7 @@ The asymmetry is:
 
 So for a parent at `288 × 300` with `timeref = 3`:
 
-```text
+``` { .text .no-copy }
 parent croco.in    :  288    300      -> 288 steps x 300 s = 1 day
 child  croco.in.1  :  288    100      -> AGRIF runs 864 x 100 s = 1 day
 ```
@@ -208,7 +208,7 @@ future, and finishes "successfully".
 grep -E "^ +(12|36) +9686\." run_agrif.log
 ```
 
-```text
+``` { .text .no-copy }
       12  9686.04167 ...      <- parent
       36  9686.04167 ...      <- child, locked
 ```

@@ -7,13 +7,13 @@ nano jobcomp
 
 `Ctrl-W`, type `SOURCE1=`, Enter. You'll find:
 
-```
+``` { .text .no-copy }
 SOURCE1=../croco/OCEAN
 ```
 
 Change it to your actual source path:
 
-```
+``` { .text .no-copy }
 SOURCE1=/home/<you>/seaforward/code/croco/OCEAN
 ```
 

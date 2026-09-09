@@ -25,7 +25,7 @@ the collision entirely.
 
 It works through the waves one at a time, printing each:
 
-```text
+``` { .text .no-copy }
 -----------------------
  Processing *Mm* wave
 -----------------------

@@ -71,7 +71,7 @@ The `tee` keeps a full log in `hcast_3cycles.log` while you watch it live.
 **What the console shows.** For each cycle you get a banner, then four stages
 (trimmed):
 
-```
+``` { .text .no-copy }
 ############################################################
 # CYCLE 1/3  T=20251225
 #   spin-up : 2025-12-23 -> 2025-12-25
@@ -113,7 +113,7 @@ most common first-run cause is the boundary window not extending past the run (t
 
 Each cycle writes a dated folder under `hindcast/model-runs/<CONFIG>/`:
 
-```
+``` { .text .no-copy }
 hindcast/model-runs/Canary_12/20251225/
 ├── spinup/                 # the 2-day spin-up run
 │   ├── croco.in            # patched for this phase (NTIMES, online, filenames)

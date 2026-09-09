@@ -14,7 +14,7 @@ During that adjustment the forecast is least trustworthy.
 An operational cycle keeps the cold-start adjustment out of the forecast by splitting
 the run into two phases:
 
-```text
+``` { .text .no-copy }
         day:  −2      −1       0       +1  +2  +3  +4  +5
               │◄──── spin-up (2 days) ───►│
               │   ini + bry from the      │◄──────── forecast (5 days) ───────►│
@@ -87,7 +87,7 @@ forecast's initial condition, and runs the 5-day forecast. You never hand-edit
 
 **3. Collect the result.** Everything for one day lands in a dated folder:
 
-```
+``` { .text .no-copy }
 forecast/model-runs/Canary_12/<date>/
 ├── spinup/     # the 2-day spin-up (produces croco_rst.nc)
 └── fcst/       # the 5-day forecast — what you keep
@@ -102,7 +102,7 @@ output goes to `forecast/model-runs/<CONFIG>/<date>/` (the results you keep).
 **4. Schedule it (optional).** To produce a fresh forecast every morning, add a
 cron entry (`crontab -e`) — for 06:00 UTC:
 
-```
+``` { .text .no-copy }
 0 6 * * *  /bin/bash -lc 'source ~/seaforward/env.sh && cd ~/seaforward/forecast && ./run_forecast_cycle.sh >> ~/seaforward/forecast/cron.log 2>&1'
 ```
 

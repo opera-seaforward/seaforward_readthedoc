@@ -4,7 +4,7 @@
 
 Perturb the **atmospheric forcing** (wind amplitude in `croco_blk.nc`), **re-run CROCO**, and compare the **upwelling response**. This is the clearest hands-on illustration in the whole toolkit of how the OceanPrediction-A value chain is connected end to end:
 
-```
+``` { .text .no-copy }
    U2                      C1                       D1
 Upstream forcing  --->  Core Forecasting  --->  Downstream diagnostic
 (wind, perturbed          Engine (CROCO)          (upwelling index,

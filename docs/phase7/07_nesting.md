@@ -19,7 +19,7 @@ Your forecast already **downscales a global product**: it takes Mercator (1/12°
 global ocean) and adds fine detail over your region. Nesting is the *same idea, one
 level down*:
 
-```text
+``` { .text .no-copy }
 Mercator (global)  →  Canary_12 (1/12°)  →  Canary_25 (1/25°)
    the parent of         the parent of          the child
    Canary_12             Canary_25
@@ -52,7 +52,7 @@ output is on **sigma levels** with names `temp/salt/u/v/zeta`. So we first
 **translate** the parent's output into a Mercator-looking file. That translator is
 `sftools/nesting.py`, the only genuinely new piece in this whole phase.
 
-```text
+``` { .text .no-copy }
 1/12° croco_his.nc  ──(nesting.py)──►  parent_<date>.nc  ──(make_ini/bry)──►  child ini/bry
   sigma, temp/salt      "looks like        z-levels,           child sigma
   /u/v/zeta              Mercator"          thetao/so/...       N=75

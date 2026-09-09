@@ -67,7 +67,7 @@ nano croco.in
 
 **time_stepping** (`Ctrl-W` → `time_stepping:`), the line below:
 
-```text
+``` { .text .no-copy }
                 2880      150      60      1
 ```
 
@@ -76,20 +76,20 @@ nano croco.in
 
 **boundary** (`Ctrl-W` → `boundary:`), the filename line:
 
-```text
+``` { .text .no-copy }
     CROCO_FILES/croco_bry_NEST_20260712_00.nc
 ```
 
 **initial** (`Ctrl-W` → `initial:`), NRREC then the filename:
 
-```text
+``` { .text .no-copy }
           1
     CROCO_FILES/croco_ini_NEST_20260712_00.nc
 ```
 
 **sponge** (`Ctrl-W` → `X_SPONGE`), the line below:
 
-```text
+``` { .text .no-copy }
                     25000.            400.
 ```
 
@@ -98,7 +98,7 @@ nano croco.in
 
 **online** (`Ctrl-W` → `online:`), the two lines below the header:
 
-```text
+``` { .text .no-copy }
            9999   1      24            9999     1
     /home/you/seaforward/forecast/model-runs/Canary_12/<DATE>/downloaded_data/GFS/for_croco/
 ```

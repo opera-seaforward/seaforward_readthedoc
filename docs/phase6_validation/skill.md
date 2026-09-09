@@ -44,7 +44,7 @@ faint lines are the individual cycles. Lead zero is the initial condition.*
 
 ## Temperature
 
-```text
+``` { .text .no-copy }
 SST  vs ODYSSEA, 3 cycles pooled:
    lead       n  SEA-FWD   parent  persist
     0.0    12657    0.750    0.879    0.750
@@ -65,7 +65,7 @@ the ocean itself changes.
 
 ## Sea level
 
-```text
+``` { .text .no-copy }
 SSH anomaly  vs DUACS, 3 cycles pooled:
    lead       n  SEA-FWD   parent  persist
     0.0    10611    0.037    0.037    0.037
@@ -82,7 +82,7 @@ one, so this panel says more about the reference than about either model.
 
 ## Currents
 
-```text
+``` { .text .no-copy }
 eastward velocity 15 m  vs GlobCurrent:      northward velocity 15 m:
    lead  SEA-FWD  parent  persist               lead  SEA-FWD  parent  persist
     0.0    0.106   0.110    0.106                0.0    0.118   0.126    0.118

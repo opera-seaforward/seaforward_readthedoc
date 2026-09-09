@@ -45,7 +45,7 @@ vo.scorecard(HIS, ODY, 'temp', days=5, Yorig=2000)
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 SST  SEA-FORWARD vs ODYSSEA, collocated:
    date         cover     n     bias    rmsd   urmsd    corr
    2026-07-11   54.0%    3882  +0.398   0.816   0.712   0.925
@@ -91,7 +91,7 @@ vo.scorecard(HIS, OST, 'temp', days=5, Yorig=2000)
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 SST  SEA-FORWARD vs OSTIA, collocated:
    date         cover     n     bias    rmsd   urmsd    corr
    2026-07-11   80.4%   22267  +0.138   0.722   0.708   0.935

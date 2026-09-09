@@ -8,7 +8,7 @@ those for a configuration that is not Canary_12.
 
 There is no fixed location, but the examples use:
 
-```text
+``` { .text .no-copy }
 ~/seaforward/data/OBS/
 ```
 

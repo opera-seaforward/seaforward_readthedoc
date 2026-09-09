@@ -2,7 +2,7 @@
 
 Three libraries, in order, each installed into the same prefix so they find each other:
 
-```text
+``` { .text .no-copy }
 HDF5  →  netcdf-c  →  netcdf-fortran
 ```
 

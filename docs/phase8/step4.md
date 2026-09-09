@@ -10,7 +10,7 @@ prefix. The build shows it: compiling with AGRIF leaves these in the run directo
 ls ~/seaforward/forecast/scratch/Canary_AGRIF/
 ```
 
-```text
+``` { .text .no-copy }
 kRGB61.txt            kRGB61.txt.1              <- AGRIF made a level-1 copy
 namelist_pisces_cfg   namelist_pisces_cfg.1
 namelist_pisces_ref   namelist_pisces_ref.1
@@ -45,7 +45,7 @@ ls -la $D/CROCO_FILES/ $D/
 
 **Which parent IC?** The forecast run left more than one candidate:
 
-```text
+``` { .text .no-copy }
 gen_spinup/CROCO_FILES/croco_ini_MERCATOR_20260711_00.nc   <- from Mercator
 spinup/CROCO_FILES/croco_ini.nc                            <- same, staged
 fcst/CROCO_FILES/croco_ini.nc                              <- the spin-up RESTART
@@ -62,7 +62,7 @@ name; staging them as `croco_ini.nc` and `croco_ini.nc.1` is what lets Step 5's
 
 ### 4c — The layout you should end up with
 
-```text
+``` { .text .no-copy }
 scratch/Canary_AGRIF/
 ├── croco                     the AGRIF-enabled executable (Step 6)
 ├── croco.in                  parent runtime settings

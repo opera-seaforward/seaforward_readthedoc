@@ -5,7 +5,7 @@ unbiased RMSD, correlation, two scatter-index variants, std-ratio) plus
 optional class-4 in-situ scoring per depth layer -- is now the **single
 statistics engine** behind every validation surface in this repo:
 
-```
+``` { .text .no-copy }
 sftools.validation_godae.godae_scorecard_croco_vs_glorys()   <- grid vs reference, one variable
 sftools.validation_godae.validate_against_insitu()           <- grid vs CMEMS in-situ TAC, per depth layer
 ```

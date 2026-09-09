@@ -6,7 +6,7 @@ copy you point at matters, and getting it wrong stops the run partway.
 There are two. The **per-cycle** copy the parent's forecast actually ran with, under its
 run folder, and an older **staging** copy in scratch:
 
-```text
+``` { .text .no-copy }
 ~/seaforward/forecast/model-runs/Canary_12/20260712/downloaded_data/GFS/for_croco/   <- use this one
 ~/seaforward/forecast/scratch/Canary_12/downloaded_data/GFS/for_croco/               <- may be shorter
 ```
@@ -15,7 +15,7 @@ They can cover different windows. The per-cycle copy spans the parent's full for
 a stale scratch copy may not. Point the child at a shorter GFS and it runs fine until
 the forcing runs out, then stops:
 
-```text
+``` { .text .no-copy }
 ONLINE_GET_BULK - ERROR: The dataset for the year 9999 month 2 is missing
 ```
 
@@ -100,7 +100,7 @@ Two practical consequences:
 A **nested 1/25°, 75-level child** that ran to completion, forced entirely by your own
 1/12° model:
 
-```text
+``` { .text .no-copy }
 forecast/scratch/Canary_25/
 ├── croco                              # the compiled child
 ├── cppdefs.h param.h croco.in jobcomp # child config (also in configs/Canary_25)

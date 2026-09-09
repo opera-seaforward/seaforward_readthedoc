@@ -31,6 +31,6 @@ tail -f fcst_$(date -u +%Y%m%d).log
 
 **Daily cron, 06:00 UTC:**
 
-```
+``` { .text .no-copy }
 0 6 * * *  /bin/bash -lc 'source ~/seaforward/env.sh && cd ~/seaforward/forecast && ./run_forecast_cycle.sh >> ~/seaforward/forecast/cron.log 2>&1'
 ```

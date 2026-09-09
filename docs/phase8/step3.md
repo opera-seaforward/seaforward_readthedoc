@@ -40,7 +40,7 @@ It reads the child grid correctly and writes a `.nc.1` file. Every sign says suc
 **And the file can be unusable.** Along the way it prints warnings that are easy to
 scroll past:
 
-```text
+``` { .text .no-copy }
   Interpolate v from OGCM to CROCO grid on each z level
 [########....] 45/50   Warning: less than 10 good values in this layer
 [#########...] 46/50   Warning: no good data in this layer
@@ -88,7 +88,7 @@ the *parent's* `obc_dict`:
 grep -E "obc_dict|sigma_params" "$CGEN/crocotools_param.py"
 ```
 
-```text
+``` { .text .no-copy }
 sigma_params = dict(theta_s=7, theta_b=2, N=50, hc=200)
 obc_dict     = dict(south=1, west=1, east=0, north=1)   # E=African coast (closed); S,W,N open
 ```
@@ -115,6 +115,9 @@ python seaforward.py make_ini \
 **Verify before going further:**
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+
 python3 << 'PYEOF'
 import xarray as xr, numpy as np, glob, os
 CGEN = os.path.expanduser('~/seaforward/forecast/scratch/Canary_AGRIF/child_gen/CROCO_FILES')
@@ -129,7 +132,7 @@ print('time =', float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 croco_ini_MERCATOR_20260711_00.nc
 temp  min=          0 max=      27.47 nan=0
 salt  min=          0 max=      37.31 nan=0
@@ -154,6 +157,9 @@ The parent and child ICs must start at the **same instant**. Two traps:
 Verify explicitly rather than assume:
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+
 python3 << 'PYEOF'
 import xarray as xr, os
 P = os.path.expanduser('~/seaforward/forecast/model-runs/Canary_12/20260711/'
@@ -166,7 +172,7 @@ for f, lbl in [(P, 'parent'), (C, 'child ')]:
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 parent 9686.0 days
 child  9686.0 days
 ```

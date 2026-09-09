@@ -64,7 +64,7 @@ for src in ('ostia', 'odyssea', 'duacs', 'globcurrent', 'armor3d'):
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 ostia: METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2
   2026-07-10 .. 2026-07-17   lon -22.65..-14.85  lat 13.44..24.54
   note: foundation SST — the temperature below the diurnal warm layer, so a

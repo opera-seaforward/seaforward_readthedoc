@@ -7,7 +7,7 @@ nano param.h
 
 `Ctrl-W`, type `YOUR REGIONAL CONFIG`, Enter. You'll land near this block:
 
-```
+``` { .text .no-copy }
 #  elif defined GIBRALTAR_VHR5
        parameter (LLm0=348, MMm0=198,  N=40)
 # else
@@ -17,7 +17,7 @@ nano param.h
 
 Add a new branch **just above the `# else` line**, so the block becomes:
 
-```
+``` { .text .no-copy }
 #  elif defined GIBRALTAR_VHR5
        parameter (LLm0=348, MMm0=198,  N=40)
 # elif defined  CANARY_12

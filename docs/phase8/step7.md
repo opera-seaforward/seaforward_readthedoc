@@ -34,7 +34,7 @@ pkill -f "croco croco.in"
 
 Early in the log, CROCO lists the CPP options it was compiled with:
 
-```text
+``` { .text .no-copy }
  Activated C-preprocessing Options:
           REGIONAL
           CANARY_12
@@ -43,7 +43,7 @@ Early in the log, CROCO lists the CPP options it was compiled with:
 
 Further down, the child's boundary conditions appear:
 
-```text
+``` { .text .no-copy }
           AGRIF_OBC_WEST
           AGRIF_OBC_NORTH
           AGRIF_OBC_SOUTH
@@ -60,7 +60,7 @@ closed on the African coast.
 
 You will also see a wall of warnings. Most are harmless:
 
-```text
+``` { .text .no-copy }
  WARNING: Unrecognized keyword: start_date  --> DISREGARDED.
  WARNING: Unrecognized keyword: bulk_forcing  --> DISREGARDED.
 ```
@@ -72,13 +72,13 @@ directly.
 
 The forcing confirmation is worth checking:
 
-```text
+``` { .text .no-copy }
  Online forcing: datasets in .../Canary_12/downloaded_data/GFS/for_croco/ with 24 records per day.
 ```
 
 And each grid announces itself:
 
-```text
+``` { .text .no-copy }
  CANARY_12 FORECAST                     <- parent (croco.in)
        288  ntimes
     300.00  dt
@@ -93,14 +93,14 @@ dt and NTIMES section on that page.
 
 Look for the grid stiffness too:
 
-```text
+``` { .text .no-copy }
  Maximum grid stiffness ratios:   rx0 = 0.20006   rx1 = 14.836     <- parent
  Maximum grid stiffness ratios:   rx0 = 0.20000   rx1 = 14.837     <- child
 ```
 
 And confirm the child is writing its own output:
 
-```text
+``` { .text .no-copy }
  DEF_HIS/AVG - Created new netCDF file 'CROCO_FILES/croco_his.nc.1'.
 ```
 
@@ -111,7 +111,7 @@ If `croco_his.nc.1` never appears, the child is not running at all — check tha
 
 Both grids print their own step tables, interleaved:
 
-```text
+``` { .text .no-copy }
       12  9686.04167 1.530301513E-03 3.8066511E+01 3.8068042E+01 1.8319687E+15  0   <- parent
       36  9686.04167 1.754320347E-03 3.5356282E+01 3.5358036E+01 6.6786900E+14  0   <- child
       37  9686.04282 1.754488569E-03 3.5356300E+01 3.5358055E+01 6.6786877E+14  0

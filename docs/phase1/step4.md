@@ -19,7 +19,7 @@ ssh-keygen -t ed25519 -C "your_email@example.com"
 
 **Example output:**
 
-```text
+``` { .text .no-copy }
 Generating public/private ed25519 key pair.
 Enter file in which to save the key (/home/user/.ssh/id_ed25519): [Press Enter]
 Enter passphrase (empty for no passphrase): [Press Enter]
@@ -36,7 +36,7 @@ cat ~/.ssh/id_ed25519.pub
 
 **Example output:**
 
-```text
+``` { .text .no-copy }
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP... your_email@example.com
 ```
 
@@ -82,7 +82,7 @@ ls
 
 ## SEA-FORWARD directory structure
 
-```
+``` { .text .no-copy }
 ~/seaforward/
 ├── env.sh                # sourced each session: shared paths + compilers + NetCDF
 ├── environment.yml       # the conda environment

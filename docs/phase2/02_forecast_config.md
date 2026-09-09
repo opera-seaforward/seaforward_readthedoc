@@ -43,7 +43,7 @@ values you edit here.
 
 ### nano crash course
 
-```
+``` { .text .no-copy }
 nano FILENAME        open a file
 Ctrl-W               search ("Where is") — type text, Enter — jumps to it
 Ctrl-K               cut the current line

@@ -47,7 +47,7 @@ python3 make_grid.py ${CONFIG_DIR}/grid.ini 2>&1 | tail -20
 ncdump -h ${CF}/croco_grd.nc | grep -E "xi_rho|eta_rho"
 ```
 
-```text
+``` { .text .no-copy }
 xi_rho = 159 ;
 eta_rho = 99 ;
 ```
@@ -57,7 +57,7 @@ eta_rho = 99 ;
 
 Carry these forward:
 
-```text
+``` { .text .no-copy }
 LLm0 = xi_rho  - 2 = 157
 MMm0 = eta_rho - 2 =  97
 N                  =  50
@@ -66,6 +66,9 @@ N                  =  50
 ## A3 — the mask decides the boundaries
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+
 python3 << 'PYEOF'
 import xarray as xr
 g = xr.open_dataset('${CF}/croco_grd.nc'); m = g.mask_rho.values
@@ -77,7 +80,7 @@ print('east :', int(m[:,-1].sum()), '/', m.shape[0]); print('   S', strip(m[:,-1
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 south: 159 / 159   OOOOOOOO...(all)...OOOOOOOO
 north:  18 / 159   OOOOOOOOOOOOO....(140 land)....OOOOO
 west :  99 / 99    OOOOOOOO...(all)...OOOOOOOO
@@ -107,7 +110,7 @@ genuine coastline, not two open-ocean corners.
 
 **Could the north edge move south instead?** A scan says no:
 
-```text
+``` { .text .no-copy }
 -32.0N:  23/159 ocean
 -32.5N:  30/159
 -33.0N:  37/159
@@ -172,7 +175,7 @@ du -sh ${FCAST}/downloaded_data/MERCATOR ${FCAST}/downloaded_data/GFS
 ls ${FCAST}/downloaded_data/GFS/for_croco/
 ```
 
-```text
+``` { .text .no-copy }
 croco_ini_MERCATOR_20260717_00.nc     16 MB    (159x99x50)
 croco_bry_MERCATOR_20260717_00.nc    4.9 MB
 
@@ -234,7 +237,7 @@ Verify with the preprocessor, not by eye:
 cpp -DREGIONAL -DAGULHAS_12 param.h 2>/dev/null | grep "parameter (LLm0"
 ```
 
-```text
+``` { .text .no-copy }
 parameter (LLm0=157, MMm0=97, N=50) ! Agulhas_12 159x99
 ```
 
@@ -286,7 +289,7 @@ conda deactivate; source ~/seaforward/env.sh
 
 ### The result, and what it told us
 
-```text
+``` { .text .no-copy }
 288  9693.00000 2.609597096E-02 4.3049518E+01 4.3075614E+01 2.6352238E+15  0
 MAIN: DONE
 ```
@@ -295,7 +298,7 @@ MAIN: DONE
 grep -i stiffness run.log
 ```
 
-```text
+``` { .text .no-copy }
 Maximum grid stiffness ratios:   rx0 = 0.20009909855131378   rx1 = 14.835722451244909
 ```
 
@@ -390,7 +393,7 @@ print('croco his times:', ds.time.values)
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 mercator records: 10
    0 2026-07-14      2 2026-07-16   <-- this one
    1 2026-07-15      3 2026-07-17   ...

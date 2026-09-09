@@ -16,7 +16,7 @@ HIS = "forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc"
 ost = vo.download_obs(HIS, "ostia", "~/seaforward/data/OBS", Yorig=2000)
 ```
 
-```text
+``` { .text .no-copy }
 ostia: METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2
   2026-07-10 .. 2026-07-17   lon -22.65..-14.85  lat 13.44..24.54
 ```
@@ -63,7 +63,7 @@ compared by **collocation**, not by regridding — see the next page.
 
 It carries a `quality_level` flag, and this product defines exactly one good level:
 
-```text
+``` { .text .no-copy }
 flag_meanings: missing invalid not_used not_used not_used clear
 ```
 

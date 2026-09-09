@@ -63,7 +63,7 @@ tail -f run_nest_$(date -u +%Y%m%d).log
 
 ## What the driver does
 
-```text
+``` { .text .no-copy }
 [1/6] locate today's parent output  →  fail clearly if the parent hasn't run
       └─ point at the parent's PER-CYCLE GFS (model-runs/<parent>/<date>/…),
          not the scratch copy, so the child gets the full forecast window

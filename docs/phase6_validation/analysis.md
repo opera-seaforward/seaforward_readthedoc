@@ -24,7 +24,7 @@ vo.compare_days(HIS, OST, 'temp',
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 SST  SEA-FORWARD vs OSTIA:
    2026-07-11   rmse  0.7845   bias +0.1316   corr  0.925
    2026-07-13   rmse  0.7742   bias +0.0982   corr  0.923

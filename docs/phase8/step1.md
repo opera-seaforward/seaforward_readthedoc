@@ -11,6 +11,9 @@ Run these from `~/seaforward`.
 Every index below is relative to this grid, so start by reading it:
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+
 python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g   = xr.open_dataset('forecast/scratch/Canary_12/CROCO_FILES/croco_grd.nc')
@@ -21,7 +24,7 @@ print('Canary_12: xi=%d eta=%d, lon %.2f-%.2fE, lat %.2f-%.2fN'
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 Canary_12: xi=81 eta=123, lon -21.95--15.55E, lat 13.94-24.00N
 ```
 
@@ -32,6 +35,9 @@ the child size, the margin to the parent's edges, the ocean fraction, the depth 
 and the land/water pattern along each of the four edges.
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+
 python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g   = xr.open_dataset('forecast/scratch/Canary_12/CROCO_FILES/croco_grd.nc')
@@ -73,7 +79,7 @@ check('C) front and shelf',      -21.0, -16.0, 18.0, 23.0)
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 A) offshore only
   lon -21.0--18.5E lat 20.0-23.0N
   -> imin=12 imax=43 jmin=73 jmax=110

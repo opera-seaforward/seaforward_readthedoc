@@ -11,28 +11,28 @@ Make the Phase 2 Step 11 edits (title, S-coord, sponge) **plus** these. Each is 
 
 **Title.** `Ctrl-W` `BENGUELA TEST`, Enter. Change line 2 to:
 
-```
+``` { .text .no-copy }
         CANARY_12 HINDCAST
 ```
 
 **time_stepping** — `Ctrl-W` `time_stepping`, Enter. Set the values line (7 days at
 `dt=300` → `NTIMES = 7×86400/300 = 2016`):
 
-```
+``` { .text .no-copy }
                 2016      300      60      1
 ```
 
 **initial** (NRREC=1) — `Ctrl-W` `croco_ini.nc`, Enter. Change the filename line to
 your GLORYS ini, leaving the `1` on the NRREC line above it:
 
-```
+``` { .text .no-copy }
     CROCO_FILES/croco_ini_GLORYS_Y2025M12D02.nc
 ```
 
 **boundary** — `Ctrl-W` `croco_bry.nc`, Enter. Change the filename line to your
 GLORYS bry:
 
-```
+``` { .text .no-copy }
     CROCO_FILES/croco_bry_GLORYS_Y2025M12D02_to_Y2025M12D30.nc
 ```
 
@@ -41,7 +41,7 @@ GLORYS bry:
 
 **sponge** — `Ctrl-W` `X_SPONGE`, Enter. Replace the `XXX  XXX` values line:
 
-```
+``` { .text .no-copy }
                     0.                0.
 ```
 
@@ -52,7 +52,7 @@ edge, turn it on with `50000.  400.`
 **online (ERA5 form)** — `Ctrl-W` `byear`, Enter. Set the two lines below the
 `online:` header — the numbers line, then the data path:
 
-```
+``` { .text .no-copy }
 online:    byear  bmonth recordsperday byearend bmonthend / data path
            2025   12      24            2025     12
     /home/<you>/seaforward/hindcast/scratch/Canary_12/downloaded_data/ERA5/for_croco/

@@ -22,14 +22,14 @@ nano cppdefs.h
 
 `Ctrl+W` `AGRIF_2WAY` `Enter` — again the **first** match, near line 81:
 
-```text
+``` { .text .no-copy }
 # define AGRIF
 # undef  AGRIF_2WAY        <- change to "# define AGRIF_2WAY"
 ```
 
 becomes
 
-```text
+``` { .text .no-copy }
 # define AGRIF
 # define AGRIF_2WAY
 ```
@@ -40,7 +40,7 @@ becomes
 grep -n "AGRIF" cppdefs.h | head -2
 ```
 
-```text
+``` { .text .no-copy }
 80:# define AGRIF
 81:# define AGRIF_2WAY      <- feedback on
 ```
@@ -83,7 +83,7 @@ the child's solution.
 
 For this run, at parent step 196:
 
-```text
+``` { .text .no-copy }
 one-way   KE 1.530e-03    NET_VOLUME 1.83197e+15
 two-way   KE 1.625e-03    NET_VOLUME 1.83591e+15
 ```
@@ -124,7 +124,7 @@ for f, l in [('oneway/croco_his.nc', 'one-way parent'),
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 one-way parent    5 records  9686.0000 .. 9687.0000
 two-way parent    5 records  9686.0000 .. 9687.0000
 ```

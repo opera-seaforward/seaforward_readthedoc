@@ -1,7 +1,7 @@
 We use **TPXO10 atlas** — one NetCDF file per wave, split into elevation (`h_`) and
 transport (`u_`) files:
 
-```text
+``` { .text .no-copy }
 DATASETS_CROCOTOOLS/TPXO10/
     grid_tpxo10atlas_v2.nc
     h_m2_tpxo10_atlas_30_v2.nc   u_m2_tpxo10_atlas_30_v2.nc

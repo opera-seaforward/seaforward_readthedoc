@@ -8,7 +8,7 @@ nf-config --prefix
 
 **Both must point inside the repo:**
 
-```
+``` { .text .no-copy }
 /home/<you>/seaforward/opt_seq/bin/nf-config
 /home/<you>/seaforward/opt_seq
 ```

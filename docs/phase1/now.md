@@ -1,4 +1,4 @@
-```
+``` { .text .no-copy }
 ~/seaforward/
 ├── README.md                  # project overview
 ├── env.sh                     # sourced each session (paths + compilers + NetCDF)

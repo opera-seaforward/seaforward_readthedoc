@@ -5,7 +5,7 @@ operational workflow, `sftools.cli` / `sftools/run_validation.py`). Owned by
 Python Dev 1/2, DCC processes **V1** (validation) and **D1** (downstream
 exercises, sensitivity analysis, animation).
 
-```
+``` { .text .no-copy }
 notebooks/
 ├── 01_visualisation.ipynb   ← maps, sections, animations (not in this package)
 ├── 02_validation.ipynb      ← bias maps, scatter plots, Taylor diagrams, time
