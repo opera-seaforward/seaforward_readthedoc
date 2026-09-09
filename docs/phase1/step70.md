@@ -39,16 +39,26 @@ awk '/MemTotal/{printf "%.0f GB\n",$2/1048576}' /proc/meminfo   # RAM
 Set it (along with the root) — this stays in effect for the rest of this
 section:
 
+**Either** let the rule choose for you:
+
 ```bash
 source ~/seaforward/env.sh
 export SEA_FORWARD_ROOT=~/seaforward
 
-# option 1 — pick a number by hand (see the rule above):
-export NJOBS=7
+CORES=$(nproc); RAM_GB=$(awk '/MemTotal/{printf "%d",$2/1024/1024}' /proc/meminfo)
+export NJOBS=$(( RAM_GB/2 ))
+[ $NJOBS -gt $CORES ] && export NJOBS=$CORES
+[ $NJOBS -lt 1 ] && export NJOBS=1
 
-# option 2 — let the rule choose for you: min(cores, RAM_GB/2), at least 1
-# CORES=$(nproc); RAM_GB=$(awk '/MemTotal/{printf "%d",$2/1024/1024}' /proc/meminfo)
-# export NJOBS=$(( RAM_GB/2 )); [ $NJOBS -gt $CORES ] && export NJOBS=$CORES; [ $NJOBS -lt 1 ] && export NJOBS=1
+echo "will compile with NJOBS=${NJOBS} parallel jobs"
+```
+
+**or** set it by hand, using the rule above:
+
+```bash
+source ~/seaforward/env.sh
+export SEA_FORWARD_ROOT=~/seaforward
+export NJOBS=7
 
 echo "will compile with NJOBS=${NJOBS} parallel jobs"
 ```

@@ -15,12 +15,22 @@ Then convert one:
 
 ```bash
 cd ~/seaforward
-python3 -c "
+conda activate seaforward
+
+# The driver names each cycle <date>_<binary> — 20260712_plain for a plain
+# run, 20260712_1way_tides for a nested one with tides. Take the most recent
+# rather than typing a date, which will not be the one below:
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+TAG=$(basename ${CYCLE})
+echo "using ${TAG}"
+
+python3 << PY
 import sftools.nesting as nest
 nest.croco_to_mercator(
-    '${SEA_FORWARD_ROOT}/forecast/model-runs/Canary_12/20260712/fcst/CROCO_FILES/croco_his.nc',
-    '${FCAST}/downloaded_data/PARENT/parent_20260712.nc',
-    Yorig=2000)"
+    "${CYCLE}fcst/CROCO_FILES/croco_his.nc",
+    "${FCAST}/downloaded_data/PARENT/parent_${TAG}.nc",
+    Yorig=2000)
+PY
 ```
 
 **What this does:** reads the 1/12° output; interpolates temperature, salinity and

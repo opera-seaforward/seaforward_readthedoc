@@ -7,6 +7,7 @@ edge.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g = xr.open_dataset('forecast/scratch/Agulhas_12/CROCO_FILES/croco_grd.nc')
@@ -31,7 +32,7 @@ for e, v in [('S', sm[0,:]), ('N', sm[-1,:]), ('W', sm[:,0]), ('E', sm[:,-1])]:
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 imin=39 imax=119 jmin=23 jmax=83
 child at 3x: 241 x 181 x 50
 margin: W=39 E=39 S=23 N=15 parent cells
@@ -108,12 +109,17 @@ Two deliberate departures from the parent:
     **That reasoning did not predict what happened** — see *The `rx1` result* at the
     end of this page.
 
-Setup and build:
+**Set up the directory** — the parent grid goes alongside the child, since
+croco_pytools reads both:
 
 ```bash
 mkdir -p ~/seaforward/forecast/scratch/Agulhas_AGRIF/CROCO_FILES
 cp ~/seaforward/forecast/scratch/Agulhas_12/CROCO_FILES/croco_grd.nc \
    ~/seaforward/forecast/scratch/Agulhas_AGRIF/CROCO_FILES/croco_grd.nc
+```
+
+**Then write the build script.** This opens an editor — paste the Python
+below into it, save with `Ctrl-O`, exit with `Ctrl-X`:
 
 cd ~/seaforward/code/croco_pytools/prepro
 nano build_agulhas_agrif.py
@@ -151,6 +157,7 @@ For a clearer view of the same thing, with the child's footprint drawn on the pa
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
@@ -192,7 +199,7 @@ echo "requested:  39  119  23  83"
 cat AGRIF_FixedGrids.in
 ```
 
-```text
+``` { .text .no-copy }
 requested:  39  119   23   83
 written:    39  121   24   84        <- imax +2, jmin +1, jmax +1
 ```
@@ -206,6 +213,9 @@ edge, and that edge is closed on solid land. A coast running *diagonally* across
 edge the tool is trying to open is what makes it march, sometimes by ten cells or more.
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+
 python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g = xr.open_dataset('croco_grd.nc.1'); m = g.mask_rho.values
@@ -224,7 +234,7 @@ for e, v in [('S', m[0,:]), ('N', m[-1,:]), ('W', m[:,0]), ('E', m[:,-1])]:
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 child: 248 x 182   ocean 80.4%
 box: 20.04-27.04E  -38.12--33.09N
 depth 48-5556 m
@@ -258,12 +268,16 @@ nano "$CGEN/crocotools_param.py"
 #   Ctrl+W obc_dict ->
 #   obc_dict = dict(south=1, west=1, east=1, north=0)   # child: N closed (coast)
 
-MERC=~/seaforward/forecast/scratch/Agulhas_12/downloaded_data/MERCATOR/MERCATOR_20260717_00.nc
+# find the download rather than typing its date — run_date must match it
+MERC=$(ls ~/seaforward/forecast/scratch/Agulhas_12/downloaded_data/MERCATOR/MERCATOR_*.nc | tail -1)
+TAG=$(basename ${MERC} | sed 's/^MERCATOR_//; s/_[0-9]*\.nc$//')
+RUN_DT="${TAG:0:4}-${TAG:4:2}-${TAG:6:2} 00:00:00"
+echo "cycle ${TAG}  ->  run_date ${RUN_DT}"
 cd ~/seaforward/sftools
 conda activate seaforward
 python seaforward.py make_ini \
     --input_file "${MERC}" --output_dir "${CGEN}" \
-    --run_date "2026-07-17 00:00:00" --hdays 2 --Yorig 2000
+    --run_date "${RUN_DT}" --hdays 2 --Yorig 2000
 ```
 
 The child grid renamed to `croco_grd.nc` is the whole trick — `make_ini` reads whatever
@@ -271,7 +285,7 @@ grid it finds in `--output_dir` and neither knows nor cares that it is a child.
 
 **Verify:**
 
-```text
+``` { .text .no-copy }
 temp  min=          0  max=      23.44  nan=0
 salt  min=          0  max=       35.6  nan=0
 u     min=     -1.831  max=       1.21  nan=0
@@ -286,18 +300,21 @@ in the initial condition — the interpolation captured it rather than smearing 
 **Clocks:**
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+
 python3 << 'PYEOF'
-import xarray as xr, os
+import xarray as xr, os, glob
 H = os.path.expanduser('~/seaforward/forecast/scratch/')
 for f, lbl in [
-    (H + 'Agulhas_12/CROCO_FILES/croco_ini_MERCATOR_20260717_00.nc', 'parent'),
-    (H + 'Agulhas_AGRIF/child_gen/CROCO_FILES/croco_ini_MERCATOR_20260717_00.nc', 'child ')]:
+    (sorted(glob.glob(H + 'Agulhas_12/CROCO_FILES/croco_ini_MERCATOR_*.nc'))[-1], 'parent'),
+    (sorted(glob.glob(H + 'Agulhas_AGRIF/child_gen/CROCO_FILES/croco_ini_MERCATOR_*.nc'))[-1], 'child ')]:
     d = xr.open_dataset(f, decode_times=False)
     print(lbl, float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 parent 9692.0 days
 child  9692.0 days
 ```
@@ -316,7 +333,7 @@ nano croco.in.1
 
 Six edits, as in Phase 8 Step 5. The one that matters:
 
-```text
+``` { .text .no-copy }
 time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
                  288     100       60      1
                          ^^^ = 300/3.  NTIMES stays 288 -- AGRIF multiplies it.
@@ -329,7 +346,7 @@ parent's output:
 grep -n "CROCO_FILES/" croco.in.1
 ```
 
-```text
+``` { .text .no-copy }
 23:    CROCO_FILES/croco_grd.nc.1     <- required
 34:    CROCO_FILES/croco_ini.nc.1     <- required
 37:    CROCO_FILES/croco_rst.nc.1     <- required
@@ -357,27 +374,50 @@ grep -cE "^start_date:|^end_date:|^time_stepping:|^restart:|^history:|^averages:
 One-way and two-way differ by a **compile-time** flag, so build both once and let the
 driver choose between them.
 
+**1 — edit `cppdefs.h` for the one-way build:**
+
 ```bash
 cd ~/seaforward/forecast/scratch/Agulhas_AGRIF
 nano cppdefs.h
-#   Ctrl+W AGRIF -> FIRST match (~line 80, your REGIONAL block --
-#   NOT the one near 1066, which is the VORTEX test case)
-#     # define AGRIF
-#     # undef  AGRIF_2WAY
+```
 
+`Ctrl+W` `AGRIF`, and take the **first** match — around line 80, in your
+REGIONAL block. The one near line 1066 belongs to the VORTEX test case. Set:
+
+``` { .c .no-copy }
+# define AGRIF
+# undef  AGRIF_2WAY
+```
+
+**2 — compile it:**
+
+```bash
 conda deactivate
 source ~/seaforward/env.sh
 which nf-config                 # must be .../opt_seq/bin/nf-config
-./jobcomp 2>&1 | tail -3        # CROCO is OK
+./jobcomp 2>&1 | tail -3        # ends with: CROCO is OK
 mv croco croco_1way
+```
 
+**3 — edit it again for two-way:**
+
+```bash
 nano cppdefs.h
-#   Ctrl+W AGRIF_2WAY -> line 81 only:  # define AGRIF_2WAY
-#   line 80 stays "# define AGRIF"
+```
 
+`Ctrl+W` `AGRIF_2WAY`, line 81 only. Line 80 stays as it is:
+
+``` { .c .no-copy }
+# define AGRIF
+# define AGRIF_2WAY
+```
+
+**4 — compile again:**
+
+```bash
 ./jobcomp 2>&1 | tail -3
 mv croco croco_2way
-ls -lh croco_1way croco_2way    # 1.7M each
+ls -lh croco_1way croco_2way    # about 1.7M each
 ```
 
 **`AGRIF` stays defined in both.** It means "there is a child at all". Only
@@ -391,10 +431,13 @@ the unnested parent from A12. Skip the rename and it reports `binary not found`.
 Once the model runs, both grids report their stiffness:
 
 ```bash
-grep -i stiffness ~/seaforward/forecast/model-runs/Agulhas_AGRIF/20260717_1way/spinup/croco_spinup.out
+# the cycle folder is named for the day it ran and the binary used,
+# so find it rather than typing it
+RUN=$(ls -d ~/seaforward/forecast/model-runs/Agulhas_AGRIF/*/ | sort | tail -1)
+grep -i stiffness ${RUN}spinup/croco_spinup.out
 ```
 
-```text
+``` { .text .no-copy }
  Maximum grid stiffness ratios:   rx0 = 0.2001   rx1 = 14.836     <- parent
  Maximum grid stiffness ratios:   rx0 = 0.2115   rx1 = 13.416     <- child
 ```
@@ -421,7 +464,7 @@ cp CROCO_FILES/AGRIF_FixedGrids.in .          # RUN dir, not CROCO_FILES
 grep -H obc_dict CROCO_FILES/crocotools_param.py CROCO_FILES/crocotools_param_child.py
 ```
 
-```text
+``` { .text .no-copy }
 crocotools_param.py:       obc_dict = dict(south=1, west=1, east=1, north=1)
 crocotools_param_child.py: obc_dict = dict(south=1, west=1, east=1, north=0)
 ```

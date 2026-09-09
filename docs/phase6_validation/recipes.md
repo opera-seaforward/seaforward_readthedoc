@@ -8,7 +8,7 @@ those for a configuration that is not Canary_12.
 
 There is no fixed location, but the examples use:
 
-```text
+``` { .text .no-copy }
 ~/seaforward/data/OBS/
 ```
 
@@ -27,10 +27,14 @@ mkdir -p ~/seaforward/data/OBS
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 OBS = '~/seaforward/data/OBS'
 
 for src in ('ostia', 'odyssea', 'duacs', 'globcurrent', 'armor3d'):
@@ -46,10 +50,14 @@ against the *last* cycle and pad backwards far enough to reach the first:
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import sftools.validation_obs as vo
 
-LAST = 'forecast/model-runs/Canary_12/20260713/fcst/CROCO_FILES/croco_his.nc'
+LAST = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 OBS  = '~/seaforward/data/OBS'
 
 for src in ('odyssea', 'duacs', 'globcurrent'):
@@ -70,6 +78,10 @@ the resolution and the coastline all follow:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
@@ -99,6 +111,10 @@ Two changes: the multi-year reference track, and the year origin.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
@@ -152,6 +168,9 @@ Find the dataset ID and the variable names from CMEMS rather than guessing:
 
 ```bash
 conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
 copernicusmarine describe --contains "<product ID>" | grep '"dataset_id"'
 copernicusmarine describe --contains "<dataset ID>" | grep '"short_name"'
 ```

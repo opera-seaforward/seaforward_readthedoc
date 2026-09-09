@@ -15,13 +15,13 @@ For Canary_12 you make **three** changes. Use `Ctrl-W` to find each line.
 
 `Ctrl-W`, type `BENGUELA_LR`, Enter. You'll land on:
 
-```
+``` { .text .no-copy }
 # define BENGUELA_LR
 ```
 
 Change `BENGUELA_LR` to `CANARY_12`:
 
-```
+``` { .text .no-copy }
 # define CANARY_12
 ```
 
@@ -34,13 +34,13 @@ built-in South-Africa example; you're replacing it with your own. Use
 
 `Ctrl-W`, type `undef  ONLINE`, Enter. You'll find:
 
-```
+``` { .text .no-copy }
 #  undef  ONLINE
 ```
 
 Change `undef` to `define`:
 
-```
+``` { .text .no-copy }
 #  define ONLINE
 ```
 
@@ -61,7 +61,7 @@ file — so this is the one edit you should not search for. Find yours first:
 grep -nE "define CANARY_12|^# *(define|undef) +OBC_(EAST|WEST|NORTH|SOUTH)" cppdefs.h | head -12
 ```
 
-```
+``` { .text .no-copy }
 72:# define CANARY_12
 98:# define OBC_EAST
 99:# define OBC_WEST
@@ -86,7 +86,7 @@ nano +98 cppdefs.h
 
 Change the edges your mask showed as land. For Canary_12 that is the east edge only:
 
-```
+``` { .text .no-copy }
 # undef  OBC_EAST
 # define OBC_WEST
 # define OBC_NORTH

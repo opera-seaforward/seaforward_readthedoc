@@ -13,6 +13,12 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".highlight").forEach(function (block) {
     var pre = block.querySelector("pre");
     if (!pre) return;
+    // Skip blocks marked .no-copy in the markdown fence — command output
+    // and file excerpts, which are there to read rather than to run.
+    if (block.classList.contains("no-copy")) return;
+    // Skip blocks marked .no-copy in the markdown fence — command output
+    // and file excerpts, which are there to read rather than to run.
+    if (block.classList.contains("no-copy")) return;
 
     var button = document.createElement("button");
     button.className = "copy-code-button";

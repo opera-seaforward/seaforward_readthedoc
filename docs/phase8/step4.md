@@ -10,7 +10,7 @@ prefix. The build shows it: compiling with AGRIF leaves these in the run directo
 ls ~/seaforward/forecast/scratch/Canary_AGRIF/
 ```
 
-```text
+``` { .text .no-copy }
 kRGB61.txt            kRGB61.txt.1              <- AGRIF made a level-1 copy
 namelist_pisces_cfg   namelist_pisces_cfg.1
 namelist_pisces_ref   namelist_pisces_ref.1
@@ -28,14 +28,19 @@ it wrote `croco_grd.nc.1`, not `1_croco_grd.nc` — as does the template CROCO s
 ```bash
 D=~/seaforward/forecast/scratch/Canary_AGRIF
 CGEN=$D/child_gen/CROCO_FILES
-RUN=~/seaforward/forecast/model-runs/Canary_12/20260711/gen_spinup/CROCO_FILES
+# Use the SAME parent cycle Step 3 used. If PCYCLE is still set from that
+# step, this reuses it; otherwise it takes the most recent, which is the same
+# cycle unless a new one appeared in between.
+PCYCLE=${PCYCLE:-$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)}
+RUN=${PCYCLE}gen_spinup/CROCO_FILES
+echo "parent files from ${RUN}"
 
 # child IC -> .1
-cp $CGEN/croco_ini_MERCATOR_20260711_00.nc  $D/CROCO_FILES/croco_ini.nc.1
+cp $(ls $CGEN/croco_ini_MERCATOR_*.nc | tail -1)  $D/CROCO_FILES/croco_ini.nc.1
 
 # parent IC + bry, from the forecast run that already made them
-cp $RUN/croco_ini_MERCATOR_20260711_00.nc   $D/CROCO_FILES/croco_ini.nc
-cp $RUN/croco_bry_MERCATOR_20260711_00.nc   $D/CROCO_FILES/croco_bry.nc
+cp $(ls $RUN/croco_ini_MERCATOR_*.nc | tail -1)   $D/CROCO_FILES/croco_ini.nc
+cp $(ls $RUN/croco_bry_MERCATOR_*.nc | tail -1)   $D/CROCO_FILES/croco_bry.nc
 
 # AGRIF_FixedGrids.in must sit in the RUN dir, not CROCO_FILES
 cp $D/CROCO_FILES/AGRIF_FixedGrids.in       $D/
@@ -45,7 +50,7 @@ ls -la $D/CROCO_FILES/ $D/
 
 **Which parent IC?** The forecast run left more than one candidate:
 
-```text
+``` { .text .no-copy }
 gen_spinup/CROCO_FILES/croco_ini_MERCATOR_20260711_00.nc   <- from Mercator
 spinup/CROCO_FILES/croco_ini.nc                            <- same, staged
 fcst/CROCO_FILES/croco_ini.nc                              <- the spin-up RESTART
@@ -62,7 +67,7 @@ name; staging them as `croco_ini.nc` and `croco_ini.nc.1` is what lets Step 5's
 
 ### 4c — The layout you should end up with
 
-```text
+``` { .text .no-copy }
 scratch/Canary_AGRIF/
 ├── croco                     the AGRIF-enabled executable (Step 6)
 ├── croco.in                  parent runtime settings

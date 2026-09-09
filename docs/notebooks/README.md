@@ -5,7 +5,7 @@ operational workflow, `sftools.cli` / `sftools/run_validation.py`). Owned by
 Python Dev 1/2, DCC processes **V1** (validation) and **D1** (downstream
 post-processing, exercises, sensitivity analysis, animation).
 
-```
+``` { .text .no-copy }
 notebooks/
 ├── 01_seaforward_postprocess_plot.ipynb  ← maps, sections, profiles, Hovmöller,
 │                                            time series (D1)
@@ -165,7 +165,7 @@ unbiased RMSD, correlation, two scatter-index variants, std-ratio) plus
 optional class-4 in-situ scoring per depth layer -- is now the **single
 statistics engine** behind every validation surface in this repo:
 
-```
+``` { .text .no-copy }
 sftools.validation_godae.godae_scorecard_croco_vs_glorys()   <- grid vs reference, one variable
 sftools.validation_godae.validate_against_insitu()           <- grid vs CMEMS in-situ TAC, per depth layer
 ```

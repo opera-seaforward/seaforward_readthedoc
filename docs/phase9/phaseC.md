@@ -2,7 +2,7 @@
 
 The split matters, and the naming is misleading: **`scratch/` is not disposable.**
 
-```text
+``` { .text .no-copy }
 scratch/Agulhas_AGRIF/                    BUILT ONCE, permanent
 ├── croco_1way, croco_2way                the binaries
 ├── croco.in, croco.in.1                  templates (driver copies + patches)
@@ -64,7 +64,7 @@ cd ~/seaforward/forecast
 ./run_forecast_cycle.sh --child 1way 2>&1 | tee agrif_run.log
 ```
 
-```text
+``` { .text .no-copy }
 ============================================================
  SEA-FORWARD forecast
    config  : Agulhas_AGRIF
@@ -89,7 +89,7 @@ matches the file, and that `DT % COEF == 0` — all before downloading anything.
 
 Then:
 
-```text
+``` { .text .no-copy }
 [1/6] download Mercator + GFS          both grids share it
 [2/6] GFS -> online forcing            both grids read the same files
 [3/6] parent ini+bry, child ini        then VALIDATES both

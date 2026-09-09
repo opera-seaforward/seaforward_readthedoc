@@ -3,7 +3,7 @@
 Guided, interactive pipeline owned by DCC processes **V1** (validation) and **D1** (downstream
 post-processing, exercises, sensitivity analysis, animation).
 
-```
+``` { .text .no-copy }
 notebooks/
 ├── 01_seaforward_postprocess_plot.ipynb  ← maps, sections, profiles, Hovmöller,
 │                                            time series (D1)

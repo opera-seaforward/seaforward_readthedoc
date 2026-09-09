@@ -45,6 +45,7 @@ above were in the prepro directory, so change back first:
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.plotting as pl
@@ -67,3 +68,7 @@ bathymetry the model will use. Check the shelf break looks continuous and that n
 obviously wrong before you build data on top of this grid.
 
 `mesh_stride=2` draws every second grid line, which keeps a dense mesh legible.
+
+The figure is written to `canary_12_portrait.png` in `~/seaforward` — open it with
+any image viewer. Writing a file rather than opening a window means this works over
+SSH and in WSL, where there is no display.

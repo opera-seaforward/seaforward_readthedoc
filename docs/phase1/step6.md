@@ -7,7 +7,7 @@ cat ~/seaforward/env.sh
 
 It sets **shared** paths and the compilers:
 
-```bash
+``` { .bash .no-copy }
 export SEA_FORWARD_ROOT=${HOME}/seaforward
 export CROCO_MODEL_DIR=${SEA_FORWARD_ROOT}/code/croco
 export CROCO_PYTOOLS_DIR=${SEA_FORWARD_ROOT}/code/croco_pytools

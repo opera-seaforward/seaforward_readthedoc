@@ -9,7 +9,7 @@ one, losing the signal. So with tides:
 
 At `dt = 300 s`:
 
-```text
+``` { .text .no-copy }
 history NWRT = 3600/300  = 12     (hourly)
 average NAVG = 86400/300 = 288    (daily)
 ```
@@ -27,7 +27,7 @@ cd ~/seaforward/forecast/scratch/Canary_12
 grep -n -A1 "^history:\|^averages:" croco.in
 ```
 
-```text
+``` { .text .no-copy }
 39:history: LDEFHIS, NWRT, NRPFHIS / filename
 40-            T      12     0
 42:averages: NTSAVG, NAVG, NRPFAVG / filename
@@ -41,7 +41,7 @@ Set `NTIMES` for the run while you are here. A one-day run shows the oscillation
 seven-day run also shows the **spring–neap cycle**, as M2 and S2 drift in and out of
 phase, and gives the daily average more than one record to work with:
 
-```text
+``` { .text .no-copy }
 time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
                 2016      300      60      1
 ```

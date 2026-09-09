@@ -151,7 +151,7 @@ print('agrif:', c['Zoom_Options']['is_agrif'], 'level', c['Zoom_Options']['agrif
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 sections: ['Croco_Files', 'Zoom_Options', 'Grid_Zoom_Params', 'Grid_Zoom_Agrif',
            'Grid_Smoothing_Params', 'Grid_Isolated_Waterbodies', 'Grid_Input_Files']
 box: imin=12 imax=74 jmin=49 jmax=110 coef=3
@@ -224,7 +224,7 @@ conda activate seaforward                     # the env that built the parent's 
 python build_canary_agrif.py 2>&1 | tail -20
 ```
 
-```text
+``` { .text .no-copy }
 === loading canary_zoom_agrif.ini
 === create_grid()
 Reading CROCO grid: .../Canary_AGRIF/CROCO_FILES/croco_grd.nc
@@ -255,7 +255,7 @@ Two lines there are AGRIF-specific:
 ls -la ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/
 ```
 
-```text
+``` { .text .no-copy }
 AGRIF_FixedGrids.in    <- the child-in-parent definition
 croco_grd.nc           <- the parent (you copied it)
 croco_grd.nc.1         <- the child grid
@@ -274,7 +274,7 @@ your check that the box landed where you meant it to.
 cat ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/AGRIF_FixedGrids.in
 ```
 
-```text
+``` { .text .no-copy }
     1
     13    75    50    111    3    3    3    3
     0
@@ -294,7 +294,7 @@ moved.**
 
 `easygrid.py` sometimes moves your box, and says so only in passing:
 
-```text
+``` { .text .no-copy }
 ==> North limits displacement +1
 ```
 
@@ -345,7 +345,7 @@ for n, r in [('south', m[0,:]), ('north', m[-1,:]), ('west', m[:,0]), ('east', m
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 grid: 188 x 185
 lon: -21.09 to -15.82 E
 lat: 18.02 to 23.10 N
@@ -374,7 +374,7 @@ is shorter at 20°N than at the equator. Always read `pm` and `pn` rather than a
 
 When the model runs it reports, for each grid:
 
-```text
+``` { .text .no-copy }
  Maximum grid stiffness ratios:   rx0 = 0.20006   rx1 = 14.836     <- parent
  Maximum grid stiffness ratios:   rx0 = 0.20000   rx1 = 14.837     <- child
 ```

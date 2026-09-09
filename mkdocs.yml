@@ -144,7 +144,6 @@ nav:
       - Overview: phase5/05_postprocessing.md
       - Gallery: phase5/00_gallery.md
       - Setup: phase5/step51_setup.md
-      - Open data: phase5/step52_open_data.md
       - Surface fields: phase5/surface.md
       - Dynamics: phase5/dynamics.md
       - Vertical structure: phase5/vertical.md

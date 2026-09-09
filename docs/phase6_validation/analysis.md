@@ -11,20 +11,28 @@ This works with any gap-free reference. OSTIA is the natural one for SST.
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
+import numpy as np
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
-OST = 'data/OBS/ostia_2026-07-08_2026-07-17.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+import glob, os
+OST = max(glob.glob('data/OBS/ostia_*.nc'),
+          key=lambda f: np.datetime64(os.path.basename(f)[:-3].split('_')[-1])
+                      - np.datetime64(os.path.basename(f)[:-3].split('_')[-2]))
 
 vo.compare_days(HIS, OST, 'temp',
-                days=['2026-07-11', '2026-07-13', '2026-07-15'],
+                days=3,                    # the first three records
                 daily_mean=True, Yorig=2000, out='days.png')
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 SST  SEA-FORWARD vs OSTIA:
    2026-07-11   rmse  0.7845   bias +0.1316   corr  0.925
    2026-07-13   rmse  0.7742   bias +0.0982   corr  0.923
@@ -46,9 +54,12 @@ you can see between the rows is a real difference.
 days=None                          # every record
 days=5                             # the first five
 days=(2, 7)                        # records 2 to 6
+days=('2026-09-01', '2026-09-05')  # a date range, inclusive
 days=['2026-07-11', '2026-07-15']  # named dates
 days=[0, 3, 6]                     # record indices
 ```
+
+A **tuple** of two dates is a range — every record between them, inclusive. A **list** of dates picks those specific days.
 
 Named dates are matched to the nearest record and raise if the nearest is more than a day
 away, so a typo produces an error rather than a quiet comparison against the wrong day.
@@ -67,14 +78,22 @@ For a single date:
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
+import numpy as np
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
-OST = 'data/OBS/ostia_2026-07-08_2026-07-17.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+import glob, os
+OST = max(glob.glob('data/OBS/ostia_*.nc'),
+          key=lambda f: np.datetime64(os.path.basename(f)[:-3].split('_')[-1])
+                      - np.datetime64(os.path.basename(f)[:-3].split('_')[-2]))
 
-vo.compare(HIS, OST, 'temp', date='2026-07-14', daily_mean=True,
+vo.compare(HIS, OST, 'temp', daily_mean=True,   # no date = last record
            Yorig=2000, out='one_day.png')
 PYEOF
 ```
@@ -88,12 +107,20 @@ Every scale and colour can be set rather than inferred:
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
+import numpy as np
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
-OST = 'data/OBS/ostia_2026-07-08_2026-07-17.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+import glob, os
+OST = max(glob.glob('data/OBS/ostia_*.nc'),
+          key=lambda f: np.datetime64(os.path.basename(f)[:-3].split('_')[-1])
+                      - np.datetime64(os.path.basename(f)[:-3].split('_')[-2]))
 
 vo.compare_days(HIS, OST, 'temp', days=3, Yorig=2000,
                 vmin=18, vmax=26,          # the field rows
@@ -116,15 +143,26 @@ The same call, a different reference:
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
+import glob, os
+import numpy as np
 import sftools.validation_obs as vo
 
-HIS   = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
-DUACS = 'data/OBS/duacs_2026-07-07_2026-07-24.nc'
-GC    = 'data/OBS/globcurrent_2026-07-07_2026-07-24.nc'
-ARM   = 'data/OBS/armor3d_2026-07-08_2026-07-17.nc'
-days  = ['2026-07-11', '2026-07-13', '2026-07-15']
+HIS   = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+# widest file of each product, so it spans the whole cycle
+def pick(src):
+    def span(f):
+        a, b = os.path.basename(f)[:-3].split('_')[-2:]
+        return np.datetime64(b) - np.datetime64(a)
+    return max(glob.glob('data/OBS/%s_*.nc' % src), key=span)
+
+DUACS, GC, ARM = pick('duacs'), pick('globcurrent'), pick('armor3d')
+days = 3                       # the run's first three records
 
 vo.compare_days(HIS, DUACS, 'ssh',   days=days, Yorig=2000, out='days_ssh.png')
 vo.compare_days(HIS, GC,    'speed', days=days, depth_m=15, Yorig=2000,
@@ -156,6 +194,3 @@ resolves everything, is worth a different explanation from one along the upwelli
 Here the bias changes sign between 11 and 15 July — +0.13 to −0.09 — while the RMSE barely
 moves. That is the initial warm offset washing out, leaving pattern error that the maps
 show sitting along the front.
-
-!!! note
-See more validation figures (scatter plots, Taylor diagram, etc.) in the two related notebooks: `02_validation.ipynb` and `03_composite_validation.ipynb`.

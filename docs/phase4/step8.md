@@ -26,7 +26,7 @@ that line to `CANARY_12`.
 **Edit 2 — ONLINE + ERA5.** `Ctrl-W`, type `undef  ONLINE`, Enter — this lands in
 **your** regional block, just below the `BULK_*` lines. Set it to:
 
-```
+``` { .text .no-copy }
 #  define ONLINE
 #  ifdef ONLINE
 #   undef  AROME
@@ -51,7 +51,7 @@ grep -nE "define CANARY_12|^# *(define|undef) +OBC_(EAST|WEST|NORTH|SOUTH)" cppd
 The block just below your config name is the one to edit. Reopen there — `nano +N`
 puts the cursor on line N — and set:
 
-```
+``` { .text .no-copy }
 # undef  OBC_EAST
 ```
 
@@ -80,7 +80,7 @@ nano param.h
 `Ctrl-W`, type `YOUR REGIONAL CONFIG`, Enter. Add your branch **above** the `# else`
 line:
 
-```
+``` { .text .no-copy }
 # elif defined  CANARY_12
       parameter (LLm0=79,   MMm0=121,   N=50)   ! Canary_12 hindcast
 ```
@@ -106,7 +106,7 @@ nano jobcomp
 
 `Ctrl-W`, type `SOURCE1=`, Enter. Set that line to your CROCO source:
 
-```
+``` { .text .no-copy }
 SOURCE1=/home/<you>/seaforward/code/croco/OCEAN
 ```
 

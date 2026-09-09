@@ -1,7 +1,7 @@
 For your region you have a compiled model that has **run to completion**, with all
 its inputs and outputs in the run folder:
 
-```
+``` { .text .no-copy }
 forecast/scratch/Canary_12/
 ├── croco                       # the compiled program
 ├── cppdefs.h param.h croco.in jobcomp   # your edited config (also in configs/Canary_12)
@@ -22,7 +22,7 @@ forecast/scratch/Canary_12/
 
 Compare the run against the Mercator product it was built from. Run from `~/seaforward`:
 
-```python
+```bash
 import sftools.validation as val
 
 HIS  = "forecast/scratch/Canary_12/CROCO_FILES/croco_his.nc"
@@ -40,7 +40,7 @@ val.compare_currents(HIS, MERC, date=DATE, Yorig=2000, out="cur_vs_mercator.png"
 Each call draws three panels — CROCO, the parent regridded onto the CROCO grid, and
 the difference — and prints the domain statistics:
 
-```
+``` { .text .no-copy }
 SST          bias=-0.830  RMSE=1.094  cRMSE=0.713  corr=0.949
 SSH anomaly  bias=-0.000  RMSE=0.019  cRMSE=0.019  corr=0.954
 Speed        bias=+0.016  RMSE=0.114  cRMSE=0.113  corr=0.519
@@ -64,7 +64,7 @@ something useful about a seven-day free run:
   point-by-point precisely because the regional model is adding something.
 
 Whether any of this is *better* than the parent needs independent observations, not
-this comparison. Phase 5 covers that, along with `margin_deg` to trim the sponge band
+this comparison. Phase 6 covers that, along with `margin_deg` to trim the sponge band
 before computing statistics.
 
 **Next:** turning the raw NetCDF into plots, sections and comparisons is

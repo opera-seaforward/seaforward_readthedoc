@@ -6,37 +6,32 @@ The obvious approach — interpolate the observations onto the model grid and di
 them — fails for a product with gaps, because the interpolation fills the holes and the
 statistics then score invented values as agreement. Collocation avoids that by going the
 other way: sample the model at each observed point.
-See `Section.7` in `02_validation.ipynb`.
-```python
-# SAT_FILES was built in Section 1c: {"OSTIA": {date: path, ...}, "ODYSSEA": {...}}
-sat_avail_key = {"OSTIA": "ostia_l4", "ODYSSEA": "odyssea_l3s"}
-sat_stats_all = {}
-for product, files in SAT_FILES.items():
-    if product == "SMOS":
-        continue   # SMOS SSS is handled separately in Section 7b below
-    if not AVAIL[sat_avail_key[product]]:
-        print(f"{product} unavailable on the CMEMS platform - skipping.")
-        continue
-    if not files:
-        print(f"{product}: nothing downloaded for this cycle (no files/coverage) - skipping.")
-        continue
-    figs, stats = val.compare_satellite_grid(CROCO_HIS, files, product, Yorig=YORIG,
-                                            out_dir=VALIDATION_DIR)
-    sat_stats_all[product] = stats
-    print(f"  -> {len(figs)} figure(s) written, one per day: "
-         f"{[os.path.basename(p) for p in figs.values()]}")
-    if stats is not None and not stats.empty:
-        print(f"\n{product} daily SST statistics:")
-        print(stats.to_string(index=False))
-        stats.to_csv(os.path.join(VALIDATION_DIR, f"sst_vs_{product.lower()}_stats.csv"), index=False)
 
-print()
+```bash
+cd ~/seaforward
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
+import matplotlib; matplotlib.use('Agg')
+import sftools.validation_obs as vo
+
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+ODY = 'data/OBS/odyssea_2026-07-07_2026-07-24.nc'
+
+vo.compare(HIS, ODY, 'temp', method='collocate', date='2026-07-14',
+           daily_mean=True, Yorig=2000, out='collocation.png')
+PYEOF
 ```
 
-![SEA-FORWARD against ODYSSEA, collocated](../img/sst_vs_odyssea_2026-07-13.png)
+![SEA-FORWARD against ODYSSEA, collocated](../img/val_collocation.png)
 
 *The observations with their cloud gaps intact, the model sampled at those same points,
 and the two against each other.*
+
+`method='auto'` picks collocation for any product with gaps and regridding otherwise, so
+in practice you rarely set it.
 
 ## The scorecard
 
@@ -44,18 +39,21 @@ Statistics per day, no figure:
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import sftools.validation_obs as vo
 
-HIS = "forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc"
-ody = vo.download_obs(HIS, "odyssea", "~/seaforward/data/OBS", Yorig=2000)
-ODY = "data/OBS/odyssea_2026-07-07_2026-07-24.nc"
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+ODY = 'data/OBS/odyssea_2026-07-07_2026-07-24.nc'
 
-vo.scorecard(HIS, ODY, "temp", days=5, Yorig=2000)
+vo.scorecard(HIS, ODY, 'temp', days=5, Yorig=2000)
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 SST  SEA-FORWARD vs ODYSSEA, collocated:
    date         cover     n     bias    rmsd   urmsd    corr
    2026-07-11   54.0%    3882  +0.398   0.816   0.712   0.925
@@ -81,10 +79,6 @@ different fixes.
 Here the bias falls from +0.40 to near zero over five days while `urmsd` stays around 0.7
 — the initial warm offset washes out, and what remains is pattern error.
 
-!!! note
-This scorecard is also printed by the first code
-
-
 ## Two references, one answer
 
 The reason to use both SST products is that they fail differently. OSTIA fills its gaps by
@@ -95,18 +89,21 @@ If they disagreed about the model, neither could be trusted. They do not:
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
-ost = vo.download_obs(HIS, "ostia", "~/seaforward/data/OBS", Yorig=2000)
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 OST = 'data/OBS/ostia_2026-07-08_2026-07-17.nc'
 
 vo.scorecard(HIS, OST, 'temp', days=5, Yorig=2000)
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 SST  SEA-FORWARD vs OSTIA, collocated:
    date         cover     n     bias    rmsd   urmsd    corr
    2026-07-11   80.4%   22267  +0.138   0.722   0.708   0.935

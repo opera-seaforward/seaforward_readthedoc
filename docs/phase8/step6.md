@@ -8,14 +8,15 @@ nano cppdefs.h
 `Ctrl+W` `AGRIF` `Enter`. **The first match is the one you want** — around line 80, in
 your config's own block:
 
-```text
+``` { .text .no-copy }
 # define AGRIF                <- change from "# undef  AGRIF"
 # undef  AGRIF_2WAY           <- leave this as undef for now
 ```
 
 !!! warning
     **Do not edit the match near line 1066.** `Alt+W` jumps to it:
-    ```text
+
+    ``` { .text .no-copy }
     !                       Baroclinic Vortex Example (TEST AGRIF)
     # define AGRIF
     # undef  AGRIF_2WAY
@@ -29,7 +30,7 @@ Save: `Ctrl+O` `Enter`, `Ctrl+X`. Verify:
 grep -n "AGRIF" cppdefs.h | head -3
 ```
 
-```text
+``` { .text .no-copy }
 80:# define AGRIF
 81:# undef  AGRIF_2WAY
 1066:!                       Baroclinic Vortex Example (TEST AGRIF)
@@ -71,7 +72,7 @@ It takes noticeably longer.
 
 Success looks like `-lagrif` in the link line, then a small ASCII crocodile and:
 
-```text
+``` { .text .no-copy }
 CROCO is OK
 ```
 

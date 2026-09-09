@@ -18,16 +18,28 @@ three curves are directly comparable.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
-runs = ['forecast/model-runs/Canary_12/%s/fcst/CROCO_FILES/croco_his.nc' % t
-        for t in ('20260711', '20260712', '20260713')]
+# the most recent three cycles, whatever they are called — the driver tags
+# each folder with its build flags, so 20260902_plain rather than a bare date
+import glob, numpy as np
+runs = sorted(glob.glob(
+    'forecast/model-runs/Canary_12/*/fcst/CROCO_FILES/croco_his.nc'))[-3:]
+print('pooling:', [r.split('/')[3] for r in runs])
 
-ODY   = 'data/OBS/odyssea_2026-07-07_2026-07-24.nc'
-DUACS = 'data/OBS/duacs_2026-07-07_2026-07-24.nc'
-GC    = 'data/OBS/globcurrent_2026-07-07_2026-07-24.nc'
+# the observation files are named start_end, so pick the WIDEST of each —
+# a narrow file would not span every cycle being pooled
+import os
+def pick(src):
+    def span(f):
+        a, b = os.path.basename(f)[:-3].split('_')[-2:]
+        return np.datetime64(b) - np.datetime64(a)
+    return max(glob.glob('data/OBS/%s_*.nc' % src), key=span)
+ODY, DUACS, GC = pick('odyssea'), pick('duacs'), pick('globcurrent')
+print('observations:', [f.split('/')[-1] for f in (ODY, DUACS, GC)])
 
 vo.skill_panels(runs,
                 {'temp': ODY, 'ssh': DUACS, 'u': GC, 'v': GC},
@@ -44,7 +56,7 @@ faint lines are the individual cycles. Lead zero is the initial condition.*
 
 ## Temperature
 
-```text
+``` { .text .no-copy }
 SST  vs ODYSSEA, 3 cycles pooled:
    lead       n  SEA-FWD   parent  persist
     0.0    12657    0.750    0.879    0.750
@@ -65,7 +77,7 @@ the ocean itself changes.
 
 ## Sea level
 
-```text
+``` { .text .no-copy }
 SSH anomaly  vs DUACS, 3 cycles pooled:
    lead       n  SEA-FWD   parent  persist
     0.0    10611    0.037    0.037    0.037
@@ -82,7 +94,7 @@ one, so this panel says more about the reference than about either model.
 
 ## Currents
 
-```text
+``` { .text .no-copy }
 eastward velocity 15 m  vs GlobCurrent:      northward velocity 15 m:
    lead  SEA-FWD  parent  persist               lead  SEA-FWD  parent  persist
     0.0    0.106   0.110    0.106                0.0    0.118   0.126    0.118

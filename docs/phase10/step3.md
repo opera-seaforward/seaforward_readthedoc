@@ -33,7 +33,7 @@ print('M2 amp: mean %.3f m  max %.3f m' % (np.nanmean(m2), np.nanmax(m2)))
 
 For the Canary parent this gave:
 
-```text
+``` { .text .no-copy }
 vars: ['tide_Ephase','tide_Eamp','tide_Cmin','tide_Cmax','tide_Cangle','tide_Cphase','tide_Pamp','tide_Pphase']
 dims: {'tide_period': 10, 'eta_rho': 123, 'xi_rho': 81}
 M2 amp: mean 0.307 m  max 0.858 m
@@ -63,7 +63,7 @@ print('fill on ocean: %d   fill on land: %d' % ((fill&mask).sum(), (fill&~mask).
 "
 ```
 
-```text
+``` { .text .no-copy }
 fill on ocean: 3   fill on land: 492
 ```
 
@@ -84,7 +84,7 @@ for k, j, i in np.argwhere(fill & mask):
 "
 ```
 
-```text
+``` { .text .no-copy }
 wave 9 at -16.05E 18.32N, depth 74 m
 wave 9 at -16.92E 21.14N, depth 50 m
 wave 9 at -16.04E 23.36N, depth 50 m

@@ -9,7 +9,7 @@ and the implementation supports only those two odd ratios.
 **This is how you choose the child's resolution — indirectly.** You never type a
 resolution anywhere. You set `coef` in the zoom config, and the resolution follows:
 
-```text
+``` { .text .no-copy }
 child resolution = parent resolution / coef
 child timestep   = parent timestep   / coef
 ```

@@ -7,7 +7,7 @@ block, where `TIDES` is currently `undef`:
 grep -n "TIDES" cppdefs.h | head -4
 ```
 
-```text
+``` { .text .no-copy }
 97:# undef  TIDES
 295:# ifdef TIDES
 296:#  define SSH_TIDES
@@ -17,7 +17,7 @@ grep -n "TIDES" cppdefs.h | head -4
 Line 97 is the one to change — `# define TIDES`. Lines 295 onward are the sub-options,
 which are already set correctly and need no edit:
 
-```text
+``` { .text .no-copy }
 # ifdef TIDES
 #  define SSH_TIDES        /* tidal sea-surface elevation at the boundary */
 #  define UV_TIDES         /* tidal currents at the boundary */
@@ -55,7 +55,7 @@ points at the tide file:
 grep -n -A1 "^forcing:" croco.in
 ```
 
-```text
+``` { .text .no-copy }
 24:forcing: filename
 25-    CROCO_FILES/croco_frc.nc
 ```

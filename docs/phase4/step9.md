@@ -11,37 +11,37 @@ Make the Phase 2 Step 11 edits (title, S-coord, sponge) **plus** these. Each is 
 
 **Title.** `Ctrl-W` `BENGUELA TEST`, Enter. Change line 2 to:
 
-```
+``` { .text .no-copy }
         CANARY_12 HINDCAST
 ```
 
 **time_stepping** — `Ctrl-W` `time_stepping`, Enter. Set the values line (7 days at
 `dt=300` → `NTIMES = 7×86400/300 = 2016`):
 
-```
+``` { .text .no-copy }
                 2016      300      60      1
 ```
 
 **initial** (NRREC=1) — `Ctrl-W` `croco_ini.nc`, Enter. Change the filename line to
 your GLORYS ini, leaving the `1` on the NRREC line above it:
 
-```
+``` { .text .no-copy }
     CROCO_FILES/croco_ini_GLORYS_Y2025M12D02.nc
 ```
 
 **boundary** — `Ctrl-W` `croco_bry.nc`, Enter. Change the filename line to your
 GLORYS bry:
 
-```
+``` { .text .no-copy }
     CROCO_FILES/croco_bry_GLORYS_Y2025M12D02_to_Y2025M12D30.nc
 ```
 
 !!! warning
-    **Build the bry with a window that extends one day past the run at each end** — Dec 1 → Dec 10 for a Dec 2 → Dec 9 run. CROCO needs a boundary record bracketing every timestep; without the margin it stops at the last step with `ERROR in get_bry: cannot read variable 'bry_time'`. Generate it with `make_bry_hindcast --start_date 2025-12-01 --end_date 2025-12-10`.
+    **The filename above carries *your* dates, not these.** It is whatever Step 7's `make_bry_hindcast` produced — check with `ls ${CF}/croco_bry_*.nc`. Step 7's Dec 02 → Dec 30 window covers this 7-day run comfortably; if you build a narrower one, extend it a day past the run at each end. CROCO needs a boundary record bracketing every timestep, and without the margin it stops at the last step with `ERROR in get_bry: cannot read variable 'bry_time'`.
 
 **sponge** — `Ctrl-W` `X_SPONGE`, Enter. Replace the `XXX  XXX` values line:
 
-```
+``` { .text .no-copy }
                     0.                0.
 ```
 
@@ -52,7 +52,7 @@ edge, turn it on with `50000.  400.`
 **online (ERA5 form)** — `Ctrl-W` `byear`, Enter. Set the two lines below the
 `online:` header — the numbers line, then the data path:
 
-```
+``` { .text .no-copy }
 online:    byear  bmonth recordsperday byearend bmonthend / data path
            2025   12      24            2025     12
     /home/<you>/seaforward/hindcast/scratch/Canary_12/downloaded_data/ERA5/for_croco/
@@ -114,9 +114,9 @@ which nf-config                  # must show .../seaforward/opt_seq/bin/nf-confi
 !!! check
     After a few minutes: the CROCO logo and **`CROCO is OK`**, and a `croco` program appears.
 
-```bash
+    ```bash
     ls -lh croco
-```
+    ```
 
 ### Run it
 

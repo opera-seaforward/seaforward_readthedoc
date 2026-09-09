@@ -12,7 +12,7 @@ While logged in, open your [profile page](https://cds.climate.copernicus.eu/prof
 and find the **Personal Access Token** section (sometimes under an "API key" or "How
 to use the CDS API" heading). It shows two lines:
 
-```
+``` { .text .no-copy }
 url: https://cds.climate.copernicus.eu/api
 key: 12345678-abcd-1234-efgh-1234567890ab
 ```
@@ -32,7 +32,7 @@ nano ~/.cdsapirc
 
 Paste **exactly** the two lines from your profile, with your own token:
 
-```
+``` { .text .no-copy }
 url: https://cds.climate.copernicus.eu/api
 key: 12345678-abcd-1234-efgh-1234567890ab
 ```

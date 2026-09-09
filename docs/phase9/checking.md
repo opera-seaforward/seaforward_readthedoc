@@ -7,7 +7,10 @@ Copy the files first if the run is still going — reading a netCDF mid-write ca
 you a truncated last record.
 
 ```bash
-D=~/seaforward/forecast/model-runs/Agulhas_AGRIF/20260717_1way/spinup/CROCO_FILES
+# the cycle folder is named for the day it ran and the binary used,
+# so find it rather than typing it
+D=$(ls -d ~/seaforward/forecast/model-runs/Agulhas_AGRIF/*/spinup/CROCO_FILES | sort | tail -1)
+echo "using ${D}"
 cp $D/croco_his.nc   /tmp/ag_p.nc
 cp $D/croco_his.nc.1 /tmp/ag_c.nc
 
@@ -20,7 +23,7 @@ for f, l in [('/tmp/ag_p.nc', 'parent'), ('/tmp/ag_c.nc', 'child ')]:
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 parent 6 records, t = [9692.0, 9692.25, 9692.5, 9692.75, 9693.0, 9693.25]
 child  6 records, t = [9692.0, 9692.25, 9692.5, 9692.75, 9693.0, 9693.25]
 ```
@@ -31,6 +34,7 @@ comparison needs interpolating.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
@@ -90,13 +94,15 @@ confesses.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import xarray as xr, numpy as np, pandas as pd
+import xarray as xr, numpy as np, pandas as pd, glob
 
-MERC = ('forecast/model-runs/Agulhas_AGRIF/20260717_1way/'
-        'downloaded_data/MERCATOR/MERCATOR_20260717_00.nc')
+MERC = sorted(glob.glob(
+    'forecast/model-runs/Agulhas_AGRIF/*/downloaded_data/MERCATOR/'
+    'MERCATOR_*.nc'))[-1]
 YORIG = 2000
 m = xr.open_dataset(MERC)
 p = xr.open_dataset('/tmp/ag_p.nc', decode_times=False)
@@ -160,7 +166,7 @@ which is what matters.
 
 *Both grids against Mercator, surface temperature.*
 
-```text
+``` { .text .no-copy }
 parent RMSE = 0.2443     child RMSE = 0.2233
 ```
 
@@ -173,7 +179,7 @@ spin-up.
 
 *Both grids against Mercator, sea-surface height anomaly.*
 
-```text
+``` { .text .no-copy }
 parent RMSE = 0.0521     child RMSE = 0.0677
 ```
 
@@ -191,10 +197,12 @@ contains more easy ocean.
 
 ```bash
 cd ~/seaforward
+conda activate seaforward
 python3 << 'PYEOF'
-import xarray as xr, numpy as np, pandas as pd
-MERC = ('forecast/model-runs/Agulhas_AGRIF/20260717_1way/'
-        'downloaded_data/MERCATOR/MERCATOR_20260717_00.nc')
+import xarray as xr, numpy as np, pandas as pd, glob
+MERC = sorted(glob.glob(
+    'forecast/model-runs/Agulhas_AGRIF/*/downloaded_data/MERCATOR/'
+    'MERCATOR_*.nc'))[-1]
 m = xr.open_dataset(MERC)
 p = xr.open_dataset('/tmp/ag_p.nc', decode_times=False)
 c = xr.open_dataset('/tmp/ag_c.nc', decode_times=False)
@@ -228,7 +236,7 @@ for var, src in [('temp', m.thetao.isel(time=k, depth=0)), ('zeta', m.zos.isel(t
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 parent cells inside the child box: 5177
 
 TEMP

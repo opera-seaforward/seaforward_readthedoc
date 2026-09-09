@@ -14,7 +14,7 @@ nano ${CONFIG_DIR}/croco.in
 
 `Ctrl-W`, `BENGUELA TEST`, Enter. Change the title line to your config's name:
 
-```
+``` { .text .no-copy }
         CANARY_12 FORECAST
 ```
 
@@ -24,7 +24,7 @@ Cosmetic, but keeps configs identifiable.
 
 `Ctrl-W`, `S-coord`, Enter. The line below should read:
 
-```
+``` { .text .no-copy }
            7.0d0     2.0d0      200.0d0
 ```
 
@@ -37,7 +37,7 @@ has these — check, don't assume.
 `Ctrl-W`, `X_SPONGE`, Enter. The line **below** the header shows `XXX  XXX`, which
 CROCO cannot read. Set real numbers:
 
-```
+``` { .text .no-copy }
                     0.                0.
 ```
 

@@ -69,7 +69,7 @@ by name from the flags you passed.
 
 ### How the name is built
 
-```
+``` { .text .no-copy }
 croco_ + [ plain | 1way | 2way ] + [ _tides ] + [ _rivers ]
 ```
 
@@ -185,7 +185,7 @@ grep -n "^CONFIG_NAME=\|^EXTENTS=\|^FIX_GFS_LON=\|^COEF=" \
      ~/seaforward/forecast/run_forecast_cycle.sh
 ```
 
-```
+``` { .text .no-copy }
 58:CONFIG_NAME=Canary_12
 59:COEF=3
 63:EXTENTS="-23.5,-14.0,12.5,25.5"
@@ -200,7 +200,7 @@ nano +58 ~/seaforward/forecast/run_forecast_cycle.sh
 
 The whole block:
 
-```bash
+``` { .bash .no-copy }
 SEA_FORWARD_ROOT=${HOME}/seaforward
 CONFIG_NAME=Canary_12               # must match your config folder and cppdefs name
 COEF=3                              # AGRIF refinement ratio, only used with --child
@@ -256,7 +256,7 @@ tail -f fcst_$(date -u +%Y%m%d).log        # Ctrl-C stops watching, not the run
 
 ## B.6 — Where the output goes
 
-```
+``` { .text .no-copy }
 forecast/model-runs/Canary_12/<date>/
 ├── spinup/
 │   └── CROCO_FILES/
@@ -276,7 +276,7 @@ compiled binaries and the grid, reused every cycle.
 To produce a fresh forecast every morning, add a cron entry with `crontab -e`. For
 06:00 UTC:
 
-```
+``` { .text .no-copy }
 0 6 * * *  /bin/bash -lc 'source ~/seaforward/env.sh && cd ~/seaforward/forecast && ./run_forecast_cycle.sh >> ~/seaforward/forecast/cron.log 2>&1'
 ```
 

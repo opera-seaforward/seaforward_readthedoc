@@ -10,16 +10,20 @@ Three views, all in `sftools.validation`.
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
+import glob
 import sftools.validation as val
 
-HIS  = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
-MERC = ('forecast/model-runs/Canary_12/20260711/downloaded_data/'
-        'MERCATOR/MERCATOR_20260711_00.nc')
+HIS  = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+MERC = glob.glob("${CYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc")[0]
 
 val.compare_section(HIS, MERC, 'temp', -21.0, 21.0, -17.0, 21.0,
-                    date='2026-07-14', depth_max=1000, Yorig=2000,
+                    depth_max=1000, Yorig=2000,
                     out='section.png')
 PYEOF
 ```
@@ -40,15 +44,19 @@ you want to see, occupies the top tenth of the figure.
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
+import glob
 import sftools.validation as val
 
-HIS  = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
-MERC = ('forecast/model-runs/Canary_12/20260711/downloaded_data/'
-        'MERCATOR/MERCATOR_20260711_00.nc')
+HIS  = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+MERC = glob.glob("${CYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc")[0]
 
-val.compare_profile(HIS, MERC, 'temp', -19.0, 21.0, date='2026-07-14',
+val.compare_profile(HIS, MERC, 'temp', -19.0, 21.0,
                     Yorig=2000, out='profile.png')
 PYEOF
 ```
@@ -65,15 +73,19 @@ near the coast and near the surface, which is where the finer grid does its work
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
+import glob
 import sftools.validation as val
 
-HIS  = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
-MERC = ('forecast/model-runs/Canary_12/20260711/downloaded_data/'
-        'MERCATOR/MERCATOR_20260711_00.nc')
+HIS  = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+MERC = glob.glob("${CYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc")[0]
 
-val.error_vs_depth(HIS, MERC, field='temp', date='2026-07-14', Yorig=2000,
+val.error_vs_depth(HIS, MERC, field='temp', Yorig=2000,
                    out='depth.png')
 PYEOF
 ```
@@ -91,17 +103,22 @@ each point:
 
 ```bash
 cd ~/seaforward
-python3 << 'PYEOF'
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import numpy as np, glob
 import sftools.postprocess as pp
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 ARM = sorted(glob.glob('data/OBS/armor3d_*.nc'))[-1]
 
 ds = pp.open_history(HIS, Yorig=2000)
 m  = pp.field_at_depth(ds, 'temp', 100, tindex=-1).values
-r  = vo.load_reference(ARM, 'temp', ds, date='2026-07-14', depth_m=100)
+date = str(pp.times(ds)[-1])[:10]      # the run's last record
+r  = vo.load_reference(ARM, 'temp', ds, date=date, depth_m=100)
 h  = ds.h.values
 d  = m - r
 
@@ -113,7 +130,7 @@ for lo, hi in [(100, 200), (200, 500), (500, 1000), (1000, 9000)]:
 PYEOF
 ```
 
-```text
+``` { .text .no-copy }
 h   100-  200 m: n=  173  bias  +1.17  rmse  1.70
 h   200-  500 m: n=  295  bias  +1.27  rmse  1.61
 h   500- 1000 m: n=  234  bias  +0.79  rmse  1.10
