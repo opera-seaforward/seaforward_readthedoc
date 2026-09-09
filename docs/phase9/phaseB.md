@@ -109,12 +109,17 @@ Two deliberate departures from the parent:
     **That reasoning did not predict what happened** — see *The `rx1` result* at the
     end of this page.
 
-Setup and build:
+**Set up the directory** — the parent grid goes alongside the child, since
+croco_pytools reads both:
 
 ```bash
 mkdir -p ~/seaforward/forecast/scratch/Agulhas_AGRIF/CROCO_FILES
 cp ~/seaforward/forecast/scratch/Agulhas_12/CROCO_FILES/croco_grd.nc \
    ~/seaforward/forecast/scratch/Agulhas_AGRIF/CROCO_FILES/croco_grd.nc
+```
+
+**Then write the build script.** This opens an editor — paste the Python
+below into it, save with `Ctrl-O`, exit with `Ctrl-X`:
 
 ```bash
 cd ~/seaforward/code/croco_pytools/prepro
@@ -370,27 +375,50 @@ grep -cE "^start_date:|^end_date:|^time_stepping:|^restart:|^history:|^averages:
 One-way and two-way differ by a **compile-time** flag, so build both once and let the
 driver choose between them.
 
+**1 — edit `cppdefs.h` for the one-way build:**
+
 ```bash
 cd ~/seaforward/forecast/scratch/Agulhas_AGRIF
 nano cppdefs.h
-#   Ctrl+W AGRIF -> FIRST match (~line 80, your REGIONAL block --
-#   NOT the one near 1066, which is the VORTEX test case)
-#     # define AGRIF
-#     # undef  AGRIF_2WAY
+```
 
+`Ctrl+W` `AGRIF`, and take the **first** match — around line 80, in your
+REGIONAL block. The one near line 1066 belongs to the VORTEX test case. Set:
+
+``` { .c .no-copy }
+# define AGRIF
+# undef  AGRIF_2WAY
+```
+
+**2 — compile it:**
+
+```bash
 conda deactivate
 source ~/seaforward/env.sh
 which nf-config                 # must be .../opt_seq/bin/nf-config
-./jobcomp 2>&1 | tail -3        # CROCO is OK
+./jobcomp 2>&1 | tail -3        # ends with: CROCO is OK
 mv croco croco_1way
+```
 
+**3 — edit it again for two-way:**
+
+```bash
 nano cppdefs.h
-#   Ctrl+W AGRIF_2WAY -> line 81 only:  # define AGRIF_2WAY
-#   line 80 stays "# define AGRIF"
+```
 
+`Ctrl+W` `AGRIF_2WAY`, line 81 only. Line 80 stays as it is:
+
+``` { .c .no-copy }
+# define AGRIF
+# define AGRIF_2WAY
+```
+
+**4 — compile again:**
+
+```bash
 ./jobcomp 2>&1 | tail -3
 mv croco croco_2way
-ls -lh croco_1way croco_2way    # 1.7M each
+ls -lh croco_1way croco_2way    # about 1.7M each
 ```
 
 **`AGRIF` stays defined in both.** It means "there is a child at all". Only
