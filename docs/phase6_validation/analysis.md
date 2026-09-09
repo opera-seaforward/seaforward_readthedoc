@@ -50,9 +50,12 @@ you can see between the rows is a real difference.
 days=None                          # every record
 days=5                             # the first five
 days=(2, 7)                        # records 2 to 6
+days=('2026-09-01', '2026-09-05')  # a date range, inclusive
 days=['2026-07-11', '2026-07-15']  # named dates
 days=[0, 3, 6]                     # record indices
 ```
+
+A **tuple** of two dates is a range — every record between them, inclusive. A **list** of dates picks those specific days.
 
 Named dates are matched to the nearest record and raise if the nearest is more than a day
 away, so a typo produces an error rather than a quiet comparison against the wrong day.
