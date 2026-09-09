@@ -114,9 +114,9 @@ which nf-config                  # must show .../seaforward/opt_seq/bin/nf-confi
 !!! check
     After a few minutes: the CROCO logo and **`CROCO is OK`**, and a `croco` program appears.
 
-```bash
+    ```bash
     ls -lh croco
-```
+    ```
 
 ### Run it
 

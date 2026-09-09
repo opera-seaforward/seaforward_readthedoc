@@ -16,11 +16,11 @@ your config's own block:
 !!! warning
     **Do not edit the match near line 1066.** `Alt+W` jumps to it:
 
-``` { .text .no-copy }
+    ``` { .text .no-copy }
     !                       Baroclinic Vortex Example (TEST AGRIF)
     # define AGRIF
     # undef  AGRIF_2WAY
-```
+    ```
 
     That is the VORTEX test case's block, inside a different `#elif defined`. Editing it does nothing for your config and will confuse you later.
 
