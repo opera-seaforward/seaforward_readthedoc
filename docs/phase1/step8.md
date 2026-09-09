@@ -26,10 +26,9 @@ rm croco_pytools-v2.0.4.tar.gz
 
 !!! check
     Both folders exist with the clean names:
-
-```bash
+    ```bash
     ls -d ~/seaforward/code/croco ~/seaforward/code/croco_pytools && echo "both present"
-```
+    ```
 
 !!! note
     **Clean names, no versions.** The folders are named exactly `croco` and `croco_pytools` — the version you downloaded (v2.1.3 / v2.0.4) is recorded in `install/04_get_croco.sh`; the folder names stay clean so nothing else in the project has to know the version. If you download **different** versions, the `mv` targets are still `croco` and `croco_pytools`.

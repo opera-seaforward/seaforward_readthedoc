@@ -46,16 +46,18 @@ To run them unattended in sequence, chain with `&&`:
 
 !!! warning
     **Run only one instance at a time.** Launch the driver again while a previous run is still going and the two write to the same files — `parent_<date>.nc`, the ini and bry — at once. The collisions produce errors that look like bugs but are just two runs stepping on each other: spurious `Invalid datetime`, half-written files. Before starting fresh, check for leftovers:
-
-```bash
+    ```bash
     # see what's running
     ps aux | grep run_nest_today.sh | grep -v grep
     jobs
     # if one is still going and you want to replace it
     pkill -f run_nest_today.sh; sleep 1
-```
+    ```
 
-    `pkill -f` matches the whole command line, so it catches `nohup ./run_nest_today.sh` and `bash run_nest_today.sh` alike; `sleep 1` gives it a moment to die before you relaunch.
+    `pkill -f` matches the whole command line, so it catches
+    `nohup ./run_nest_today.sh` and `bash run_nest_today.sh`
+    alike; `sleep 1` gives it a moment to die before you
+    relaunch.
 
 ## What the driver does
 

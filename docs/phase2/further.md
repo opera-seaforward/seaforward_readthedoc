@@ -72,7 +72,7 @@ the parent that a child needs. To build the child:
 - **[Phase 7 — Nesting (offline)](../phase7/07_nesting.md)** builds the child from
   the parent's saved output, running the two separately. It allows a different
   vertical grid.
-- **[Phase 8 — AGRIF nesting](../phase8/08_agrif.md)** is the step-by-step how-to for
+- **[Phase 8 — AGRIF nesting (online)](../phase8/08_agrif.md)** is the step-by-step how-to for
   the online route: choosing the box against the parent's mask, building the child
   grid, its initial condition, the `croco.in.1`, turning AGRIF on, and running
   one-way then two-way.

@@ -16,15 +16,15 @@ cp croco.in croco.in.1
 !!! note
     **First, check the parent's own filenames.** If you copied `croco.in` from a config the driver has run, it points at that cycle's dated files — `croco_ini_MERCATOR_20260711_00.nc` rather than `croco_ini.nc` — while Step 4 staged them under the short names. Fix `croco.in` before going further:
 
-``` { .text .no-copy }
+    ``` { .text .no-copy }
     boundary: filename
         CROCO_FILES/croco_bry.nc
     initial: NRREC / filename
               1
         CROCO_FILES/croco_ini.nc
-```
+    ```
 
-    Then confirm both agree with what is on disk:
+Then confirm both agree with what is on disk:
 
 ```bash
     ls CROCO_FILES/

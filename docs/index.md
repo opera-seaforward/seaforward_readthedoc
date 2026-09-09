@@ -5,7 +5,7 @@
 
 SEA-FORWARD (**S**imple **E**ducational **A**ccess for **For**ecast and **War**ning **D**evelopers) is a free, open-source toolkit that teaches you to build and run a
 complete ocean forecasting system on your own computer — from raw input data
-through to a validated 5-day forecast you can plot and interpret. SEA-FORWARD implements the OceanPrediction-A architecture described in the figure below.
+through to a validated 5-day forecast you can plot and interpret. SEA-FORWARD implements the [OceanPrediction-A architecture](https://www.unoceanprediction.org/sites/default/files/file/2024-12/Architecture%20Guide%20Spreads%20MERCATOR%20EDITORIAL_241122.pdf) described in the figure below.
 
 <figure style="text-align: center; margin: 20px 0;">
   <img src="./img/SEA-FORWARD_Architecture.png" alt="Architecture" style="max-width: 100%; height: auto;">

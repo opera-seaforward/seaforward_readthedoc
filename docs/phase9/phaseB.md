@@ -121,7 +121,6 @@ cp ~/seaforward/forecast/scratch/Agulhas_12/CROCO_FILES/croco_grd.nc \
 **Then write the build script.** This opens an editor — paste the Python
 below into it, save with `Ctrl-O`, exit with `Ctrl-X`:
 
-```bash
 cd ~/seaforward/code/croco_pytools/prepro
 nano build_agulhas_agrif.py
 ```

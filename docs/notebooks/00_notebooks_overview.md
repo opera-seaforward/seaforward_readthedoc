@@ -1,38 +1,48 @@
 # notebooks/ — SEA-FORWARD Jupyter Notebook Toolkit
 
-Guided, interactive counterparts to the automated pipeline (Steps 1-5 of the
-operational workflow, `sftools.cli` / `sftools/run_validation.py`). Owned by
-Python Dev 1/2, DCC processes **V1** (validation) and **D1** (downstream
-exercises, sensitivity analysis, animation).
+Guided, interactive pipeline owned by DCC processes **V1** (validation) and **D1** (downstream
+post-processing, exercises, sensitivity analysis, animation).
 
 ``` { .text .no-copy }
 notebooks/
-├── 01_visualisation.ipynb   ← maps, sections, animations (not in this package)
-├── 02_validation.ipynb      ← bias maps, scatter plots, Taylor diagrams, time
-│                               series, optional in-situ scoring, batch history (V1)
-├── 03_exercises.ipynb       ← guided exercises: upwelling, MLD, coastal jet, eddies (D1)
-├── 04_sensitivity.ipynb     ← wind-forcing sensitivity study, Step 5.3 (U2 -> C1 -> D1)
-├── 05_animation.ipynb       ← SSH+eddies, currents, scalar fields, particle
-│                               advection (D1, needs py-eddy-tracker)
-├── _demo_data.py            ← shared helper, NOT a notebook — see below
-└── region_cells.py          ← region-picker helper cells
+├── 01_seaforward_postprocess_plot.ipynb  ← maps, sections, profiles, Hovmöller,
+│                                            time series (D1)
+├── 02_validation.ipynb                   ← single-cycle validation: bias maps,
+│                                            scatter plots, Taylor diagrams, time
+│                                            series, pass/fail summary, optional
+│                                            in-situ scoring, HTML report, batch
+│                                            history across cycles (V1)
+├── 03_composite_validation.ipynb         ← multi-cycle validation, merged and
+│                                            indexed by forecast LEAD TIME rather
+│                                            than calendar date (V1)
+├── 04_exercises.ipynb                    ← guided exercises: upwelling index,
+│                                            MLD, coastal jet, eddy detection (D1)
+├── 05_sensitivity.ipynb                  ← wind-forcing sensitivity study,
+│                                            Step 5.3 (U3 -> C1 -> D1)
+├── 06_animation.ipynb                    ← 5 animations built on a single entry
+│                                            point, sftools.animation.animate()
+│                                            (D1)
+├── _paths.py                             ← shared helper, NOT a notebook — cycle
+│                                            discovery + path resolution, see below
+└── region_cells.py                       ← region-picker helper cells
 
 sftools/
-├── validation.py                 ← grid-level CROCO-vs-reference comparisons (class 1/2)
-├── validation_godae.py           ← GODAE OceanView scorecard + optional in-situ (class 4)
-├── animate.py                    ← SSH/eddy, current, scalar, particle animations
-└── run_validation.py             ← validates ONE cycle (Step 4.1) -- see below
+├── validation.py                 ← single module for every single-cycle validation
+│                                    building block: bias maps, profiles, scatter,
+│                                    GODAE scorecard/Taylor diagram, satellite
+│                                    SST/SSS, optional in-situ, HTML summary
+│                                    (imported as `val` in 02_validation.ipynb and
+│                                    03_composite_validation.ipynb — some of that
+│                                    module's docstrings/prose refer to logical
+│                                    sub-areas as "validation_godae"/
+│                                    "validation_satellite"; there is no separate
+│                                    top-level module by either of those names)
+├── validation_composite.py       ← lead-time compositing across cycles (imported
+│                                    as `vc` in 03_composite_validation.ipynb only)
+├── download/cmems.py             ← Copernicus Marine availability checks + downloads
+│                                    (`from sftools.download import cmems`)
+└── animation.py                  ← sftools.animation.animate() — the single entry
+                                    point behind every animation in 06_animation.ipynb
 
-forecast/
-├── validate_all_cycles.sh           ← validates EVERY not-yet-validated cycle
-└── install_validation_crontab.sh    ← schedules validate_all_cycles.sh via cron
-
-validation/
-└── test_sftools_animate_validation.py   ← pytest suite for validation_godae.py / animate.py
 ```
 
-**A note on that last change:** `validation_godae.py` and `animate.py` used
-to also have stale duplicate copies under `validation/` (left over from
-early development, before they were finalised) — those have been removed.
-`sftools/` is now the single source of truth for every importable module;
-`validation/` holds only the test suite.
