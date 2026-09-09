@@ -12,11 +12,14 @@ This works with any gap-free reference. OSTIA is the natural one for SST.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 OST = 'data/OBS/ostia_2026-07-08_2026-07-17.nc'
 
 vo.compare_days(HIS, OST, 'temp',
@@ -69,11 +72,14 @@ For a single date:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 OST = 'data/OBS/ostia_2026-07-08_2026-07-17.nc'
 
 vo.compare(HIS, OST, 'temp', date='2026-07-14', daily_mean=True,
@@ -91,11 +97,14 @@ Every scale and colour can be set rather than inferred:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 OST = 'data/OBS/ostia_2026-07-08_2026-07-17.nc'
 
 vo.compare_days(HIS, OST, 'temp', days=3, Yorig=2000,
@@ -120,11 +129,14 @@ The same call, a different reference:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
-HIS   = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS   = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 DUACS = 'data/OBS/duacs_2026-07-07_2026-07-24.nc'
 GC    = 'data/OBS/globcurrent_2026-07-07_2026-07-24.nc'
 ARM   = 'data/OBS/armor3d_2026-07-08_2026-07-17.nc'

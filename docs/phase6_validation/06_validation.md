@@ -54,10 +54,13 @@ dates and grid and fetches only that:
 mkdir -p ~/seaforward/data/OBS
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 OBS = '~/seaforward/data/OBS'
 
 for src in ('ostia', 'odyssea', 'duacs', 'globcurrent', 'armor3d'):

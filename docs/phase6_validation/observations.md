@@ -10,11 +10,14 @@ other way: sample the model at each observed point.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 ODY = 'data/OBS/odyssea_2026-07-07_2026-07-24.nc'
 
 vo.compare(HIS, ODY, 'temp', method='collocate', date='2026-07-14',
@@ -37,10 +40,13 @@ Statistics per day, no figure:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 ODY = 'data/OBS/odyssea_2026-07-07_2026-07-24.nc'
 
 vo.scorecard(HIS, ODY, 'temp', days=5, Yorig=2000)
@@ -84,10 +90,13 @@ If they disagreed about the model, neither could be trusted. They do not:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+
+# the cycle folder carries the driver's flag tag, so find it
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+python3 << PYEOF
 import sftools.validation_obs as vo
 
-HIS = 'forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc'
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 OST = 'data/OBS/ostia_2026-07-08_2026-07-17.nc'
 
 vo.scorecard(HIS, OST, 'temp', days=5, Yorig=2000)

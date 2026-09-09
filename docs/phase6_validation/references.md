@@ -8,12 +8,22 @@ somethings are, how to get them, and what each cannot do.
 One call, sized to the run being validated. It reads the run's dates and grid, widens
 them slightly, and fetches only that:
 
-```python
+```bash
+cd ~/seaforward
+conda activate seaforward
+
+# the cycle folder carries the driver's flag tag — 20260902_plain — so
+# take the most recent rather than typing a date
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+
+python3 << PY
 import sftools.validation_obs as vo
 
-HIS = "forecast/model-runs/Canary_12/20260711/fcst/CROCO_FILES/croco_his.nc"
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 
 ost = vo.download_obs(HIS, "ostia", "~/seaforward/data/OBS", Yorig=2000)
+print("downloaded:", ost)
+PY
 ```
 
 ``` { .text .no-copy }
@@ -32,8 +42,14 @@ reprocessed twin, the same split as Mercator and GLORYS.
 
 To see what a reference provides before using it:
 
-```python
+```bash
+cd ~/seaforward
+conda activate seaforward
+
+python3 << 'PY'
+import sftools.validation_obs as vo
 vo.describe("armor3d")
+PY
 ```
 
 ## What each one is
@@ -138,9 +154,20 @@ the skill page does.
 
 `download_obs` derives its request from the run itself:
 
-```python
-vo.run_window(HIS, Yorig=2000)     # ('2026-07-10', '2026-07-17')
-vo.run_domain(HIS, Yorig=2000)     # (-22.65, -14.85, 13.44, 24.54)
+```bash
+cd ~/seaforward
+conda activate seaforward
+
+CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+
+python3 << PY
+import sftools.validation_obs as vo
+
+HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
+
+print("window:", vo.run_window(HIS, Yorig=2000))
+print("domain:", vo.run_domain(HIS, Yorig=2000))
+PY
 ```
 
 The window is padded by a day on each side, because a daily mean is centred at noon
@@ -151,10 +178,22 @@ reference points beyond the edge rather than extrapolating.
 When several cycles are being compared together, one file covering all of them is
 simpler than one per cycle:
 
-```python
-# the last cycle runs latest; pad backwards to reach the first cycle's start
-vo.download_obs(LAST_HIS, "odyssea", "~/seaforward/data/OBS",
-                Yorig=2000, pad_days=6)
+```bash
+cd ~/seaforward
+conda activate seaforward
+
+# the last cycle runs latest; pad backwards to reach the first one
+LAST=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+
+python3 << PY
+import sftools.validation_obs as vo
+
+HIS = "${LAST}fcst/CROCO_FILES/croco_his.nc"
+
+for src in ("odyssea", "duacs", "globcurrent"):
+    print(vo.download_obs(HIS, src, "~/seaforward/data/OBS",
+                          Yorig=2000, pad_days=6))
+PY
 ```
 
 !!! note
