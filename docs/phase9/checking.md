@@ -7,7 +7,10 @@ Copy the files first if the run is still going — reading a netCDF mid-write ca
 you a truncated last record.
 
 ```bash
-D=~/seaforward/forecast/model-runs/Agulhas_AGRIF/20260717_1way/spinup/CROCO_FILES
+# the cycle folder is named for the day it ran and the binary used,
+# so find it rather than typing it
+D=$(ls -d ~/seaforward/forecast/model-runs/Agulhas_AGRIF/*/spinup/CROCO_FILES | sort | tail -1)
+echo "using ${D}"
 cp $D/croco_his.nc   /tmp/ag_p.nc
 cp $D/croco_his.nc.1 /tmp/ag_c.nc
 
@@ -95,10 +98,11 @@ conda activate seaforward
 python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import xarray as xr, numpy as np, pandas as pd
+import xarray as xr, numpy as np, pandas as pd, glob
 
-MERC = ('forecast/model-runs/Agulhas_AGRIF/20260717_1way/'
-        'downloaded_data/MERCATOR/MERCATOR_20260717_00.nc')
+MERC = sorted(glob.glob(
+    'forecast/model-runs/Agulhas_AGRIF/*/downloaded_data/MERCATOR/'
+    'MERCATOR_*.nc'))[-1]
 YORIG = 2000
 m = xr.open_dataset(MERC)
 p = xr.open_dataset('/tmp/ag_p.nc', decode_times=False)
@@ -195,9 +199,10 @@ contains more easy ocean.
 cd ~/seaforward
 conda activate seaforward
 python3 << 'PYEOF'
-import xarray as xr, numpy as np, pandas as pd
-MERC = ('forecast/model-runs/Agulhas_AGRIF/20260717_1way/'
-        'downloaded_data/MERCATOR/MERCATOR_20260717_00.nc')
+import xarray as xr, numpy as np, pandas as pd, glob
+MERC = sorted(glob.glob(
+    'forecast/model-runs/Agulhas_AGRIF/*/downloaded_data/MERCATOR/'
+    'MERCATOR_*.nc'))[-1]
 m = xr.open_dataset(MERC)
 p = xr.open_dataset('/tmp/ag_p.nc', decode_times=False)
 c = xr.open_dataset('/tmp/ag_c.nc', decode_times=False)
