@@ -23,12 +23,23 @@ python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
-runs = ['forecast/model-runs/Canary_12/%s/fcst/CROCO_FILES/croco_his.nc' % t
-        for t in ('20260711', '20260712', '20260713')]
+# the most recent three cycles, whatever they are called — the driver tags
+# each folder with its build flags, so 20260902_plain rather than a bare date
+import glob, numpy as np
+runs = sorted(glob.glob(
+    'forecast/model-runs/Canary_12/*/fcst/CROCO_FILES/croco_his.nc'))[-3:]
+print('pooling:', [r.split('/')[3] for r in runs])
 
-ODY   = 'data/OBS/odyssea_2026-07-07_2026-07-24.nc'
-DUACS = 'data/OBS/duacs_2026-07-07_2026-07-24.nc'
-GC    = 'data/OBS/globcurrent_2026-07-07_2026-07-24.nc'
+# the observation files are named start_end, so pick the WIDEST of each —
+# a narrow file would not span every cycle being pooled
+import os
+def pick(src):
+    def span(f):
+        a, b = os.path.basename(f)[:-3].split('_')[-2:]
+        return np.datetime64(b) - np.datetime64(a)
+    return max(glob.glob('data/OBS/%s_*.nc' % src), key=span)
+ODY, DUACS, GC = pick('odyssea'), pick('duacs'), pick('globcurrent')
+print('observations:', [f.split('/')[-1] for f in (ODY, DUACS, GC)])
 
 vo.skill_panels(runs,
                 {'temp': ODY, 'ssh': DUACS, 'u': GC, 'v': GC},
