@@ -23,7 +23,7 @@ HIS  = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 MERC = glob.glob("${CYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc")[0]
 
 val.compare_section(HIS, MERC, 'temp', -21.0, 21.0, -17.0, 21.0,
-                    date='2026-07-14', depth_max=1000, Yorig=2000,
+                    depth_max=1000, Yorig=2000,
                     out='section.png')
 PYEOF
 ```
@@ -56,7 +56,7 @@ import sftools.validation as val
 HIS  = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 MERC = glob.glob("${CYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc")[0]
 
-val.compare_profile(HIS, MERC, 'temp', -19.0, 21.0, date='2026-07-14',
+val.compare_profile(HIS, MERC, 'temp', -19.0, 21.0,
                     Yorig=2000, out='profile.png')
 PYEOF
 ```
@@ -85,7 +85,7 @@ import sftools.validation as val
 HIS  = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 MERC = glob.glob("${CYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc")[0]
 
-val.error_vs_depth(HIS, MERC, field='temp', date='2026-07-14', Yorig=2000,
+val.error_vs_depth(HIS, MERC, field='temp', Yorig=2000,
                    out='depth.png')
 PYEOF
 ```
@@ -117,7 +117,8 @@ ARM = sorted(glob.glob('data/OBS/armor3d_*.nc'))[-1]
 
 ds = pp.open_history(HIS, Yorig=2000)
 m  = pp.field_at_depth(ds, 'temp', 100, tindex=-1).values
-r  = vo.load_reference(ARM, 'temp', ds, date='2026-07-14', depth_m=100)
+date = str(pp.times(ds)[-1])[:10]      # the run's last record
+r  = vo.load_reference(ARM, 'temp', ds, date=date, depth_m=100)
 h  = ds.h.values
 d  = m - r
 
