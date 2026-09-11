@@ -147,3 +147,11 @@ downstream product stays visible without additional machinery.
 SEA-FORWARD is released under an open-source licence, with input data and reference results archived on Zenodo with permanent DOIs. See the [LICENSE](https://github.com/opera-seaforward/seaforward_readthedoc/blob/main/LICENSE) file and the citation guidance in the repository.
 
 <!-- TODO: confirm the Zenodo DOI and licence name once issued -->
+
+## Acknowledgements
+
+We thank the **[SOMISANA](https://somisana.ac.za/)** team at
+**[SAEON](https://www.saeon.ac.za/)**, the South African Environmental Observation
+Network, for documenting their CROCO setup openly. Their
+[somisana-croco wiki](https://github.com/SAEON/somisana-croco/wiki) was a useful
+reference while we designed SEA-FORWARD.
