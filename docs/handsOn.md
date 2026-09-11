@@ -19,5 +19,5 @@
 
 - Commands are shown for the **Canary_12** example region (22°W–15.5°W, 14°N–24°N, 1/12°). Replace its numbers with your region's.
 - `~/seaforward` is the repository root; `<you>` is your Linux username.
-- ✅ after a step tells you what a correct result looks like.
-- ⚠️ marks a place people commonly trip; read those twice.
+- **Check** boxes show what a correct result looks like.
+- **Warning** boxes mark a place people commonly trip; read those twice.

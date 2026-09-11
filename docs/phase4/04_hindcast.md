@@ -32,7 +32,7 @@ The worked example is again **Canary_12** (22°W–15.5°W, 14°N–24°N, 1/12�
     **Prerequisites:** Phase 1 (Setup) done, and you've read Phases 2–3 (the hindcast reuses their steps and vocabulary). You need a **CDS account + API key** for ERA5 (explained in [Step 3](step3.md)).
 
 !!! note
-    **How to read this guide** — same conventions as Phase 2: `nano` hand-edits with **What / Why**, `✅ CHECK`, `⚠️ WATCH`.
+    **How to read this guide** — same conventions as Phase 2: `nano` hand-edits with **What / Why**, and check and warning boxes.
 
 ---
 

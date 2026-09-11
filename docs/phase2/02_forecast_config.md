@@ -36,8 +36,8 @@ values you edit here.
   **find** and what to **change it to**, with a **What / Why** for each edit.
 - A few steps — downloading data, building the grid, compiling — are run rather
   than edited, and the guide explains what each is doing.
-- **✅ CHECK** shows what a correct result looks like.
-- **⚠️ WATCH** marks a trap.
+- **Check** boxes show what a correct result looks like.
+- **Warning** boxes mark a trap.
 - A **workflow diagram** opens each step, with the piece that step produces
   highlighted, so you always see where you are in the build.
 

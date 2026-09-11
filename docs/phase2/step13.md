@@ -45,7 +45,7 @@ counting toward 2016. The kinetic-energy column should stay small and steady (no
 grow), and `trd` should be `0`.
 
 !!! check
-    ✅ **CHECK** — it ends with **`MAIN: DONE`** and writes the outputs:
+    It ends with **`MAIN: DONE`** and writes the outputs:
      ```bash
       ls -lh ${CF}/croco_his.nc ${CF}/croco_avg.nc
       tail -6 run.log
