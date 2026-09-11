@@ -43,7 +43,7 @@ print('PARENT lon %.2f..%.2f  lat %.2f..%.2f' % f(p))
 
 !!! check
     For Canary_25 against Canary_12:
-    ```
+    ``` { .text .no-copy }
     CHILD  lon -21.81..-15.69  lat 14.26..23.72
     PARENT lon -22.15..-15.35  lat 13.94..24.04
     ```
