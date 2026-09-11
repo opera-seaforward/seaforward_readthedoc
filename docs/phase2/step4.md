@@ -1,13 +1,6 @@
-Now let's talk about how to construct the ocean boundaries.
-
-![ocean_boundaries](../img/ocean_boundaries.png)
-
-*Step 4 sets up the **ocean** side of the chain: the global ocean product supplies
-both the initial condition and the boundary conditions.*
-
-`crocotools_param.py` tells the tools that build those conditions about your grid.
-The CLI reads it from the folder you point `make_ini`/`make_bry` at — your
-`CROCO_FILES`. Create and edit it:
+`crocotools_param.py` tells the tools that build the initial and boundary conditions
+about your grid. The CLI reads it from the folder you point `make_ini`/`make_bry` at —
+your `CROCO_FILES`. Create and edit it:
 
 ```bash
 nano ${CF}/crocotools_param.py
@@ -16,7 +9,7 @@ nano ${CF}/crocotools_param.py
 The file is empty. **Type in** the following (don't type the explanations that
 follow):
 
-```python
+``` { .python .no-copy }
 inputdata    = 'mercator'
 Nzgoodmin    = 4
 multi_files  = False

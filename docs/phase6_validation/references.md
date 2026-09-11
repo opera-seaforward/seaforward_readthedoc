@@ -123,6 +123,20 @@ makes a subsurface comparison possible at all.
 !!! warning
     **ARMOR3D over a shelf is unreliable.** Argo floats avoid shallow water, so the covariances it relies on are thin there, and at 1/8° a narrow shelf is barely resolved. Comparing at 100 m over the Canary slope gives a bias of +1.2 °C against −0.3 °C in deep water — the difference is a property of the reference, not the model. Use `min_depth=500` to exclude it.
 
+!!! note
+    **ARMOR3D is published weekly**, so a recent run often ends after its last
+    record. `download_obs` notices, adjusts the window to what exists and says so.
+    If the adjusted window no longer overlaps the run at all it warns, because a
+    comparison against it will then raise rather than quietly compare the wrong
+    days.
+
+!!! note
+    **ARMOR3D is published weekly**, so a recent run often ends after its last
+    record. `download_obs` notices, adjusts the window to what exists and says so.
+    If the adjusted window no longer overlaps the run at all it warns, because a
+    comparison against it will then raise rather than quietly compare the wrong
+    days.
+
 ### Mercator and GLORYS — the parent
 
 The product that supplied the initial and boundary conditions. Mercator's
