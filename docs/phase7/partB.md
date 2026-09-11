@@ -14,7 +14,7 @@ cd ~/seaforward/forecast
 ```
 
 !!! warning
-    **Run them in that order — the child cannot go first.** `run_nest_today.sh` reads the parent's `croco_his.nc` and its GFS forcing, so on its own it stops with `ERROR: no parent cycle under model-runs/Canary_12/`. By default it takes the most recent parent cycle, whatever the driver tagged it — `20260713_plain`, `20260713_1way_tides` — so you never type a date. To nest inside a particular one, name it: `PARENT_TAG=20260711_plain ./run_nest_today.sh`. If the tag does not match, it lists the cycles you have.
+    **Run them in that order — the child cannot go first.** `run_nest_today.sh` reads the parent's `croco_his.nc` and its GFS forcing, so on its own it stops and tells you to run the parent first. By default it takes **today's** parent cycle, whatever the driver tagged it — `20260909_plain`, `20260909_1way_tides` — so you never type a date. A child nested inside yesterday's parent would be silently wrong, so it fails rather than guessing. To nest inside an earlier cycle, name it: `PARENT_TAG=20260711_plain ./run_nest_today.sh`; the run date and filenames then follow that cycle rather than the clock. If the tag does not match, it lists the cycles you have.
 
 ## Running it so it survives a closed terminal
 

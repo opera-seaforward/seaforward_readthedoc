@@ -8,8 +8,9 @@ output.
 cd ~/seaforward
 conda activate seaforward
 
-# the parent cycle folder carries the driver's flag tag, so take the
-# most recent rather than typing a date
+# the parent cycle folder carries the driver's flag tag, so take the most
+# recent rather than typing a date. Unlike the nesting driver, which wants
+# today's cycle, this is a look-back — any parent you have will do.
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
 
 python3 << PY
