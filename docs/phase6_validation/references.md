@@ -130,13 +130,6 @@ makes a subsurface comparison possible at all.
     comparison against it will then raise rather than quietly compare the wrong
     days.
 
-!!! note
-    **ARMOR3D is published weekly**, so a recent run often ends after its last
-    record. `download_obs` notices, adjusts the window to what exists and says so.
-    If the adjusted window no longer overlaps the run at all it warns, because a
-    comparison against it will then raise rather than quietly compare the wrong
-    days.
-
 ### Mercator and GLORYS — the parent
 
 The product that supplied the initial and boundary conditions. Mercator's
