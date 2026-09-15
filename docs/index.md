@@ -92,12 +92,13 @@ a 1/12° domain of about 270 × 170 points — three times the size — remains 
 | Configure a forecast                 | [Phase 2](phase2/02_forecast_config.md)          |
 | Run forecasts, manually or automated | [Phase 3](phase3/03_forecast.md)                 |
 | Build and run a hindcast             | [Phase 4](phase4/04_hindcast.md)                 |
-| Post-process and validate results    | [Phase 5](phase5/05_postprocessing.md)           |
+| Plot and explore the output          | [Phase 5](phase5/05_postprocessing.md)           |
+| Check the run against observations   | [Phase 6 — Validation](phase6_validation/06_validation.md) |
 | Increase resolution — offline nest   | [Phase 7 — Nesting](phase7/07_nesting.md)        |
-| Start from a ready-made region       | [Region gallery](regions/overview.md) |
 | Increase resolution — AGRIF nest     | [Phase 8 — AGRIF nesting](phase8/08_agrif.md)    |
 | Add tidal forcing                    | [Phase 10 — Tides](phase10/10_tides.md)          |
 | Add river freshwater forcing         | [Phase 11 — Rivers](phase11/11_rivers.md)        |
+| Start from a ready-made region       | [Region gallery](regions/overview.md)            |
 
 ## Context: the OPERA Capacity Development Activities
 
