@@ -2,7 +2,7 @@
 **2-day spin-up + 5-day hindcast** cycles. It mirrors the forecast driver, with
 GLORYS + ERA5 and a cycle loop.
 
-![The two-phase cycle](../img/forecasting_scheme.png)
+![The two-phase cycle](../img/hindcasting_scheme.png)
 
 ### 10.1 What one cycle does (per cycle date T)
 

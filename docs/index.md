@@ -64,7 +64,7 @@ because each poses a different forecasting challenge:
 ![sea_forward_test_cases](./img/SEA-FORWARD_test_cases.png)
 
 See the [region gallery](regions/overview.md) for the grid, boundaries and build
-command for each.                                    |
+command for each. 
 
 ## Requirements at a glance
 

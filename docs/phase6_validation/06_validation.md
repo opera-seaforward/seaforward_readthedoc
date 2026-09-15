@@ -42,6 +42,7 @@ products agree about the model, that agreement is worth more than either number 
 |---|---|---|
 | **OSTIA** | L4 SST analysis, 0.05°, gap-free | SST maps and error growth |
 | **ODYSSEA** | L3S merged satellite SST, 0.1°, cloud gaps | SST skill, independent of in-situ |
+| **SMOS** |	L4 merged satellite SSS, 0.125°, gap-free | SSS validation |
 | **DUACS** | L4 altimetry, 0.125° | sea level, heavily smoothed |
 | **GlobCurrent** | total surface current, 0.25°, 0 m and 15 m | currents — total flow, not geostrophic only |
 | **ARMOR3D** | reconstructed T, S, SSH, MLD, 1/8°, 50 levels | the subsurface |

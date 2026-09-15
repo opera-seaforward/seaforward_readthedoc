@@ -216,3 +216,7 @@ that is what lets every function take a bare path without being told which produ
 
 Sections and profiles live in `sftools.validation` — `compare_section`, `compare_profile`,
 `error_vs_depth` — and are covered on the previous page.
+
+
+!!! Important 
+This section is not about how to handle all the observations, more examples can be found in the validation notebooks: `02_validation.ipynb` and `03_composite_validation.ipynb`.

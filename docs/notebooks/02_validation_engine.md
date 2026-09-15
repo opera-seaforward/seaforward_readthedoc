@@ -38,8 +38,7 @@ The notebook's actual section numbering:
 | **5** | **Automated pass/fail summary (V1)** — reads directly from the Section 4 scorecard, so it can't drift out of sync with the Taylor diagram or with `run_validation.py`'s own report |
 | 6 / 6b / 6c | Time series and domain-wide bias boxplots, vs parent and vs satellite |
 | 7 / 7b | Satellite SST (OSTIA, ODYSSEA) and SSS (SMOS) validation |
-| **8** | **In-situ validation (optional)** — off by default; a cycle/region with no matching in-situ profiles isn't a failure, the section just reports "nothing to score" and moves on |
-| 9 | Self-contained HTML summary report (`index.html`) |
+| 8 | Self-contained HTML summary report (`index.html`) |
 
 
 

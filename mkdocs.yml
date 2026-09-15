@@ -229,6 +229,7 @@ nav:
   - Notebooks Toolkit:
       - Overview: notebooks/00_notebooks_overview.md
       - Before you start: notebooks/01_before_you_start.md
+      - Postprocessing: notebooks/01_postprocessing.md
       - Validation engine: notebooks/02_validation_engine.md
       - Composite validation: notebooks/03_composite_validation.md
       - Guided exercises: notebooks/04_guided_exercises.md

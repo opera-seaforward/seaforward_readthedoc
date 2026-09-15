@@ -1,6 +1,6 @@
 # Notebook-By-Notebook Notes
 
-- **`01_seaforward_postprocess_plot.ipynb`** — safe to run standalone.
+- **`01_postprocessing.ipynb`** — safe to run standalone.
 Static maps, sections, profiles, Hovmöller diagrams and time series built
 on `sftools.postprocess` (`pp`) and `sftools.plotting` (`pl`); see Phase 5
 for the full narrative walkthrough.

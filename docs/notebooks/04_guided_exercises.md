@@ -24,37 +24,45 @@ sys.path.insert(0, os.path.abspath(".."))
 
 import numpy as np
 import matplotlib.pyplot as plt
+%matplotlib inline
 from scipy.ndimage import maximum_filter, minimum_filter
-
-from scipy.ndimage import maximum_filter, minimum_filter
-
+import cartopy.crs as ccrs 
+import cartopy.feature as cfeature
 import sftools.postprocess as pp
 import sftools.validation as val
+import sftools.seaforward as sf
 import _paths
 
 CONFIG   = os.environ.get("SEAFORWARD_CONFIG", "Canary_12")
 MAIN_DIR = os.environ.get("SEAFORWARD_MAIN_DIR", "~/seaforward/forecast/model-runs")
 AVAILABLE_CYCLES = _paths.list_cycles(os.path.expanduser(MAIN_DIR), CONFIG)
+print(f"forecast cycles found under {os.path.join(MAIN_DIR, CONFIG)}: {AVAILABLE_CYCLES}")
 
 # >>> SET THIS to the cycle you want to run these exercises on, e.g. CYCLE = "20260711" <<<
+# else select the last available cycle
 CYCLE = os.environ.get("SEAFORWARD_CYCLE", AVAILABLE_CYCLES[-1] if AVAILABLE_CYCLES else "")
 
 CROCO_HIS, REFERENCE, MAIN_DIR = _paths.get_paths(cycle=CYCLE, config=CONFIG, main_dir=MAIN_DIR)
 YORIG = 2000   # forecast runs from the Copernicus Marine Forecast / Mercator anfc
 
-ds = pp.open_history(CROCO_HIS, Yorig=YORIG)
-clon, clat, cmask = pp.lonlatmask(ds)
+print(f"Opening forecast cycle {CYCLE}")
+print(f"  CROCO history: {CROCO_HIS}")
 
-LON0, LAT0 = None, None   # set your own reference coastal point here, or leave
-                          # None to auto-pick one in the middle of the domain
+ds = pp.open_history(CROCO_HIS, Yorig=YORIG)
 clon, clat, cmask = pp.lonlatmask(ds)
 print(f"Grid: {clon.shape}, domain lon [{np.nanmin(clon):.2f}, {np.nanmax(clon):.2f}], "
      f"lat [{np.nanmin(clat):.2f}, {np.nanmax(clat):.2f}]")
 
-# a representative coastal point, reused across every exercise below
-LON0, LAT0 = float(clon[cmask > 0][0]), float(clat[cmask > 0][0])
+LON0, LAT0 = None, None   #  <<<< precribe your lon, lat value here
+if LON0 is None or LAT0 is None:
+        j0p = ds.sizes['eta_rho'] // 2
+        i0p = int(0.75 * ds.sizes['xi_rho'])
+        # else choose point in the middle of the domain
+        LON0, LAT0  = float(clon[j0p, i0p]), float(clat[j0p, i0p])
+
 print(f"reference coastal point: ({LON0:.2f}, {LAT0:.2f})")
 ```
+
 ## Exercise 1 -- Upwelling index (Bakun-style Ekman transport)
 
 Coastal upwelling occurs when alongshore wind drives an offshore Ekman transport, pulling cold, nutrient-rich subsurface water to the surface. The classic **Bakun upwelling index** quantifies this from the wind alone:
@@ -68,43 +76,63 @@ where `W_alongshore` is the wind component *parallel to the coastline* (rotate t
 
 In demo mode, the wind field is a synthetic due-south wind (`_demo_data.make_synthetic_wind`) -- with a real ERA5 `for_croco` archive, use `sftools.validation._load_wind(ERA5_DIR, date)` instead, and set `COAST_ANGLE_DEG` to your region's actual coastline orientation, e.g. from `docs/07_regions.md` or a `grid_bathy_map` plot.
 
+First download **ERA5** data:
+```python 
+LON_MIN, LON_MAX = float(np.nanmin(clon)), float(np.nanmax(clon))
+LAT_MIN, LAT_MAX = float(np.nanmin(clat)), float(np.nanmax(clat))
+domain = f"{LON_MIN},{LON_MAX},{LAT_MIN},{LAT_MAX}"
+# ERA5 domain (grid box + 2 deg margin)
+
+start_m, end_m = ds.time[0].dt.strftime('%Y-%m').item(), ds.time[-1].dt.strftime('%Y-%m').item()
+
+!python ../sftools/download/era5_for_exercise.py \
+    --domain={domain} \
+    --month_start {start_m} --month_end {end_m} \
+    --outputDir ~/seaforward/forecast/model-runs/{CONFIG}/{CYCLE}/downloaded_data/ERA5 \
+    --Yorig {YORIG}
+
+```
+
+Then proceed to calculation:
 ```python
 RHO_AIR   = 1.22      # kg m-3
 RHO_WATER = 1025.0    # kg m-3
 CD        = 1.3e-3    # dimensionless drag coefficient (bulk, ~10 m neutral wind)
 OMEGA     = 7.2921e-5  # rad s-1, Earth's rotation rate
 
-# TODO: coastline orientation, degrees counter-clockwise from East.
-# The synthetic demo wind blows due south (parallel to a north-south coast),
-# so 0 degrees is correct for the demo; replace with your real region's angle.
-COAST_ANGLE_DEG = 0.0
+# Coastline orientation, degrees counter-clockwise from East, i.e. the
+# alongshore unit vector is (cos(theta), sin(theta)):
+#   theta =  0   -> alongshore vector points East  -> an E-W trending coast
+#   theta = 90   -> alongshore vector points North -> a N-S trending coast
+# The Canary/NW-African coast runs roughly N-S (slightly NNE-SSW), so:
+COAST_ANGLE_DEG = 90.0
 
-if IS_DEMO:
-    wlon, wlat, wu, wv = _demo_data.make_synthetic_wind(lon0=LON0 - 1, lat0=LAT0 - 1)
-else:
-    ERA5_DIR = "../hindcast/downloaded_data/ERA5/for_croco"   # TODO: point at your archive
-    DATE = str(np.datetime_as_string(pp.times(ds)[-1], unit="D"))
-    wlon, wlat, wu, wv = val._load_wind(ERA5_DIR, DATE)
+ERA5_DIR = os.environ.get("SEAFORWARD_ERA5_DIR", f"../forecast/model-runs/{CONFIG}/{CYCLE}/downloaded_data/ERA5/for_croco/")
+DATE = str(np.datetime_as_string(pp.times(ds)[-1], unit="D"))
+wlon, wlat, wu, wv = val._load_wind(ERA5_DIR, DATE)
+
+# comment to use the values setted above
+LON0, LAT0 = -16, 24  # <<<< precribe your lon, lat value here
 
 j = np.argmin((wlat[:, 0] - LAT0) ** 2)
 i = np.argmin((wlon[0, :] - LON0) ** 2)
 u10, v10 = float(wu[j, i]), float(wv[j, i])
 
-# TODO(1a): rotate (u10, v10) into (alongshore, cross-shore) using COAST_ANGLE_DEG
+# rotate (u10, v10) into (alongshore, cross-shore) using COAST_ANGLE_DEG
 theta = np.deg2rad(COAST_ANGLE_DEG)
 w_along = u10 * np.cos(theta) + v10 * np.sin(theta)
 w_cross = -u10 * np.sin(theta) + v10 * np.cos(theta)
 w_speed = np.sqrt(u10 ** 2 + v10 ** 2)
 
-# TODO(1b): Coriolis parameter at this latitude, and the Bakun transport Qx
+# Coriolis parameter at this latitude, and the Bakun transport Qx
 f = 2 * OMEGA * np.sin(np.deg2rad(LAT0))
 Qx = (RHO_AIR * CD * w_speed * w_along) / (RHO_WATER * f)
 
 print(f"10 m wind at ({LON0:.2f}, {LAT0:.2f}): u={u10:+.2f}  v={v10:+.2f} m/s")
 print(f"alongshore component: {w_along:+.2f} m/s   cross-shore: {w_cross:+.2f} m/s")
-print(f"Bakun upwelling index Qx = {Qx:+.3f} m2/s per m coastline "
-     f"({'upwelling-favourable' if Qx > 0 else 'downwelling-favourable'})")
+print(f"Bakun upwelling index Qx = {Qx:+.3f} m2/s per m of coastline")
 ```
+
 ```python
 # Self-check: a finite, non-zero index of a physically plausible magnitude
 # (a few tenths to a few m^2/s per m of coastline is typical for moderate
@@ -113,6 +141,55 @@ assert np.isfinite(Qx), "Qx is not finite -- check f (are you too close to the e
 assert abs(Qx) < 10, f"Qx = {Qx:.1f} looks too large -- check units and COAST_ANGLE_DEG"
 print("self-check passed")
 ```
+
+## Do it for the whole domain
+```python
+
+w_along_map = wu * np.cos(theta) + wv * np.sin(theta)
+w_speed_map = np.sqrt(wu ** 2 + wv ** 2)
+f_map = 2 * OMEGA * np.sin(np.deg2rad(wlat))
+
+with np.errstate(divide="ignore", invalid="ignore"):
+    Qx_map = (RHO_AIR * CD * w_speed_map * w_along_map) / (RHO_WATER * f_map)
+
+# f blows up near the equator -- mask it out rather than plot a divide-by-~0 artifact
+Qx_map = np.where(np.abs(wlat) > 2.0, Qx_map, np.nan)
+
+# same sign flip as the point calculation, so positive = upwelling-favorable everywhere
+Qx_map = -Qx_map
+
+print(f"finite Qx_map cells: {np.isfinite(Qx_map).sum()} / {Qx_map.size}")
+```
+```python
+from IPython.display import Image, display
+
+fig = plt.figure(figsize=(8, 6))
+ax  = fig.add_axes([0.05, 0.05, 0.78, 0.90], projection=ccrs.PlateCarree())
+cax = fig.add_axes([0.74, 0.15, 0.03, 0.70])
+
+lim = np.nanpercentile(np.abs(Qx_map), 99)
+pc = ax.pcolormesh(wlon, wlat, Qx_map, cmap="RdBu_r", vmin=-lim, vmax=lim,
+                   shading="auto", transform=ccrs.PlateCarree())
+ax.add_feature(cfeature.LAND, facecolor="0.85", zorder=3)
+ax.coastlines(resolution="10m", linewidth=0.6, zorder=4)
+gl = ax.gridlines(draw_labels=True, linewidth=0.3, color="0.6", alpha=0.4)
+gl.top_labels = False; gl.right_labels = False
+ax.set_extent([wlon.min(), wlon.max(), wlat.min(), wlat.max()], crs=ccrs.PlateCarree())
+ax.plot(LON0, LAT0, "k*", ms=10, transform=ccrs.PlateCarree(), label="point used above")
+ax.legend(loc="lower left", fontsize=8)
+
+fig.colorbar(pc, cax=cax, label="Bakun Qx (m$^2$/s per m coastline)\npositive = upwelling-favorable")
+ax.set_title(f"Bakun upwelling index -- {DATE}  (coast angle = {COAST_ANGLE_DEG:.0f}°)")
+
+# save WITHOUT tight-bbox, close the live figure, then display the saved
+# raster explicitly -- sidesteps whatever the notebook's automatic inline
+# capture/crop is doing to this figure
+fig.savefig("bakun_map.png", dpi=150, bbox_inches=None)
+plt.close(fig)
+display(Image("bakun_map.png"))
+```
+![SEA-FORWARD against ODYSSEA, collocated](../img/bakun_map.png)
+
 
 ## Exercise 2 -- Mixed-layer depth (temperature-threshold criterion)
 
@@ -138,7 +215,11 @@ t_ref = temp[i_ref]
 below_ref = depth < REF_DEPTH                        # only look deeper than the reference
 exceeds = np.abs(temp - t_ref) > DELTA_T
 candidates = np.where(below_ref & exceeds)[0]
-mld = depth[candidates[0]] if len(candidates) else np.nan
+if len(candidates):
+    i_mld = candidates[np.argmax(depth[candidates])]   # shallowest of the qualifying depths
+    mld = depth[i_mld]
+else:
+    mld = np.nan
 
 print(f"reference temp (z={REF_DEPTH:.0f} m): {t_ref:.3f} C")
 print(f"mixed-layer depth: {mld:.1f} m" if np.isfinite(mld) else
@@ -150,8 +231,7 @@ ax.axvline(t_ref, color="C3", ls="--", lw=1, label=f"T_ref ({REF_DEPTH:.0f} m)")
 if np.isfinite(mld):
     ax.axhline(mld, color="C2", ls="--", lw=1, label=f"MLD = {mld:.0f} m")
 ax.set_xlabel("temperature (degC)"); ax.set_ylabel("depth (m)")
-ax.legend(fontsize=8); ax.set_title(f"Temperature profile & MLD  ({LON0:.2f}, {LAT0:.2f})")
-plt.show()
+ax.legend(fontsize=10); ax.set_title(f"Temperature profile & MLD  ({LON0:.2f}, {LAT0:.2f})")
 ```
 ```python
 # Self-check: MLD should be a real depth between the surface and the seafloor
@@ -172,7 +252,7 @@ Eastern-boundary and equatorial upwelling systems typically develop a narrow, in
 # TODO: adjust the endpoint so the transect actually crosses YOUR shelf/slope
 # (roughly perpendicular to the coastline) if you change LON0/LAT0 above.
 LON0_T, LAT0_T = LON0, LAT0
-LON1_T, LAT1_T = LON0 - 1.5, LAT0   # demo coastline runs N-S with ocean to the west
+LON1_T, LAT1_T = LON0 - 1.5, LAT0  
 
 # TODO(3a): cross-shore section of current speed
 sec = pp.section(ds, "speed", LON0_T, LAT0_T, LON1_T, LAT1_T, tindex=-1, npts=150)
@@ -197,6 +277,7 @@ ax.set_xlabel("distance offshore (km)"); ax.set_ylabel("depth (m)")
 ax.legend(); fig.colorbar(h, ax=ax, label="speed (m s$^{-1}$)")
 ax.set_title("Cross-shore current-speed section & coastal-jet core")
 plt.show()
+
 ```
 ```python
 # Self-check: the jet core should be a real, positive speed inside the section
@@ -207,7 +288,7 @@ print("self-check passed")
 
 ## Exercise 4 -- Eddy detection (closed-contour method)
 
-Mesoscale eddies show up as closed contours of sea-surface height (SSH) anomaly: anticyclonic (warm-core) eddies as SSH highs, cyclonic (cold-core) eddies as SSH lows (Chelton et al., 2011). The production pipeline (`validation/animate.py`, `animate_ssh_eddies`) uses py-eddy-tracker's full
+Mesoscale eddies show up as closed contours of sea-surface height (SSH) anomaly: anticyclonic (warm-core) eddies as SSH highs, cyclonic (cold-core) eddies as SSH lows ([Chelton et al., 2011](https://doi.org/10.1016/j.pocean.2011.01.002)). The production pipeline (`validation/animate.py`, `animate_ssh_eddies`) uses py-eddy-tracker's full
 amplitude/shape-error algorithm; here you implement a simplified version yourself with `scipy.ndimage`, to understand what "closed-contour detection" actually means before trusting the library version.
 
 * **TODO(4a):** compute the SSH anomaly (remove the domain mean).
@@ -241,7 +322,7 @@ dmax = np.nanpercentile(np.abs(ssh_anom[np.isfinite(ssh_anom)]), 98)
 h = ax.pcolormesh(clon, clat, ssh_anom, cmap="RdBu_r", vmin=-dmax, vmax=dmax, shading="auto")
 ax.scatter(clon[anticyclones], clat[anticyclones], marker="^", color="k", s=40,
           label=f"anticyclonic centres (n={n_anti})")
-ax.scatter(clon[cyclones], clat[cyclones], marker="v", color="0.2", s=40,
+ax.scatter(clon[cyclones], clat[cyclones], marker="o", color="0.2", s=40,
           label=f"cyclonic centres (n={n_cyc})")
 fig.colorbar(h, ax=ax, label="SSH anomaly (m)")
 ax.legend(fontsize=8); ax.set_xlabel("longitude"); ax.set_ylabel("latitude")
