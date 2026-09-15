@@ -62,7 +62,8 @@ is uniform deep water:
 ```python
 fig = pl.plot(pp.hovmoller(ds, 'temp', kind='time_depth', lon0=plon, lat0=plat),
               title='Temperature — time vs depth')
-fig.axes[0].set_ylim(-1500, 0)
+fig.axes[0].set_ylim(-1500, 0)          # crop before saving
+fig.savefig('g_hov_temp.png', dpi=110, bbox_inches='tight')
 ```
 
 ![Temperature against depth and time](../img/phase5/g_hov_temp.png)
@@ -70,7 +71,8 @@ fig.axes[0].set_ylim(-1500, 0)
 ```python
 fig = pl.plot(pp.hovmoller(ds, 'salt', kind='time_depth', lon0=plon, lat0=plat),
               title='Salinity — time vs depth')
-fig.axes[0].set_ylim(-1500, 0)
+fig.axes[0].set_ylim(-1500, 0)          # crop before saving
+fig.savefig('g_hov_salt.png', dpi=110, bbox_inches='tight')
 ```
 
 ![Salinity against depth and time](../img/phase5/g_hov_salt.png)
@@ -82,14 +84,14 @@ as bands that tilt rather than run flat.
 
 ```python
 fig = pl.plot(pp.hovmoller(ds, 'temp', kind='time_lat', lon0=plon),
-              title='Temperature — time vs latitude')
+              title='Temperature — time vs latitude', out='g_hovlat_temp.png')
 ```
 
 ![Temperature against latitude and time](../img/phase5/g_hovlat_temp.png)
 
 ```python
 fig = pl.plot(pp.hovmoller(ds, 'salt', kind='time_lat', lon0=plon),
-              title='Salinity — time vs latitude')
+              title='Salinity — time vs latitude', out='g_hovlat_salt.png')
 ```
 
 ![Salinity against latitude and time](../img/phase5/g_hovlat_salt.png)
@@ -117,14 +119,14 @@ Unlike `hovmoller`, this handles derived fields and the staggered-grid velocitie
 
 ```python
 fig = pl.plot(pp.timeseries(ds, 'temp', lon0=plon, lat0=plat),
-              title='Surface temperature')
+              title='Surface temperature', out='g_ts_temp.png')
 ```
 
 ![Surface temperature over time](../img/phase5/g_ts_temp.png)
 
 ```python
 fig = pl.plot(pp.timeseries(ds, 'zeta', lon0=plon, lat0=plat),
-              title='Sea surface height')
+              title='Sea surface height', out='g_ts_zeta.png')
 ```
 
 ![Sea surface height over time](../img/phase5/g_ts_zeta.png)
@@ -136,21 +138,21 @@ atmosphere is doing from what the ocean is doing.
 
 ```python
 fig = pl.plot(pp.timeseries(ds, 'temp', lon0=plon, lat0=plat, depth_m=50),
-              title='Temperature at 50 m')
+              title='Temperature at 50 m', out='g_ts_temp50.png')
 ```
 
 ![Temperature at 50 m over time](../img/phase5/g_ts_temp50.png)
 
 ```python
 fig = pl.plot(pp.timeseries(ds, 'salt', lon0=plon, lat0=plat, depth_m=50),
-              title='Salinity at 50 m')
+              title='Salinity at 50 m', out='g_ts_salt50.png')
 ```
 
 ![Salinity at 50 m over time](../img/phase5/g_ts_salt50.png)
 
 ```python
 fig = pl.plot(pp.timeseries(ds, 'speed', lon0=plon, lat0=plat, depth_m=50),
-              title='Speed at 50 m')
+              title='Speed at 50 m', out='g_ts_speed50.png')
 ```
 
 ![Speed at 50 m over time](../img/phase5/g_ts_speed50.png)

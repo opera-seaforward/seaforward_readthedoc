@@ -38,7 +38,8 @@ depth. The difference between the surface and 100 m is often striking — the su
 carries the atmosphere's imprint, while 100 m shows the thermocline structure:
 
 ```python
-fig = pl.plot(pp.field(ds, 'temp', depth_m=100), ds=ds, isobaths=isobaths)
+fig = pl.plot(pp.field(ds, 'temp', depth_m=100), ds=ds, isobaths=isobaths,
+              out='g_temp100.png')
 ```
 
 ![Temperature at 100 m](../img/phase5/g_temp100.png)
@@ -70,7 +71,7 @@ the shelf, and the cold water drawn up at the coast.
 
 ```python
 fig = pl.plot(pp.section(ds, 'temp', lon0, lat0, lon1, lat1),
-              title='Temperature — section')
+              title='Temperature — section', out='g_sec_temp.png')
 ```
 
 ![Temperature section across the shelf](../img/phase5/g_sec_temp.png)
@@ -81,7 +82,7 @@ The same transect in salinity separates water masses that share a temperature.
 
 ```python
 fig = pl.plot(pp.section(ds, 'salt', lon0, lat0, lon1, lat1),
-              title='Salinity — section')
+              title='Salinity — section', out='g_sec_salt.png')
 ```
 
 ![Salinity section across the shelf](../img/phase5/g_sec_salt.png)
@@ -93,7 +94,7 @@ the slope.
 
 ```python
 fig = pl.plot(pp.section(ds, 'speed', lon0, lat0, lon1, lat1),
-              title='Current speed — section')
+              title='Current speed — section', out='g_sec_speed.png')
 ```
 
 ![Current speed section](../img/phase5/g_sec_speed.png)
@@ -106,14 +107,14 @@ components behave quite differently.
 
 ```python
 fig = pl.plot(pp.section(ds, 'u', lon0, lat0, lon1, lat1),
-              title='Zonal current — section')
+              title='Zonal current — section', out='g_sec_u.png')
 ```
 
 ![Zonal current section](../img/phase5/g_sec_u.png)
 
 ```python
 fig = pl.plot(pp.section(ds, 'v', lon0, lat0, lon1, lat1),
-              title='Meridional current — section')
+              title='Meridional current — section', out='g_sec_v.png')
 ```
 
 ![Meridional current section](../img/phase5/g_sec_v.png)
@@ -137,7 +138,8 @@ pp.profile(ds, 'temp', -19.0, 21.0)
 
 ```python
 fig = pl.plot(pp.profile(ds, 'temp', plon, plat), title='Temperature')
-fig.axes[0].set_ylim(-1500, 0)
+fig.axes[0].set_ylim(-1500, 0)          # crop before saving
+fig.savefig('g_prof_temp.png', dpi=110, bbox_inches='tight')
 ```
 
 ![Temperature profile](../img/phase5/g_prof_temp.png)
@@ -154,7 +156,8 @@ narrow figure runs wider than the plot itself.
 
 ```python
 fig = pl.plot(pp.profile(ds, 'salt', plon, plat), title='Salinity')
-fig.axes[0].set_ylim(-1500, 0)
+fig.axes[0].set_ylim(-1500, 0)          # crop before saving
+fig.savefig('g_prof_salt.png', dpi=110, bbox_inches='tight')
 ```
 
 ![Salinity profile](../img/phase5/g_prof_salt.png)
@@ -163,21 +166,24 @@ fig.axes[0].set_ylim(-1500, 0)
 
 ```python
 fig = pl.plot(pp.profile(ds, 'speed', plon, plat), title='Current speed')
-fig.axes[0].set_ylim(-1500, 0)
+fig.axes[0].set_ylim(-1500, 0)          # crop before saving
+fig.savefig('g_prof_speed.png', dpi=110, bbox_inches='tight')
 ```
 
 ![Speed profile](../img/phase5/g_prof_speed.png)
 
 ```python
 fig = pl.plot(pp.profile(ds, 'u', plon, plat), title='Zonal current')
-fig.axes[0].set_ylim(-1500, 0)
+fig.axes[0].set_ylim(-1500, 0)          # crop before saving
+fig.savefig('g_prof_u.png', dpi=110, bbox_inches='tight')
 ```
 
 ![Zonal current profile](../img/phase5/g_prof_u.png)
 
 ```python
 fig = pl.plot(pp.profile(ds, 'v', plon, plat), title='Meridional current')
-fig.axes[0].set_ylim(-1500, 0)
+fig.axes[0].set_ylim(-1500, 0)          # crop before saving
+fig.savefig('g_prof_v.png', dpi=110, bbox_inches='tight')
 ```
 
 ![Meridional current profile](../img/phase5/g_prof_v.png)

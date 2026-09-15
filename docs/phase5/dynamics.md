@@ -44,7 +44,7 @@ overlaying the vectors shows both how fast and which way:
 ```python
 fig = pl.plot(pp.speed_map(ds, depth_m=depth), ds=ds, uv=(u, v),
               isobaths=isobaths, uv_scale=4, uv_skip=3, uv_ref=0.2,
-              vmin=0, vmax=0.25)
+              vmin=0, vmax=0.25, out='g_currents.png')
 ```
 
 ![Current speed with vectors at 1000 m](../img/phase5/g_currents.png)
@@ -61,7 +61,7 @@ the usual way to look at the mesoscale.
 
 ```python
 fig = pl.plot(pp.vorticity(ds, depth_m=depth, normalized=True),
-              vmin=-0.25, vmax=0.25)
+              vmin=-0.25, vmax=0.25, out='g_vort.png')
 ```
 
 ![Normalised relative vorticity at 1000 m](../img/phase5/g_vort.png)
@@ -73,6 +73,8 @@ field.
 The limits matter here. The default range is ±1, sized for a strong surface eddy — at
 depth the field rarely exceeds ±0.25, so without the override almost all the colour range
 goes unused and the structure disappears into white.
+
+The three forms, for reference — add `out=` to write any of them:
 
 ```python
 pl.plot(pp.vorticity(ds))                        # raw vorticity, s⁻¹
@@ -93,7 +95,8 @@ ke.attrs['long_name'] = 'surface kinetic energy'
 ke.attrs['units'] = 'm2 s-2'
 ke.name = 'ke'
 
-fig = pl.plot(ke, ds=ds, isobaths=isobaths, vmin=0, vmax=0.15)
+fig = pl.plot(ke, ds=ds, isobaths=isobaths, vmin=0, vmax=0.15,
+              out='g_ke.png')
 ```
 
 ![Surface kinetic energy](../img/phase5/g_ke.png)
@@ -117,7 +120,7 @@ base.attrs['vmax'] = 7.0
 
 ```python
 fig = pl.plot_eddy(base, ('uv', (u, v)), ds=ds, isobaths=isobaths,
-                   uv_scale=4, uv_skip=3, uv_ref=0.2)
+                   uv_scale=4, uv_skip=3, uv_ref=0.2, out='g_eddy_uv.png')
 ```
 
 ![Temperature at 1000 m with current vectors](../img/phase5/g_eddy_uv.png)
@@ -127,7 +130,8 @@ than arrows:
 
 ```python
 vort_da = pp.vorticity(ds, depth_m=depth, normalized=True)
-fig = pl.plot_eddy(base, ('vort', vort_da), ds=ds, isobaths=isobaths)
+fig = pl.plot_eddy(base, ('vort', vort_da), ds=ds, isobaths=isobaths,
+                   out='g_eddy.png')
 ```
 
 ![Temperature at 1000 m with vorticity contours](../img/phase5/g_eddy.png)
@@ -137,7 +141,7 @@ yourself:
 
 ```python
 base, ov = pp.eddy_view(ds, base='temp', overlay='vort', depth_m=depth)
-pl.plot_eddy(base, ov, ds=ds, isobaths=isobaths)
+pl.plot_eddy(base, ov, ds=ds, isobaths=isobaths, out='g_eddy.png')
 ```
 
 It returns the field to shade and an overlay tuple — `('vort', vort_da)` or
