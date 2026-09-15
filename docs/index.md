@@ -102,11 +102,11 @@ a 1/12° domain of about 270 × 170 points — three times the size — remains 
 
 ## Context: the OPERA Capacity Development Activities
 
-SEA-FORWARD is delivered under the **OPERA (Ocean Prediction Enhancement in Regions of Africa) Capacity Development Activities** — a 38-month work package led by the **ICMPA-UNESCO Chair** (Université d'Abomey-Calavi, Benin) and the **Gulf of Guinea Ocean Sciences Summer School (GGOSSS)**.
+SEA-FORWARD is delivered under the **[OPERA (Ocean Prediction Enhancement in Regions of Africa)](https://www.unoceanprediction.org/en/ocean-prediction-enhancement-regions-africa-opera) Capacity Development Activities** — a 38-month work package led by the **[ICMPA-UNESCO Chair](https://www.icmpa.net/cipma/)** (Université d'Abomey-Calavi, Benin) and the **[Gulf of Guinea Ocean Sciences Summer School (GGOSSS)](https://www.ggosss.org/)**.
 
-OPERA itself is a five-year project implemented by **Mercator Ocean International**,
-funded by the **European Union** as part of the **Arc X programme**, and framed
-within the **OceanPrediction Decade Collaborative Centre (DCC)**. Its purpose is
+OPERA itself is a five-year project implemented by **[Mercator Ocean International](https://www.mercator-ocean.eu/)**,
+funded by the **[European Union](https://european-union.europa.eu/index_en)** as part of the **[Arc X programme](https://commission.europa.eu/topics/international-partnerships/global-gateway_en)**, and framed
+within the **[OceanPrediction Decade Collaborative Centre (DCC)](https://www.unoceanprediction.org/en/homepage)**. Its purpose is
 to strengthen regional, pan-African and international cooperation for the
 development of ocean forecasting systems, services and applications.
 
