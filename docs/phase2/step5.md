@@ -175,10 +175,10 @@ For completeness, in the same download-then-shape pattern:
   a `croco_frc.nc` tidal-forcing file.
 - **Turn tides on at compile time** with the `TIDES` switch in `cppdefs.h`, so a
   tidal run is a *different binary* — the same compile-time-vs-run-time distinction
-  you meet at Step 7.
+  you meet at [Step 7](step7.md).
 
 Because tides touch both the data preparation *and* the compile step, they are a
-chapter of their own. **See Phase 10 (Tides)** for the full build.
+chapter of their own. **See [Phase 10 — Tides](../phase10/10_tides.md)** for the full build.
 
 ### 5d — Rivers
 
@@ -201,7 +201,7 @@ For completeness, and to show where rivers differ from tides:
   at Step 7 and with tides.
 
 Because rivers touch the data preparation, the compile step *and* `croco.in`, they are
-a chapter of their own. **See Phase 11 (Rivers)** for the full build.
+a chapter of their own. **See [Phase 11](../phase11/11_rivers.md) (Rivers)** for the full build.
 
 ### 5e — Confirm your inputs are in place
 

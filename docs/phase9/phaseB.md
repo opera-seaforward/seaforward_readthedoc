@@ -1,4 +1,4 @@
-Follow **Phase 8**. Numbers and decisions specific to Agulhas below.
+Follow **[Phase 8](../phase8/08_agrif.md)**. Numbers and decisions specific to Agulhas below.
 
 ## B1 — check the child box against the parent's mask
 

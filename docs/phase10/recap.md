@@ -1,4 +1,4 @@
-Mapped onto the Phase 2 build, so you know which step each one extends:
+Mapped onto the [Phase 2](../phase2/02_forecast_config.md) build, so you know which step each one extends:
 
 1. **Tool** *(extends Phase 2 Step 5)* — `make_tides` added to `seaforward.py`, reading
    a tide-specific `crocotools_param.py` from its own gen dir, which avoids the

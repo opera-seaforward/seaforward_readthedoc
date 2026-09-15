@@ -1,6 +1,6 @@
 # Against an analysis
 
-Phase 5 plots a run. This page plots a run *against* something — the same fields, side by
+[Phase 5](../phase5/05_postprocessing.md) plots a run. This page plots a run *against* something — the same fields, side by
 side with a reference, and the difference between them.
 
 Statistics tell you how large the error is. A map tells you where it is, and that is often

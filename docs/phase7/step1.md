@@ -1,4 +1,4 @@
-The child grid is built **exactly like the parent's** (Phase 2, Steps 1–2), just
+The child grid is built **exactly like the parent's** ([Phase 2](../phase2/02_forecast_config.md), Steps 1–2), just
 with a smaller spacing and a slightly shrunk box so it sits inside the parent.
 
 ```bash

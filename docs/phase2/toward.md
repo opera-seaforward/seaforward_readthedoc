@@ -88,7 +88,7 @@ forecast's initial condition, and runs the 5-day forecast. You never hand-edit
 **3. Collect the result.** Everything for one day lands in a dated folder:
 
 ``` { .text .no-copy }
-forecast/model-runs/Canary_12/<date>/
+forecast/model-runs/Canary_12/<date>_<build>/
 ├── spinup/     # the 2-day spin-up (produces croco_rst.nc)
 └── fcst/       # the 5-day forecast — what you keep
     └── CROCO_FILES/
@@ -97,7 +97,7 @@ forecast/model-runs/Canary_12/<date>/
 ```
 
 The built config stays in `forecast/scratch/<CONFIG>/` (the workbench); each day's
-output goes to `forecast/model-runs/<CONFIG>/<date>/` (the results you keep).
+output goes to `forecast/model-runs/<CONFIG>/<date>_<build>/` (the results you keep).
 
 **4. Schedule it (optional).** To produce a fresh forecast every morning, add a
 cron entry (`crontab -e`) — for 06:00 UTC:
@@ -125,8 +125,8 @@ them at launch rather than keeping separate scripts:
 
 The flags are independent and compose. **`--tides`** generates a tidal-forcing file
 per cycle and switches the output to hourly history and daily averages (full setup in
-**Phase 10**). **`--rivers`** stages the pre-built river climatology into each cycle
-(**Phase 11**). **`--child 1way|2way`** runs the AGRIF nest described just above — the
+**[Phase 10](../phase10/10_tides.md)**). **`--rivers`** stages the pre-built river climatology into each cycle
+(**[Phase 11](../phase11/11_rivers.md)**). **`--child 1way|2way`** runs the AGRIF nest described just above — the
 parent and child together, the parent supplying the child's boundaries each step —
 with `1way` passing information parent→child only and `2way` also feeding the child's
 solution back to the parent.
@@ -136,4 +136,4 @@ pre-built binary the driver selects from the flags — but the daily cycle itsel
 unchanged. This chapter's plain forecast is the base; the flags layer physics on top.
 
 Full details of the operational driver — every stage, the settings, the output
-layout — are in **Phase 3 (Running a Forecast)**.
+layout — are in **[Phase 3](../phase3/03_forecast.md) (Running a Forecast)**.

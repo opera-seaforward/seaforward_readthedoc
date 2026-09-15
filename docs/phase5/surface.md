@@ -39,7 +39,7 @@ shelf, inshore of the 200 m contour.
 
 ```python
 fig = pl.plot(pp.field(ds, 'temp', depth_m=depth), ds=ds, isobaths=isobaths,
-              vmin=20, vmax=28)
+              vmin=20, vmax=28, out='g_sst.png')
 ```
 
 ![Surface temperature with isobaths](../img/phase5/g_sst.png)
@@ -53,7 +53,8 @@ sv = pp._v2rho(ds['svstr'].isel(time=-1).values)
 se, sn = pp.rotate_uv(ds, su, sv)
 
 fig = pl.plot_map(pp.field(ds, 'temp'), ds=ds, uv=(se, sn), uv_kind='wind',
-                  uv_skip=4, uv_scale=2, uv_ref=0.1, vmin=20, vmax=26)
+                  uv_skip=4, uv_scale=2, uv_ref=0.1, vmin=20, vmax=26,
+                  out='g_sst_wind.png')
 ```
 
 ![Surface temperature with wind stress](../img/phase5/g_sst_wind.png)
@@ -71,7 +72,7 @@ share both.
 
 ```python
 fig = pl.plot(pp.field(ds, 'salt', depth_m=depth), ds=ds, isobaths=isobaths,
-              vmin=35, vmax=37)
+              vmin=35, vmax=37, out='g_sss.png')
 ```
 
 ![Surface salinity with isobaths](../img/phase5/g_sss.png)
@@ -84,7 +85,7 @@ looking at the velocity field itself.
 
 ```python
 fig = pl.plot(pp.field(ds, 'zeta'), ds=ds, isobaths=isobaths,
-              vmin=-0.25, vmax=-0.05, cmap='Spectral_r')
+              vmin=-0.25, vmax=-0.05, cmap='Spectral_r', out='g_ssh.png')
 ```
 
 ![Sea surface height](../img/phase5/g_ssh.png)

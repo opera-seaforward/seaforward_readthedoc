@@ -7,7 +7,7 @@ conda activate seaforward
 cd ~/seaforward/forecast
 ./run_forecast_cycle.sh
 # 2-day spin-up → 5-day forecast (init from spin-up end)
-# result: forecast/model-runs/<CONFIG>/<date>/fcst/CROCO_FILES/croco_his.nc
+# result: forecast/model-runs/<CONFIG>/<date>_<build>/fcst/CROCO_FILES/croco_his.nc
 ```
 
 **Flags:**

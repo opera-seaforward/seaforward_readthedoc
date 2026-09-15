@@ -29,3 +29,7 @@ origin. It reads `crocotools_param.py` and `croco_grd.nc` from `--output_dir`.
     ```
 
     Either start on the 2nd, as here, or download the preceding month as well. The same applies at the far end of a boundary window.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

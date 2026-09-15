@@ -4,7 +4,7 @@
 
 ![Phase 3](../img/phase3.jpg)
 
-At the end of Phase 2 you have a **compiled forecast configuration** for your
+At the end of [Phase 2](../phase2/02_forecast_config.md) you have a **compiled forecast configuration** for your
 region — the `croco` program plus its grid, initial condition, boundary
 conditions, and surface forcing, all under `forecast/scratch/<CONFIG>/`. This
 document runs it two ways:

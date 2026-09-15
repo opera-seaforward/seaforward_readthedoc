@@ -16,3 +16,7 @@ result is a self-contained NetCDF that lives in the repo.
 
 !!! warning
     **A from-source stack cannot be moved.** The install path (`.../opt_seq`) is baked into the compiled binaries and libraries. If you ever relocate the repo, **rebuild** this stack in the new place — do not copy `opt_seq`.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

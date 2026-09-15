@@ -1,4 +1,4 @@
-Copy the templates into the hindcast config folder (Phase 2 Step 6), then edit the
+Copy the templates into the hindcast config folder ([Phase 2](../phase2/02_forecast_config.md) Step 6), then edit the
 four files **by hand in `nano`**. Only the differences from the forecast are spelled
 out here; everything else is exactly Phase 2.
 
@@ -111,3 +111,7 @@ SOURCE1=/home/<you>/seaforward/code/croco/OCEAN
 ```
 
 Replace `<you>` with your username. Save `Ctrl-O` Enter, exit `Ctrl-X`.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

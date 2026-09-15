@@ -7,8 +7,8 @@ SEA-FORWARD uses the standard set, each supplying one class of input:
 |---|---|---|
 | Parent ocean model | **Mercator** (forecast) / **GLORYS** (hindcast), global 1/12° | initial and boundary conditions |
 | Atmospheric forcing | **GFS** (forecast) / **ERA5** (hindcast) | surface forcing |
-| Tidal atlas | **TPXO** | tidal forcing (Phase 10) |
-| River discharge | **Dai & Trenberth climatology** | coastal freshwater (Phase 11) |
+| Tidal atlas | **TPXO** | tidal forcing ([Phase 10](../phase10/10_tides.md)) |
+| River discharge | **Dai & Trenberth climatology** | coastal freshwater ([Phase 11](../phase11/11_rivers.md)) |
 | Bathymetry and coastline | **ETOPO2 + GSHHS** | the model grid |
 | Ocean observations | tide gauges, altimetry, Argo | validation |
 
@@ -46,7 +46,7 @@ grid carries its coordinates. Anyone downstream can open the output with standar
 
 Interoperability is the property the Architecture Guide places at the centre of the
 design, and it is worth being precise about what has been shown. The output *is* NetCDF
-with CF-style attributes, which is what the tooling in Phase 5 relies on. Whether it
+with CF-style attributes, which is what the tooling in [Phase 5](../phase5/05_postprocessing.md) relies on. Whether it
 passes a formal CF compliance check has not been tested here, and doing so would be a
 worthwhile step toward the guide's standard.
 

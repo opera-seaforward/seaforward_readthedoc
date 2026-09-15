@@ -1,5 +1,5 @@
 The hindcast builds its **own** grid so the track is self-contained — even though
-for the same region it comes out identical to the forecast's. This is Phase 2
+for the same region it comes out identical to the forecast's. This is [Phase 2](../phase2/02_forecast_config.md)
 Steps 1–2, run under the hindcast track:
 
 ```bash
@@ -18,3 +18,7 @@ ncdump -h ${CF}/croco_grd.nc | grep -E "xi_rho|eta_rho"
 
 Read the boundaries from the mask as in Phase 2 Step 3, and note the result: you
 need it again for `crocotools_param.py` and `cppdefs.h`.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

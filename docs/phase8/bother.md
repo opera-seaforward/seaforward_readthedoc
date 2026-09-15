@@ -29,7 +29,7 @@ you see differences well beyond the box, following the flow. The parent does not
 *resolution* outside the box; it gains **correct values at its own resolution**,
 instead of a fabricated smear from a grid too coarse to compute the feature at all.
 
-| | Offline (Phase 7) | AGRIF one-way | AGRIF two-way |
+| | Offline ([Phase 7](../phase7/07_nesting.md)) | AGRIF one-way | AGRIF two-way |
 |---|---|---|---|
 | Child boundaries from | parent's **history file** (hourly) | parent, **every barotropic step** | **every barotropic step** |
 | Parent learns from child | never | never | **yes** |

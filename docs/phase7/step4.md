@@ -18,7 +18,7 @@ python seaforward.py make_bry \
 ls -lh ${CF}/croco_ini_NEST_20260712*.nc ${CF}/croco_bry_NEST_20260712*.nc
 ```
 
-**What / Why:** identical to Phase 2 Step 5, except `--input_file` is the converted
+**What / Why:** identical to [Phase 2](../phase2/02_forecast_config.md) Step 5, except `--input_file` is the converted
 parent and `--Yorig 2000` matches the forecast track. `--hdays 0` puts T0 at the
 parent's first record, with no spin-up offset.
 

@@ -1,4 +1,4 @@
-Same as Phase 2 Step 10. Stage the config into the run folder and build:
+Same as [Phase 2](../phase2/02_forecast_config.md) Step 10. Stage the config into the run folder and build:
 
 ```bash
 cd ${FCAST}

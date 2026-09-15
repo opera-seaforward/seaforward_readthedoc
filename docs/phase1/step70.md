@@ -68,3 +68,7 @@ echo "will compile with NJOBS=${NJOBS} parallel jobs"
 
 !!! warning
     **`NJOBS` lives only in the current terminal.** If you open a new terminal partway through, re-run the two `export` lines above — otherwise `make -j ${NJOBS}` becomes a bare `make -j`, which launches unlimited parallel jobs and can bring the machine to a halt. Every build command below uses `-j ${NJOBS}`, so this one variable controls the processor count everywhere.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

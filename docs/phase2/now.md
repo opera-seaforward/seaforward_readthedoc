@@ -20,25 +20,40 @@ forecast/scratch/Canary_12/
 
 ## A first look at the output
 
-Compare the run against the Mercator product it was built from. Run from `~/seaforward`:
+Compare the run against the Mercator product it was built from.
 
 ```bash
-import sftools.validation as val
+cd ~/seaforward
+conda activate seaforward
 
-HIS  = "forecast/scratch/Canary_12/CROCO_FILES/croco_his.nc"
-MERC = "forecast/scratch/Canary_12/downloaded_data/MERCATOR/MERCATOR_20260711_00.nc"
-DATE = "2026-07-16"          # the last day of the run
+python3 << PY
+import glob
+import matplotlib; matplotlib.use("Agg")
+import sftools.validation as val
+import sftools.postprocess as pp
+
+B    = "forecast/scratch/Canary_12"
+HIS  = B + "/CROCO_FILES/croco_his.nc"
+# the Mercator file is named for the day it was downloaded
+MERC = sorted(glob.glob(B + "/downloaded_data/MERCATOR/MERCATOR_*.nc"))[-1]
+
+# the run's last record — passing date= matters, see the warning below
+DATE = str(pp.open_history(HIS, Yorig=2000).time.values[-1])[:10]
+print("comparing", DATE)
 
 val.compare_sst(HIS, MERC, date=DATE, Yorig=2000, out="sst_vs_mercator.png")
 val.compare_ssh(HIS, MERC, date=DATE, Yorig=2000, out="ssh_vs_mercator.png")
 val.compare_currents(HIS, MERC, date=DATE, Yorig=2000, out="cur_vs_mercator.png")
+PY
 ```
 
 !!! warning
     **Always pass `date=`.** Without it the comparison takes CROCO's *last* record and the parent's *first* — eight days apart in this run — and the statistics are meaningless.
 
 Each call draws three panels — CROCO, the parent regridded onto the CROCO grid, and
-the difference — and prints the domain statistics:
+the difference — and prints the domain statistics. The numbers below are from the
+run this guide describes; **yours will differ**, depending on your domain, your
+download and how long the run was:
 
 ``` { .text .no-copy }
 SST          bias=-0.830  RMSE=1.094  cRMSE=0.713  corr=0.949
@@ -64,8 +79,8 @@ something useful about a seven-day free run:
   point-by-point precisely because the regional model is adding something.
 
 Whether any of this is *better* than the parent needs independent observations, not
-this comparison. Phase 6 covers that, along with `margin_deg` to trim the sponge band
+this comparison. [Phase 6](../phase6_validation/06_validation.md) covers that, along with `margin_deg` to trim the sponge band
 before computing statistics.
 
 **Next:** turning the raw NetCDF into plots, sections and comparisons is
-**post-processing**, covered in Phase 5.
+**post-processing**, covered in [Phase 5](../phase5/05_postprocessing.md).

@@ -20,3 +20,7 @@ NetCDF, not conda's), then run `./jobcomp`.
 | Install CROCO + croco_pytools ([step 8](step8.md)) | once per machine |
 | Download bathymetry data ([step 9](step9.md)) | once per machine |
 | **`source env.sh` + `track.sh` + `conda activate`** | **every session** |
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

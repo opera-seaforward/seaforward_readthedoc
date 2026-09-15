@@ -33,7 +33,7 @@ eddies that the parent smooths into broad patches. That difference is the whole 
 of nesting.*
 
 **A nested child is just a forecast whose "global product" is your own coarser run.**
-Everything you learned in Phase 2 applies — you build a grid, decide boundaries, make
+Everything you learned in [Phase 2](../phase2/02_forecast_config.md) applies — you build a grid, decide boundaries, make
 ini and bry, edit the config, compile, run. The *only* thing that changes is **where
 the ocean data comes from**: instead of Mercator, it comes from your 1/12° CROCO
 output.
@@ -42,7 +42,7 @@ That is the whole lesson. Nesting is Phase 2 with the parent's output as the oce
 source.
 
 !!! note
-    **Offline nesting lets the child have its own vertical grid.** Canary_25 uses 75 levels against the parent's 50 — worth doing when the child resolves a shelf where the parent had only a few layers. An AGRIF child (Phase 8) cannot: the two grids exchange data column by column every timestep, so they must share the vertical. That freedom is the main reason to nest offline rather than online.
+    **Offline nesting lets the child have its own vertical grid.** Canary_25 uses 75 levels against the parent's 50 — worth doing when the child resolves a shelf where the parent had only a few layers. An AGRIF child ([Phase 8](../phase8/08_agrif.md)) cannot: the two grids exchange data column by column every timestep, so they must share the vertical. That freedom is the main reason to nest offline rather than online.
 
 ### The one new tool: the converter
 
