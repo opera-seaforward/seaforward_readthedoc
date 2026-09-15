@@ -88,7 +88,7 @@ forecast's initial condition, and runs the 5-day forecast. You never hand-edit
 **3. Collect the result.** Everything for one day lands in a dated folder:
 
 ``` { .text .no-copy }
-forecast/model-runs/Canary_12/<date>/
+forecast/model-runs/Canary_12/<date>_<build>/
 ├── spinup/     # the 2-day spin-up (produces croco_rst.nc)
 └── fcst/       # the 5-day forecast — what you keep
     └── CROCO_FILES/
@@ -97,7 +97,7 @@ forecast/model-runs/Canary_12/<date>/
 ```
 
 The built config stays in `forecast/scratch/<CONFIG>/` (the workbench); each day's
-output goes to `forecast/model-runs/<CONFIG>/<date>/` (the results you keep).
+output goes to `forecast/model-runs/<CONFIG>/<date>_<build>/` (the results you keep).
 
 **4. Schedule it (optional).** To produce a fresh forecast every morning, add a
 cron entry (`crontab -e`) — for 06:00 UTC:

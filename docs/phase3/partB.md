@@ -257,7 +257,7 @@ tail -f fcst_$(date -u +%Y%m%d).log        # Ctrl-C stops watching, not the run
 ## B.6 — Where the output goes
 
 ``` { .text .no-copy }
-forecast/model-runs/Canary_12/<date>/
+forecast/model-runs/Canary_12/<date>_<build>/
 ├── spinup/
 │   └── CROCO_FILES/
 │       └── croco_rst.nc     # the restart the forecast starts from
@@ -269,7 +269,10 @@ forecast/model-runs/Canary_12/<date>/
 
 Two roots, two jobs: `forecast/scratch/<CONFIG>/` is the workbench, holding the
 compiled binaries and the grid, reused every cycle.
-`forecast/model-runs/<CONFIG>/<date>/` holds the results you keep, one folder per day.
+`forecast/model-runs/<CONFIG>/<date>_<build>/` holds the results you keep. The
+suffix names the build that produced them — `_plain` for the basic forecast.
+[B.3](#b3-optional-physics-and-the-binary-it-needs) covers the other builds and
+their suffixes.
 
 ## B.7 — Scheduling it
 

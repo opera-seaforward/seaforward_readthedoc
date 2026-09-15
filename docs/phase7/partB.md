@@ -63,7 +63,7 @@ To run them unattended in sequence, chain with `&&`:
 
 ``` { .text .no-copy }
 [1/6] locate today's parent output  →  fail clearly if the parent hasn't run
-      └─ point at the parent's PER-CYCLE GFS (model-runs/<parent>/<date>/…),
+      └─ point at the parent's PER-CYCLE GFS (model-runs/<parent>/<date>_<build>/…),
          not the scratch copy, so the child gets the full forecast window
 [2/6] convert parent croco_his.nc  →  Mercator-format parent_<date>.nc   (nesting.py)
 [3/6] make_ini + make_bry from the converted parent   (child N=75, hdays=0)
@@ -90,7 +90,7 @@ NP=7                         # MPI ranks
 
 **Why it uses the parent's per-cycle GFS.** The child runs the same window as the
 parent, so it must read the **same GFS the parent's forecast used** — the per-cycle
-copy under `model-runs/<parent>/<date>/`, which covers the full window. A stale
+copy under `model-runs/<parent>/<date>_<build>/`, which covers the full window. A stale
 `scratch/<parent>/…` copy may be shorter and cut the child off early with
 `ONLINE_GET_BULK ... dataset ... missing`. Stage [1/6] uses the per-cycle folder and
 fails clearly if it's absent, with no silent fallback to scratch.

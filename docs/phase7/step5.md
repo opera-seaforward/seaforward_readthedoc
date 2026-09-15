@@ -116,7 +116,7 @@ grep -n -A2 "^online:" croco.in
 The path on that second line must start with `/home/`, not `${`.
 
 !!! warning
-    **Use the parent's per-cycle GFS, not the scratch copy.** Point at `model-runs/<parent>/<date>/downloaded_data/GFS/for_croco/` — the forcing the parent's forecast actually ran with, which covers the full window. A stale `scratch/<parent>/…` copy can be shorter and will cut the child off early with `ONLINE_GET_BULK ... dataset ... missing`.
+    **Use the parent's per-cycle GFS, not the scratch copy.** Point at `model-runs/<parent>/<date>_<build>/downloaded_data/GFS/for_croco/` — the forcing the parent's forecast actually ran with, which covers the full window. A stale `scratch/<parent>/…` copy can be shorter and will cut the child off early with `ONLINE_GET_BULK ... dataset ... missing`.
 
 **Why the atmosphere isn't converted, when the ocean was.** The two use different
 mechanisms. The **ocean** is interpolated *offline*, ahead of the run, into
