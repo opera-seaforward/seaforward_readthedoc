@@ -103,10 +103,10 @@ The twelve steps fall into four stages:
 
 | stage     | steps | what you produce                                                                                 |
 | --------- | ----- | ------------------------------------------------------------------------------------------------ |
-| **Grid**  | 0–3   | the model grid and its open/closed boundaries                                                    |
-| **Data**  | 4–5   | download the global data, then shape it into initial conditions, boundaries, and surface forcing |
-| **Build** | 6–10  | the four config files, then the compiled `croco` binary                                          |
-| **Run**   | 11–12 | the run-time settings, then a proof run to `MAIN: DONE`                                          |
+| **[Grid](step0.md)**   | 0–3   | the model grid and its open/closed boundaries                                                    |
+| **[Data](step4.md)**   | 4–5   | download the global data, then shape it into initial conditions, boundaries, and surface forcing |
+| **[Build](step6.md)**  | 6–10  | the four config files, then the compiled `croco` binary                                          |
+| **[Run](step11.md)**   | 11–12 | the run-time settings, then a proof run to `MAIN: DONE`                                          |
 
 Each step opens with the workflow diagram, the piece it produces highlighted, so
 you always know which stage you are in.
