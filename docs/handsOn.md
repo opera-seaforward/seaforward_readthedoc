@@ -10,7 +10,7 @@
 
 
 !!! note
-    Phase 1 is a prerequisite for everything (once per computer). Phase 2 builds a **forecast** configuration for a region and Phase 3 runs it. Phase 4 (hindcast) reuses Phase 2's _steps_ but
+    [Phase 1](phase1/01_setup.md) is a prerequisite for everything (once per computer). [Phase 2](phase2/02_forecast_config.md) builds a **forecast** configuration for a region and [Phase 3](phase3/03_forecast.md) runs it. [Phase 4](phase4/04_hindcast.md) (hindcast) reuses Phase 2's _steps_ but
     swaps the data source — it points back to Phase 2 rather than repeating it.
 
 ![The five phases](./img/phase.jpeg)

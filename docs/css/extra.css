@@ -137,8 +137,8 @@ body {
     display: block;
     width: 80px;
     height: 80px;                              /* ajuste selon la taille voulue */
-    margin: 10px auto 5px auto;               /* centre l'image et ajoute une petite marge en bas */
-    background-image: url('../assets/sf.png');
+    margin: 20px auto 5px auto;               /* centre l'image et ajoute une petite marge en bas */
+    background-image: url('../assets/logo.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -395,7 +395,7 @@ body.sidebar-open .sidebar-backdrop {
 }
 
 .wy-side-nav-search img, .wy-side-nav-search::after {
-    border-radius: 50%;
+    border-radius: 0;
     aspect-ratio: 1 / 1;
     object-fit: cover;
 }

@@ -1,5 +1,4 @@
-<!-- BANNER IMAGE GOES HERE -->
-<!-- e.g. ![SEA-FORWARD](assets/banner.png) -->
+<img src="assets/banner.png" alt="SEA-FORWARD banner" style="width: 100%; max-height: 300px; object-fit: contain;">
 
 # SEA-FORWARD
 
@@ -92,20 +91,21 @@ a 1/12° domain of about 270 × 170 points — three times the size — remains 
 | Configure a forecast                 | [Phase 2](phase2/02_forecast_config.md)          |
 | Run forecasts, manually or automated | [Phase 3](phase3/03_forecast.md)                 |
 | Build and run a hindcast             | [Phase 4](phase4/04_hindcast.md)                 |
-| Post-process and validate results    | [Phase 5](phase5/05_postprocessing.md)           |
+| Plot and explore the output          | [Phase 5](phase5/05_postprocessing.md)           |
+| Check the run against observations   | [Phase 6 — Validation](phase6_validation/06_validation.md) |
 | Increase resolution — offline nest   | [Phase 7 — Nesting](phase7/07_nesting.md)        |
-| Start from a ready-made region       | [Region gallery](regions/overview.md) |
 | Increase resolution — AGRIF nest     | [Phase 8 — AGRIF nesting](phase8/08_agrif.md)    |
 | Add tidal forcing                    | [Phase 10 — Tides](phase10/10_tides.md)          |
 | Add river freshwater forcing         | [Phase 11 — Rivers](phase11/11_rivers.md)        |
+| Start from a ready-made region       | [Region gallery](regions/overview.md)            |
 
 ## Context: the OPERA Capacity Development Activities
 
-SEA-FORWARD is delivered under the **OPERA (Ocean Prediction Enhancement in Regions of Africa) Capacity Development Activities** — a 38-month work package led by the **ICMPA-UNESCO Chair** (Université d'Abomey-Calavi, Benin) and the **Gulf of Guinea Ocean Sciences Summer School (GGOSSS)**.
+SEA-FORWARD is delivered under the **[OPERA (Ocean Prediction Enhancement in Regions of Africa)](https://www.unoceanprediction.org/en/ocean-prediction-enhancement-regions-africa-opera) Capacity Development Activities** — a 38-month work package led by the **[ICMPA-UNESCO Chair](https://www.icmpa.net/cipma/)** (Université d'Abomey-Calavi, Benin) and the **[Gulf of Guinea Ocean Sciences Summer School (GGOSSS)](https://www.ggosss.org/)**.
 
-OPERA itself is a five-year project implemented by **Mercator Ocean International**,
-funded by the **European Union** as part of the **Arc X programme**, and framed
-within the **OceanPrediction Decade Collaborative Centre (DCC)**. Its purpose is
+OPERA itself is a five-year project implemented by **[Mercator Ocean International](https://www.mercator-ocean.eu/)**,
+funded by the **[European Union](https://european-union.europa.eu/index_en)** as part of the **[Arc X programme](https://commission.europa.eu/topics/international-partnerships/global-gateway_en)**, and framed
+within the **[OceanPrediction Decade Collaborative Centre (DCC)](https://www.unoceanprediction.org/en/homepage)**. Its purpose is
 to strengthen regional, pan-African and international cooperation for the
 development of ocean forecasting systems, services and applications.
 
@@ -118,10 +118,7 @@ OceanPrediction DCC _virtuous loop_, which moves through four thematic periods:
 3. Operating an Ocean Forecasting Service
 4. Applications and Digital Twins
 
-**SEA-FORWARD sits in the second of these periods, aimed at the advanced-level
-audience.** It implements OceanPrediction-A as a single deterministic run: one model,
-one grid, no data assimilation, so the full value chain from upstream data to
-downstream product stays visible without additional machinery.
+**SEA-FORWARD sits in the second of these periods, aimed at the advanced-level audience.** It implements OceanPrediction-A as a single deterministic run: one model, one grid, no data assimilation, so the full value chain from upstream data to downstream product stays visible without additional machinery.
 
 ## Partners
 

@@ -94,7 +94,7 @@ nano croco.in
 ```
 
 !!! note
-    **A nested child wants a sponge, unlike the parent.** Phase 2 turned it off — a parent forced by a global product at the same resolution has little boundary mismatch to absorb. A child is different: it is forced by the parent's **sharp mesoscale** features, which arrive at the boundary with structure the child must accommodate, so reflection is a real risk. Width scales with the grid — the usual 50 km becomes about 25 km at 1/25°. Start with it on; turn it off only if you have checked the boundaries stay quiet without it.
+    **A nested child wants a sponge, unlike the parent.** [Phase 2](../phase2/02_forecast_config.md) turned it off — a parent forced by a global product at the same resolution has little boundary mismatch to absorb. A child is different: it is forced by the parent's **sharp mesoscale** features, which arrive at the boundary with structure the child must accommodate, so reflection is a real risk. Width scales with the grid — the usual 50 km becomes about 25 km at 1/25°. Start with it on; turn it off only if you have checked the boundaries stay quiet without it.
 
 **online** (`Ctrl-W` → `online:`), the two lines below the header:
 
@@ -116,7 +116,7 @@ grep -n -A2 "^online:" croco.in
 The path on that second line must start with `/home/`, not `${`.
 
 !!! warning
-    **Use the parent's per-cycle GFS, not the scratch copy.** Point at `model-runs/<parent>/<date>/downloaded_data/GFS/for_croco/` — the forcing the parent's forecast actually ran with, which covers the full window. A stale `scratch/<parent>/…` copy can be shorter and will cut the child off early with `ONLINE_GET_BULK ... dataset ... missing`.
+    **Use the parent's per-cycle GFS, not the scratch copy.** Point at `model-runs/<parent>/<date>_<build>/downloaded_data/GFS/for_croco/` — the forcing the parent's forecast actually ran with, which covers the full window. A stale `scratch/<parent>/…` copy can be shorter and will cut the child off early with `ONLINE_GET_BULK ... dataset ... missing`.
 
 **Why the atmosphere isn't converted, when the ocean was.** The two use different
 mechanisms. The **ocean** is interpolated *offline*, ahead of the run, into

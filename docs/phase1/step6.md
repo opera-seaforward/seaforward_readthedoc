@@ -36,3 +36,7 @@ so once you've sourced `env.sh` you can build the model.
 
 !!! note
     **These paths point at the finished layout.** `env.sh` names where things *will* live — `code/croco`, `opt_seq`, `data/` — but you install those in [Steps 7](step7.md)–[9](step9.md) below. So right after cloning, sourcing `env.sh` is harmless but some of the folders it names are still empty. They fill in as you work through the rest of this document.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

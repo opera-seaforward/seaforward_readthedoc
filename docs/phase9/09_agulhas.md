@@ -8,9 +8,9 @@ It is a companion to the reference chapters, not a replacement:
 
 | For the general recipe | See |
 |---|---|
-| building a regional config by hand | **Phase 2** |
-| the operational forecast driver | **Phase 3** |
-| AGRIF nesting, and its gotchas | **Phase 8** |
+| building a regional config by hand | **[Phase 2](../phase2/02_forecast_config.md)** |
+| the operational forecast driver | **[Phase 3](../phase3/03_forecast.md)** |
+| AGRIF nesting, and its gotchas | **[Phase 8](../phase8/08_agrif.md)** |
 
 Here we follow those recipes on a real, new region and record what actually happened —
 including the numbers, which are the part you cannot guess.

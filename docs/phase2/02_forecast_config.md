@@ -25,10 +25,10 @@ The worked example is **Canary_12**, a 1/12° domain off North-West Africa
 values you edit here.
 
 !!! note
-    **This is not yet an operational forecast.** The run here is manual and cold-started. An operational system adds a spin-up and runs on a schedule — Phase 3 builds that.
+    **This is not yet an operational forecast.** The run here is manual and cold-started. An operational system adds a spin-up and runs on a schedule — [Phase 3](../phase3/03_forecast.md) builds that.
 
 !!! important
-    **Prerequisite.** You have finished Phase 1 (Setup): the `seaforward` conda environment exists, `nf-config --prefix` shows `~/seaforward/opt_seq`, CROCO is in `~/seaforward/code/croco`, and the bathymetry data is under `~/seaforward/data/DATASETS_CROCOTOOLS/`.
+    **Prerequisite.** You have finished [Phase 1](../phase1/01_setup.md) (Setup): the `seaforward` conda environment exists, `nf-config --prefix` shows `~/seaforward/opt_seq`, CROCO is in `~/seaforward/code/croco`, and the bathymetry data is under `~/seaforward/data/DATASETS_CROCOTOOLS/`.
 
 **How to read this guide.**
 
@@ -74,8 +74,8 @@ handful of global datasets, the **upstream data sources**, which you either
 | **Bathymetry**                | the sea-floor shape — the geometry itself | ETOPO2 + GSHHS      | the grid (Step 2), once                                   |
 | **Parent ocean model**        | initial state + open-boundary values      | **Mercator**        | `crocotools_param.py` + `make_ini`/`make_bry` (Steps 4–5) |
 | **Atmospheric forcing**       | wind, heat, pressure, rain at the surface | **GFS**             | `cppdefs.h` `ONLINE` + `make_forcing` (Steps 5, 7)        |
-| **Tides** _(optional)_        | tidal rise/fall at the boundaries         | **TPXO**            | `cppdefs.h` `TIDES` + `make_tides` _(Phase 10)_           |
-| **River inputs** _(optional)_ | coastal freshwater                        | **Dai climatology** | `cppdefs.h` `PSOURCE` + `make_river` _(Phase 11)_         |
+| **Tides** _(optional)_        | tidal rise/fall at the boundaries         | **TPXO**            | `cppdefs.h` `TIDES` + `make_tides` _([Phase 10](../phase10/10_tides.md))_           |
+| **River inputs** _(optional)_ | coastal freshwater                        | **Dai climatology** | `cppdefs.h` `PSOURCE` + `make_river` _([Phase 11](../phase11/11_rivers.md))_         |
 
 Read the roles, because they tell you _where_ each enters:
 
@@ -103,10 +103,10 @@ The twelve steps fall into four stages:
 
 | stage     | steps | what you produce                                                                                 |
 | --------- | ----- | ------------------------------------------------------------------------------------------------ |
-| **Grid**  | 0–3   | the model grid and its open/closed boundaries                                                    |
-| **Data**  | 4–5   | download the global data, then shape it into initial conditions, boundaries, and surface forcing |
-| **Build** | 6–10  | the four config files, then the compiled `croco` binary                                          |
-| **Run**   | 11–12 | the run-time settings, then a proof run to `MAIN: DONE`                                          |
+| **[Grid](step0.md)**   | 0–3   | the model grid and its open/closed boundaries                                                    |
+| **[Data](step4.md)**   | 4–5   | download the global data, then shape it into initial conditions, boundaries, and surface forcing |
+| **[Build](step6.md)**  | 6–10  | the four config files, then the compiled `croco` binary                                          |
+| **[Run](step11.md)**   | 11–12 | the run-time settings, then a proof run to `MAIN: DONE`                                          |
 
 Each step opens with the workflow diagram, the piece it produces highlighted, so
 you always know which stage you are in.

@@ -118,7 +118,7 @@ boundary: filename
 `XXXXXXXXX` is a deliberate non-existent filename — CROCO's way of saying "this
 section is unused". **AGRIF supplies the child's boundaries every barotropic step;
 there is no child bry file.** This is the line that most clearly distinguishes AGRIF
-from the Phase 7 offline nest, where the bry file *was* the entire mechanism.
+from the [Phase 7](../phase7/07_nesting.md) offline nest, where the bry file *was* the entire mechanism.
 
 Do the same for `climatology:` if your parent has one.
 

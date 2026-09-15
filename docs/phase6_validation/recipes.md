@@ -12,7 +12,7 @@ There is no fixed location, but the examples use:
 ~/seaforward/data/OBS/
 ```
 
-alongside `data/DATASETS_CROCOTOOLS/`, which Phase 1 sets up for the static datasets.
+alongside `data/DATASETS_CROCOTOOLS/`, which [Phase 1](../phase1/01_setup.md) sets up for the static datasets.
 Observations differ from those: they are per-run rather than build-once, so they
 accumulate. The filenames carry their window — `ostia_2026-07-10_2026-07-17.nc` — which
 keeps cycles apart and makes it obvious what can be deleted.

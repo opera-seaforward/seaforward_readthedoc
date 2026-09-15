@@ -96,5 +96,5 @@ clean, so this is not worth stopping for.
 
 **What would be worth stopping for** is fills scattered across the main semidiurnal or
 diurnal waves, or in open water away from the coast. That is the same class of bug as
-fill values in an initial condition, which Phase 8 Step 3b documents, and it would
+fill values in an initial condition, which [Phase 8](../phase8/08_agrif.md) Step 3b documents, and it would
 poison the run.

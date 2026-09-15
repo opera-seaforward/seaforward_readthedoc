@@ -18,7 +18,7 @@ Here is everything, and the role each plays:
 | **Bathymetry** | the sea-floor shape — the geometry itself | ETOPO2 + GSHHS | the grid (Step 2), once |
 | **Parent ocean model** | initial state + open-boundary values | **Mercator** | `crocotools_param.py` + `make_ini`/`make_bry` (Steps 4–5) |
 | **Atmospheric forcing** | wind, heat, pressure, rain at the surface | **GFS** | `cppdefs.h` `ONLINE` + `make_forcing` (Steps 5, 7) |
-| **Tides** *(optional)* | tidal rise/fall at the boundaries | **TPXO** | `cppdefs.h` `TIDES` + `make_tides` *(Phase 10)* |
+| **Tides** *(optional)* | tidal rise/fall at the boundaries | **TPXO** | `cppdefs.h` `TIDES` + `make_tides` *([Phase 10](../phase10/10_tides.md))* |
 | **River inputs** *(not yet used)* | coastal freshwater | GloFAS | — |
 
 Read the roles, because they tell you *where* each enters:

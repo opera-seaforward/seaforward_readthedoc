@@ -35,3 +35,7 @@ python seaforward.py download_atmosphere_hindcast \
 
 !!! note
     **Re-running is safe.** The request skips raw files that already exist, and the wrapper regenerates `era5_crocotools_param.py` from your arguments each run — so you never hand-edit that parameter file.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

@@ -48,7 +48,7 @@ Change `undef` to `define`:
 without it, the model wouldn't use the weather files you made in Step 5b. Just
 below it, leave `AROME` and `ERA_ECMWF` as `undef` — that selects the default
 (GFS-style) forcing format your files are in. A hindcast defines `ERA_ECMWF`
-instead (Phase 4).
+instead ([Phase 4](../phase4/04_hindcast.md)).
 
 ### 7.3 — Close the land boundaries
 

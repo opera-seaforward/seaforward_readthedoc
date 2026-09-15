@@ -29,7 +29,7 @@ same recipe with both switches on.
 ```
 
 The driver also takes `--rivers`, which extends the same scheme —
-`croco_plain_tides_rivers` and so on. Phase 11 covers it.
+`croco_plain_tides_rivers` and so on. [Phase 11](../phase11/11_rivers.md) covers it.
 
 ### What `--tides` does inside the driver
 

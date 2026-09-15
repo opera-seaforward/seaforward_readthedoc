@@ -12,7 +12,7 @@ tar -xzf DATASETS_CROCOTOOLS.tar.gz
 ```
 
 !!! note
-    **Large download — plan for it.** The package is several GB and can take hours; running it overnight is sensible. The `-c` flag lets `wget` resume a partial download rather than starting over, so an interrupted transfer costs nothing. You can also postpone this step until you first build a grid (Phase 2).
+    **Large download — plan for it.** The package is several GB and can take hours; running it overnight is sensible. The `-c` flag lets `wget` resume a partial download rather than starting over, so an interrupted transfer costs nothing. You can also postpone this step until you first build a grid ([Phase 2](../phase2/02_forecast_config.md)).
 
 !!! note
     This data is **large and never committed** to the repository (it is git-ignored). Each user downloads it once. `CROCO_DATA_ROOT` in `env.sh` points at `~/seaforward/data`, so as long as the datasets sit there, the tools find them.
@@ -23,3 +23,7 @@ Verify:
 source ~/seaforward/env.sh
 ls $CROCO_DATA_ROOT/DATASETS_CROCOTOOLS/Topo/etopo2.nc && echo "bathymetry OK"
 ```
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

@@ -22,3 +22,7 @@ This chapter assumes very little. If a step looks obvious, skip it; if a term is
     forecast. From then on, a working session is three lines — source `env.sh`, source a
     `track.sh`, `conda activate seaforward` — shown at the end and used throughout
     Phases 2–5.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

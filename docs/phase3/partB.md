@@ -112,7 +112,7 @@ Every build is the same three steps: set the switches in `cppdefs.h`, compile, r
 the result. `jobcomp` always produces a file called `croco`, and each build overwrites
 the last — so **rename before building the next**.
 
-**The plain binary — do this one first.** Phase 2 already built it; it just needs the
+**The plain binary — do this one first.** [Phase 2](../phase2/02_forecast_config.md) already built it; it just needs the
 name:
 
 ```bash
@@ -170,7 +170,7 @@ Check what you have at any point:
 ls ~/seaforward/forecast/scratch/Canary_12/croco_*
 ```
 
-Full setup for each: **Phase 10** for tides, **Phase 11** for rivers, **Phase 8** for
+Full setup for each: **[Phase 10](../phase10/10_tides.md)** for tides, **[Phase 11](../phase11/11_rivers.md)** for rivers, **[Phase 8](../phase8/08_agrif.md)** for
 AGRIF — those chapters cover the data files each one also needs, not just the switches.
 
 ## B.4 — Settings at the top of the driver
@@ -257,7 +257,7 @@ tail -f fcst_$(date -u +%Y%m%d).log        # Ctrl-C stops watching, not the run
 ## B.6 — Where the output goes
 
 ``` { .text .no-copy }
-forecast/model-runs/Canary_12/<date>/
+forecast/model-runs/Canary_12/<date>_<build>/
 ├── spinup/
 │   └── CROCO_FILES/
 │       └── croco_rst.nc     # the restart the forecast starts from
@@ -269,7 +269,10 @@ forecast/model-runs/Canary_12/<date>/
 
 Two roots, two jobs: `forecast/scratch/<CONFIG>/` is the workbench, holding the
 compiled binaries and the grid, reused every cycle.
-`forecast/model-runs/<CONFIG>/<date>/` holds the results you keep, one folder per day.
+`forecast/model-runs/<CONFIG>/<date>_<build>/` holds the results you keep. The
+suffix names the build that produced them — `_plain` for the basic forecast.
+[B.3](#b3-optional-physics-and-the-binary-it-needs) covers the other builds and
+their suffixes.
 
 ## B.7 — Scheduling it
 

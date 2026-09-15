@@ -6,7 +6,7 @@ test run (7 days, Dec 2→9, ini at D02):
 nano croco.in
 ```
 
-Make the Phase 2 Step 11 edits (title, S-coord, sponge) **plus** these. Each is a
+Make the [Phase 2](../phase2/02_forecast_config.md) Step 11 edits (title, S-coord, sponge) **plus** these. Each is a
 `Ctrl-W` search, then edit the line *below* the keyword.
 
 **Title.** `Ctrl-W` `BENGUELA TEST`, Enter. Change line 2 to:
@@ -143,3 +143,7 @@ agree, which makes it the best sanity check in the whole build.
 
 !!! warning
     **If it stops with `ERROR in get_bry: cannot read variable 'bry_time'`** near the end, the boundary file ran out — rebuild it with a day's margin at each end. **If numbers go `NaN` or it says `BLOW UP`**, recheck that the open boundaries match the mask and that `dt` isn't too large.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

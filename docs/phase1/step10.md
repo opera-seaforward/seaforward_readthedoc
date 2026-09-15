@@ -14,3 +14,7 @@ echo "-- bathymetry --";      ls ${CROCO_DATA_ROOT}/DATASETS_CROCOTOOLS/Topo/eto
 
 If the five checks print `OK` and `nf-config --prefix` shows
 `~/seaforward/opt_seq`, your machine is fully set up.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

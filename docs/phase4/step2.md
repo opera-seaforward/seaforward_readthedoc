@@ -29,3 +29,7 @@ Keep a copy with the recipe: `cp ${CF}/crocotools_param.py ${CONFIG_DIR}/`.
 
 !!! warning
     **It stays `'mercator'` — there is no `'glorys'` key in the reader.** GLORYS from CMEMS uses the same variable names as Mercator (`zos`, `thetao`, `so`, `uo`, `vo`), so it reads through the `'mercator'` branch: `ibc_class.py` maps `'mercator'` → `ssh:zos, temp:thetao, salt:so, u:uo, v:vo`, which is exactly GLORYS. Note that `'mercator_croco'` is a *different* mapping with renamed variables — not your raw GLORYS.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

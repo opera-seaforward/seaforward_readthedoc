@@ -57,4 +57,4 @@ grep -n "XXX" ${CONFIG_DIR}/croco.in && echo "STILL HAS XXX — fix it" || echo 
 ```
 
 !!! note
-    The `time_stepping`, `initial`, `boundary` and `online` lines are set at run time (Phase 3). The `diagnostics`, `floats`, `stations`, `psource`, `sediment`, `biology` and `wkb_*` sections are inert unless their CPP switch is on, so you can ignore them for this configuration.
+    The `time_stepping`, `initial`, `boundary` and `online` lines are set at run time ([Phase 3](../phase3/03_forecast.md)). The `diagnostics`, `floats`, `stations`, `psource`, `sediment`, `biology` and `wkb_*` sections are inert unless their CPP switch is on, so you can ignore them for this configuration.

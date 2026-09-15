@@ -27,3 +27,7 @@ You should see `seaforward env OK`. Your prompt now shows `(seaforward)`.
     **Why a named environment?** Keeping everything in an environment called `seaforward`
     means you can always return to a known-good set of libraries with
     `conda activate seaforward`, and you never pollute your system Python.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

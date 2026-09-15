@@ -1,6 +1,6 @@
 # Phase 6 — Validation
 
-Phase 5 showed you how to look at a run. This chapter is about deciding whether to
+[Phase 5](../phase5/05_postprocessing.md) showed you how to look at a run. This chapter is about deciding whether to
 believe it.
 
 Most of the work is not computing statistics — it is choosing what to compare against. A
@@ -57,7 +57,10 @@ cd ~/seaforward
 conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
+# the most recent cycle. To use a different one, name it instead:
+#     CYCLE=~/seaforward/forecast/model-runs/Canary_12/20260711_plain/
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
+echo "using $(basename ${CYCLE})"
 python3 << PYEOF
 import sftools.validation_obs as vo
 
@@ -79,6 +82,9 @@ ostia: METOFFICE-GLO-SST-L4-NRT-OBS-SST-V2
 
 The filename carries the window, so a second cycle does not overwrite the first. Mercator
 needs no download — the driver already fetched it for each cycle, beside the run.
+
+Every example in this chapter starts by finding `CYCLE`. It takes the most recent
+run by default — set it to a folder name instead to work on a particular cycle.
 
 `Yorig` is required: a CROCO file written without CF time units carries raw seconds, and
 without a reference year the download would silently request the wrong decade. 2000 for

@@ -17,7 +17,7 @@ what changes is the **data**:
 | Time origin `Yorig` | 2000                              | **1993** (GLORYS/reanalysis convention)   |
 
 Because the grid, the config files, and the run mechanics are the same skeleton
-as Phase 2, this document focuses on **what's different for a hindcast** and
+as [Phase 2](../phase2/02_forecast_config.md), this document focuses on **what's different for a hindcast** and
 points back to Phase 2 for the shared steps. By the end you'll have built a
 GLORYS + ERA5 hindcast config for a region, proven a single run, and run a
 multi-cycle hindcast (2-day spin-up + 5-day hindcast per cycle) over a past
@@ -29,7 +29,7 @@ The worked example is again **Canary_12** (22°W–15.5°W, 14°N–24°N, 1/12�
 ![The Canary_12 grid and bathymetry](../img/canary_12_portrait.png)
 
 !!! important
-    **Prerequisites:** Phase 1 (Setup) done, and you've read Phases 2–3 (the hindcast reuses their steps and vocabulary). You need a **CDS account + API key** for ERA5 (explained in [Step 3](step3.md)).
+    **Prerequisites:** [Phase 1](../phase1/01_setup.md) (Setup) done, and you've read Phases 2–3 (the hindcast reuses their steps and vocabulary). You need a **CDS account + API key** for ERA5 (explained in [Step 3](step3.md)).
 
 !!! note
     **How to read this guide** — same conventions as Phase 2: `nano` hand-edits with **What / Why**, and check and warning boxes.
@@ -47,3 +47,7 @@ reanalysis rather than drifting.
 
 The SEA-FORWARD hindcast tools are exposed through the same CLI as the forecast
 (`seaforward.py`), with a parallel set of **`*_hindcast`** subcommands.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

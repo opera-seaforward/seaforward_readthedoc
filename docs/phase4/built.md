@@ -9,3 +9,7 @@ forecast ones:
 | `make_bry_hindcast` | GLORYS boundaries for a `--start_date` / `--end_date` window, reading across months |
 
 Plus the `hindcast/run_hindcast_cycle.sh` cycling driver.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*
