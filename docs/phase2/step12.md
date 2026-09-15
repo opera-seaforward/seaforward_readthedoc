@@ -3,7 +3,7 @@
 *Step 12 **runs the model** — now every prepared input converges on the run.*
 
 Compiling only proves the code builds — it doesn't prove your grid, boundaries and
-data actually run. So do **one** manual run here. The operational driver in Phase 3
+data actually run. So do **one** manual run here. The operational driver in [Phase 3](../phase3/03_forecast.md)
 does this automatically every day; this single run is the by-hand proof.
 
 Four sections of `croco.in` need setting for a run: how long to integrate, which

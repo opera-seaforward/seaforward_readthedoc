@@ -1,4 +1,4 @@
-Copy the templates into the hindcast config folder (Phase 2 Step 6), then edit the
+Copy the templates into the hindcast config folder ([Phase 2](../phase2/02_forecast_config.md) Step 6), then edit the
 four files **by hand in `nano`**. Only the differences from the forecast are spelled
 out here; everything else is exactly Phase 2.
 

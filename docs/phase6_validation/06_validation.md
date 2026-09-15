@@ -1,6 +1,6 @@
 # Phase 6 — Validation
 
-Phase 5 showed you how to look at a run. This chapter is about deciding whether to
+[Phase 5](../phase5/05_postprocessing.md) showed you how to look at a run. This chapter is about deciding whether to
 believe it.
 
 Most of the work is not computing statistics — it is choosing what to compare against. A

@@ -1,6 +1,6 @@
 ### 2a — Why this doesn't use the tool you already know
 
-Phase 2 built Canary_12's grid with `make_grid.py` and a `grid.ini`. That script
+[Phase 2](../phase2/02_forecast_config.md) built Canary_12's grid with `make_grid.py` and a `grid.ini`. That script
 **cannot build a zoom grid** — it has no notion of a parent. The AGRIF logic lives in
 a Python class, `CROCO`, in `code/croco_pytools/prepro/Modules/croco_class.py`, and
 the only thing shipped that drives it is a Jupyter notebook,
@@ -387,6 +387,6 @@ The child's `rx1` is **essentially unchanged from its parent's** — 14.837 agai
 14.836. That is worth noting, because refining a grid does not automatically make it
 stiffer: it depends on what the finer grid resolves. Over Canary's shelf break the
 extra resolution did not sharpen the slope enough to matter, while elsewhere it can.
-Phase 9's Agulhas child, built at a lower `rfact`, came out *lower* than its parent.
+[Phase 9](../phase9/09_agulhas.md)'s Agulhas child, built at a lower `rfact`, came out *lower* than its parent.
 
 `rx0` landed on the requested `rfact = 0.2` for both grids.

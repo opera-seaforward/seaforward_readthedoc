@@ -1,5 +1,5 @@
 The hindcast builds its **own** grid so the track is self-contained — even though
-for the same region it comes out identical to the forecast's. This is Phase 2
+for the same region it comes out identical to the forecast's. This is [Phase 2](../phase2/02_forecast_config.md)
 Steps 1–2, run under the hindcast track:
 
 ```bash

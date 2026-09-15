@@ -1,4 +1,4 @@
-This is exactly what you produced at the end of Phase 2: a compiled model in
+This is exactly what you produced at the end of [Phase 2](../phase2/02_forecast_config.md): a compiled model in
 `forecast/scratch/<CONFIG>/`, with `croco.in` pointed at the dated
 `croco_ini_*`/`croco_bry_*` files and the `for_croco/` forcing, run once with
 `./croco croco.in`. If you want to repeat that single run:

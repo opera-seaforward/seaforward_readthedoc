@@ -1,6 +1,6 @@
 Compiling only proves the code builds — it doesn't prove your grid, boundaries,
 and data actually run. So do **one** manual run here. (The operational driver in
-Phase 3 does this automatically every day; this single run is the by-hand proof.)
+[Phase 3](../phase3/03_forecast.md) does this automatically every day; this single run is the by-hand proof.)
 
 A single run needs four run-time lines set in `croco.in` — the driver would patch
 these for you, but for this one manual run you set them by hand. Still in

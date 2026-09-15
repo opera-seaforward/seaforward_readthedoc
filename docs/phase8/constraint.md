@@ -26,7 +26,7 @@ cos(lat). The same 1/36° grid is 3.06 km at the equator, 2.88 km over the Canar
 upwelling at 20°N, and 2.5 km off Cape Town at 34°S. Check the actual metrics after
 building rather than assuming.
 
-Offline nesting takes any ratio — the Phase 7 nest went 1/12° → 1/25°, a 2.08× jump
+Offline nesting takes any ratio — the [Phase 7](../phase7/07_nesting.md) nest went 1/12° → 1/25°, a 2.08× jump
 chosen to suit the region. AGRIF takes one of two, and in exchange gives you boundary
 exchange every barotropic step and, if you want it, feedback to the parent.
 

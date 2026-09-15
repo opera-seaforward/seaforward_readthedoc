@@ -48,7 +48,7 @@ TPXO_DIR="${SEA_FORWARD_ROOT}/data/DATASETS_CROCOTOOLS/TPXO10"
 DT=300; NDTFAST=60; NINFO=1
 ```
 
-Those are the same lines Phase 3 documents; only the values change. `TPXO_DIR` matters
+Those are the same lines [Phase 3](../phase3/03_forecast.md) documents; only the values change. `TPXO_DIR` matters
 only with `--tides`, which this chapter doesn't use.
 
 There is no date here — the driver runs today's cycle unless you pass
@@ -133,4 +133,4 @@ binary swap — which is what makes it a clean experiment, and why both binaries
 worth the disk.
 
 !!! note
-    The Agulhas nest in this chapter was run **one-way only**. Phase 8 Step 8 shows what the two-way comparison looks like and how to read it; run it here the same way, keeping the one-way output as your baseline.
+    The Agulhas nest in this chapter was run **one-way only**. [Phase 8](../phase8/08_agrif.md) Step 8 shows what the two-way comparison looks like and how to read it; run it here the same way, keeping the one-way output as your baseline.

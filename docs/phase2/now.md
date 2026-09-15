@@ -64,8 +64,8 @@ something useful about a seven-day free run:
   point-by-point precisely because the regional model is adding something.
 
 Whether any of this is *better* than the parent needs independent observations, not
-this comparison. Phase 6 covers that, along with `margin_deg` to trim the sponge band
+this comparison. [Phase 6](../phase6_validation/06_validation.md) covers that, along with `margin_deg` to trim the sponge band
 before computing statistics.
 
 **Next:** turning the raw NetCDF into plots, sections and comparisons is
-**post-processing**, covered in Phase 5.
+**post-processing**, covered in [Phase 5](../phase5/05_postprocessing.md).

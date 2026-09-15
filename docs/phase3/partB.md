@@ -112,7 +112,7 @@ Every build is the same three steps: set the switches in `cppdefs.h`, compile, r
 the result. `jobcomp` always produces a file called `croco`, and each build overwrites
 the last — so **rename before building the next**.
 
-**The plain binary — do this one first.** Phase 2 already built it; it just needs the
+**The plain binary — do this one first.** [Phase 2](../phase2/02_forecast_config.md) already built it; it just needs the
 name:
 
 ```bash
@@ -170,7 +170,7 @@ Check what you have at any point:
 ls ~/seaforward/forecast/scratch/Canary_12/croco_*
 ```
 
-Full setup for each: **Phase 10** for tides, **Phase 11** for rivers, **Phase 8** for
+Full setup for each: **[Phase 10](../phase10/10_tides.md)** for tides, **[Phase 11](../phase11/11_rivers.md)** for rivers, **[Phase 8](../phase8/08_agrif.md)** for
 AGRIF — those chapters cover the data files each one also needs, not just the switches.
 
 ## B.4 — Settings at the top of the driver

@@ -1,4 +1,4 @@
-Follow **Phase 2**. What follows is that workflow with Agulhas' numbers, and notes
+Follow **[Phase 2](../phase2/02_forecast_config.md)**. What follows is that workflow with Agulhas' numbers, and notes
 where the region forced a decision.
 
 ## A0 — session setup
@@ -352,7 +352,7 @@ at the edges, so IGOG's child came out at 0.233 from the same 0.2.
 High values risk spurious pressure-gradient forces, and this is the Agulhas shelf
 break: 100 m to 4000 m over a short distance, with 50 sigma layers stretched across
 the tilt. **It ran stably** — KE steady, `trd = 0` throughout — so 14.84 is
-demonstrably survivable at 1/12°. The AGRIF child in Phase 8 sits at 15.78, also stable.
+demonstrably survivable at 1/12°. The AGRIF child in [Phase 8](../phase8/08_agrif.md) sits at 15.78, also stable.
 
 It also set up the open question for Phase B: **would the child's `rx1` be worse?** The
 reasoning was that a 3× refinement resolves the same slope with thinner layers, so the

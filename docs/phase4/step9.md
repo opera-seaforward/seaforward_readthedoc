@@ -6,7 +6,7 @@ test run (7 days, Dec 2→9, ini at D02):
 nano croco.in
 ```
 
-Make the Phase 2 Step 11 edits (title, S-coord, sponge) **plus** these. Each is a
+Make the [Phase 2](../phase2/02_forecast_config.md) Step 11 edits (title, S-coord, sponge) **plus** these. Each is a
 `Ctrl-W` search, then edit the line *below* the keyword.
 
 **Title.** `Ctrl-W` `BENGUELA TEST`, Enter. Change line 2 to:

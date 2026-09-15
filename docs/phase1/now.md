@@ -18,7 +18,7 @@
 
 
 !!! note
-    **Next:** Phase 2 — *Building a Forecast Config*, where you build a region's grid, decide its open boundaries, and prepare the ocean and atmosphere data. Those steps are identical for forecasts and hindcasts, which is why they're a document of their own.
+    **Next:** [Phase 2](../phase2/02_forecast_config.md) — *Building a Forecast Config*, where you build a region's grid, decide its open boundaries, and prepare the ocean and atmosphere data. Those steps are identical for forecasts and hindcasts, which is why they're a document of their own.
 
 ---
 

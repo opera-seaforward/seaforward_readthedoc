@@ -116,7 +116,7 @@ hindcast" to schedule, so there is nothing for a hindcast driver to automate tha
 deliberate manual run doesn't already cover.
 
 So to nest a hindcast, do the same manual steps (3–7), choosing a cycle and making
-three swaps you already know from Phase 4:
+three swaps you already know from [Phase 4](../phase4/04_hindcast.md):
 
 | What | Forecast nest | Hindcast nest |
 |---|---|---|

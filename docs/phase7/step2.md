@@ -1,4 +1,4 @@
-Same file as Phase 2 Step 4, with two changes: **N=75** (was 50) and the NEST
+Same file as [Phase 2](../phase2/02_forecast_config.md) Step 4, with two changes: **N=75** (was 50) and the NEST
 prefixes. Create it in the child's `CROCO_FILES`:
 
 ```bash

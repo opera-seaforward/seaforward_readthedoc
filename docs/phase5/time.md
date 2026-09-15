@@ -96,7 +96,7 @@ fig = pl.plot(pp.hovmoller(ds, 'salt', kind='time_lat', lon0=plon),
 
 Over a five-day forecast the bands are close to horizontal — there simply isn't enough
 time for much to propagate across the domain. A longer run makes this view far more
-informative; hindcast cycles stitched together with `ncrcat` (Phase 4) give the longer
+informative; hindcast cycles stitched together with `ncrcat` ([Phase 4](../phase4/04_hindcast.md)) give the longer
 axis.
 
 ## Time series
