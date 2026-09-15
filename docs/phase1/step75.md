@@ -33,3 +33,7 @@ ls ~/seaforward/opt_seq/lib/libnetcdff.so && echo "NetCDF-Fortran present"
 
 !!! note
     **Naming note.** Upstream CROCO documentation often installs into a folder called `opt`. SEA-FORWARD names it **`opt_seq`** to make explicit that this is the *sequential* build (a future *parallel*/MPI build would live in a separate `opt_mpi`). `env.sh` points `SEA_FORWARD_PREFIX` at `opt_seq`, so everything downstream finds it.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

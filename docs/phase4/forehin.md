@@ -8,3 +8,7 @@
   window instead of running "today".
 - **Kept separate on disk:** `forecast/` and `hindcast/` each have their own
   `configs/`, `scratch/`, `model-runs/` and `track.sh`.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

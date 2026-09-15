@@ -184,3 +184,7 @@ plot or analyse as a single time series.
 
 !!! note
     **scratch vs model-runs** — the same split as the forecast. The built config (binary, grid, downloaded data) stays in `hindcast/scratch/<CONFIG>/`; each cycle's output goes to `hindcast/model-runs/<CONFIG>/<T>/`. You can delete a `model-runs/<T>/` folder and re-run that cycle without touching the build.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

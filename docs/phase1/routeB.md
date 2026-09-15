@@ -129,3 +129,7 @@ ${SEA_FORWARD_ROOT}/opt_seq/bin/nf-config --flibs
     Five `ok` lines, and `nf-config --flibs` naming `-lnetcdff` **and** `-lnetcdf`, both under `opt_seq/lib`.
 
     A missing `libnetcdf.so` alongside a present `libnetcdff.so` is the specific failure this page's ordering exists to prevent: the Fortran bindings built against a netcdf-c that is not there. `jobcomp` then fails in Phase 2 with `cannot find -lnetcdf`, several chapters from the cause.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

@@ -108,3 +108,7 @@ ls
 
 !!! note
     **The golden rule of this project:** everything lives under `~/seaforward`. The scripts assume `SEA_FORWARD_ROOT=${HOME}/seaforward`. If you clone it somewhere else, adjust that variable in `env.sh`.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

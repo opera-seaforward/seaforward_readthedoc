@@ -143,3 +143,7 @@ agree, which makes it the best sanity check in the whole build.
 
 !!! warning
     **If it stops with `ERROR in get_bry: cannot read variable 'bry_time'`** near the end, the boundary file ran out — rebuild it with a day's margin at each end. **If numbers go `NaN` or it says `BLOW UP`**, recheck that the open boundaries match the mask and that `dt` isn't too large.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

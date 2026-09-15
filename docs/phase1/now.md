@@ -15,8 +15,11 @@
 └── hindcast/                  # the hindcast track: configs/, scratch/, model-runs/, driver
 ```
 
-!!! important
-    **What's committed vs local.** The repo carries what you author — `sftools/`, the `install/` scripts, the `forecast/`/`hindcast/` configs and drivers, `docs/`, and the top-level files. The heavy, regenerable pieces (`code/`, `opt_seq/`, `data/`, and each track's `scratch/`/`model-runs/`) are **git-ignored**: the setup scripts build them and the CLI downloads the data, so they don't bloat the repository.
+
 
 !!! note
     **Next:** Phase 2 — *Building a Forecast Config*, where you build a region's grid, decide its open boundaries, and prepare the ocean and atmosphere data. Those steps are identical for forecasts and hindcasts, which is why they're a document of their own.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

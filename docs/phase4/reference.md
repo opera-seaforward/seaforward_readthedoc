@@ -16,3 +16,7 @@ cd ~/seaforward/hindcast
 ./run_hindcast_cycle.sh
 # results: hindcast/model-runs/<CONFIG>/<T>/hcast/CROCO_FILES/croco_his.nc
 ```
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

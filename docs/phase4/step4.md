@@ -37,3 +37,7 @@ python seaforward.py download_ocean_hindcast \
 
 !!! note
     **Neighbour months for boundaries.** Boundary conditions need ocean data slightly *beyond* the run window. For a cycle near a month edge — Dec 30 to Jan 4, say — the tools read **both** `2025_12.nc` and `2026_01.nc`. So download the month before and after your period too. The operational driver does this automatically.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

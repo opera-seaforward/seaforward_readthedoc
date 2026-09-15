@@ -47,3 +47,7 @@ reanalysis rather than drifting.
 
 The SEA-FORWARD hindcast tools are exposed through the same CLI as the forecast
 (`seaforward.py`), with a parallel set of **`*_hindcast`** subcommands.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

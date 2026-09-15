@@ -54,3 +54,7 @@ ls ~/seaforward/code/croco_pytools/prepro/Modules/toolsf*.so && echo "croco_pyto
 
 !!! note
     **The SEA-FORWARD copy.** `sftools/croco_pytools/` holds the pre-processing modules the CLI needs, so the download and pre-processing tools work even before you install `code/croco_pytools`. You still install `code/croco_pytools` — that is what grid-building uses.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

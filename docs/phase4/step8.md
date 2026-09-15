@@ -111,3 +111,7 @@ SOURCE1=/home/<you>/seaforward/code/croco/OCEAN
 ```
 
 Replace `<you>` with your username. Save `Ctrl-O` Enter, exit `Ctrl-X`.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

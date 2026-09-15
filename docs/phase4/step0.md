@@ -33,3 +33,7 @@ mkdir -p ${CONFIG_DIR} ${CF} \
 
 !!! note
     **Two different domain strings.** `EXTENTS` is your grid box plus ~1.5° and goes to the GLORYS download. `ERA5_BOX` is the grid box itself — the ERA5 downloader adds its own 2° margin. Passing the wrong one to either gives too little data or too much.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

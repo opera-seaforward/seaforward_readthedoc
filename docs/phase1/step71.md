@@ -19,3 +19,7 @@ You should now have the three `.tar.gz` files:
 ```bash
 ls -1 ${SEA_FORWARD_ROOT}/install/*.tar.gz
 ```
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

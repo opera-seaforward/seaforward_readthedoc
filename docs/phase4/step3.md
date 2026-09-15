@@ -79,3 +79,7 @@ EOF
 
 !!! warning
     **An *authentication* error when downloading** means `.cdsapirc` is missing or wrong — redo 3.2 and 3.3, checking the token copied cleanly and the URL has no `/v2`. **A *licence* error** despite a working key means you skipped 3.5.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

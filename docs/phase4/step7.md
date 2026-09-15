@@ -31,3 +31,7 @@ following your `obc_dict`.
 
 !!! note
     **Cross-year windows work.** `--start_date 2025-12-30 --end_date 2026-01-04` reads **both** `2025_12.nc` and `2026_01.nc` and stitches them; the filename records the span, e.g. `..._Y2025M12D30_to_Y2026M01D04.nc`.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*

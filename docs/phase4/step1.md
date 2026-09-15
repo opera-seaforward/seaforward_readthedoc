@@ -18,3 +18,7 @@ ncdump -h ${CF}/croco_grd.nc | grep -E "xi_rho|eta_rho"
 
 Read the boundaries from the mask as in Phase 2 Step 3, and note the result: you
 need it again for `crocotools_param.py` and `cppdefs.h`.
+
+---
+
+*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*
