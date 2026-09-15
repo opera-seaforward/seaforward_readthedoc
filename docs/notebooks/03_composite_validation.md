@@ -72,7 +72,7 @@ list of one dict per cycle and is what every later section iterates over.
 | 5e | Section 2b | Composite vertical profiles (point and full-domain), mean ± 1 std across every cycle reaching `PROFILE_LEAD`, for temp/salt/speed |
 | 6 | Section 7 | Composite satellite SST validation map (OSTIA, ODYSSEA), one figure per lead |
 | 6b | Section 7b | Composite satellite SSS validation (SMOS), one figure per lead |
-| 7 | Section 9 | Composite self-contained HTML summary, via `vc.build_html_summary_composite` — a thin wrapper around the same `val.build_html_summary` the single-cycle notebook uses, so report layout/lightbox/grouping code is never duplicated |
+| 7 | Section 8 | Composite self-contained HTML summary, via `vc.build_html_summary_composite` — a thin wrapper around the same `val.build_html_summary` the single-cycle notebook uses, so report layout/lightbox/grouping code is never duplicated |
 
 ## Merging rule
 

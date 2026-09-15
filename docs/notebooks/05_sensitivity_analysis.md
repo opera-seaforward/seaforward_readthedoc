@@ -5,7 +5,7 @@
 Perturb the **atmospheric forcing** (wind amplitude in `croco_blk.nc`), **re-run CROCO**, and compare the **upwelling response**. This is the clearest hands-on illustration in the whole toolkit of how the OceanPrediction-A value chain is connected end to end:
 
 ``` { .text .no-copy }
-   U2                      C1                       D1
+   U3                      C1                       D1
 Upstream forcing  --->  Core Forecasting  --->  Downstream diagnostic
 (wind, perturbed          Engine (CROCO)          (upwelling index,
  here)                    re-run with the          SST response --
@@ -37,28 +37,33 @@ import matplotlib.pyplot as plt
 
 import sftools.postprocess as pp
 import sftools.validation as val
+import _paths
 
-import _demo_data
+CONFIG   = os.environ.get("SEAFORWARD_CONFIG", "Canary_12")
+MAIN_DIR = os.environ.get("SEAFORWARD_MAIN_DIR", "~/seaforward/forecast/model-runs")
+AVAILABLE_CYCLES = _paths.list_cycles(os.path.expanduser(MAIN_DIR), CONFIG)
+print(f"forecast cycles found under {os.path.join(MAIN_DIR, CONFIG)}: {AVAILABLE_CYCLES}")
 
-AMP_FACTOR = 1.5   # per Step 5.3 of the operational workflow
-paths = _demo_data.get_sensitivity_paths(amp_factor=AMP_FACTOR)
-IS_DEMO = paths["is_demo"]
-YORIG = paths["Yorig"]
+# >>> SET THIS to the cycle you want to perturb, e.g. "20260711" <<<
+CYCLE = os.environ.get("SEAFORWARD_CYCLE", AVAILABLE_CYCLES[-1] if AVAILABLE_CYCLES else "")
+```
+```python
+AMP_FACTOR = 1.5   # 
 
-if IS_DEMO:
-    print("!! DEMO DATA !! Real forcing/history files were not found, so this")
-    print("   notebook is running against synthetic stand-ins (see _demo_data.py).")
-    print("   Part A and Part C run for real below; Part B (the actual CROCO")
-    print("   re-run) is skipped in demo mode -- see that section's markdown.")
-    BLK_BASELINE = paths["blk_baseline"]
-else:
-    REGION = "Canary_12"   # TODO: your region, see docs/07_regions.md
-    BLK_BASELINE = f"../hindcast/model-runs/{REGION}/<DATE>/hcast/CROCO_FILES/croco_blk.nc"
+CROCO_HIS, REFERENCE, MAIN_DIR = _paths.get_paths(cycle=CYCLE, config=CONFIG, main_dir=MAIN_DIR)
+YORIG = 2000   # forecast runs from the Copernicus Marine Forecast / Mercator anfc
+
+GFS = os.environ.get("SEAFORWARD_MAIN_DIR", f"../forecast/model-runs/{CONFIG}/{CYCLE}/downloaded_data/GFS/for_croco/")
+BLK_BASELINE = os.path.join(GFS, "U-COMPONENT_OF_WIND_Y9999M01.nc")
 BLK_PERTURBED = os.path.splitext(BLK_BASELINE)[0] + f"_wind{AMP_FACTOR:g}.nc"
+
+print(f"Opening forecast cycle {CYCLE}")
+print(f"  CROCO history    : {CROCO_HIS}")
+print(f"  baseline forcing : {BLK_BASELINE}")
 
 # CROCOTOOLS bulk-forcing files commonly use 'uwnd'/'vwnd'; some pipelines
 # instead carry 'Uwind'/'Vwind'. Detect whichever pair is present.
-WIND_NAME_PAIRS = [("uwnd", "vwnd"), ("Uwind", "Vwind"), ("u10", "v10")]
+WIND_NAME_PAIRS = [(" U-component_of_wind", " v-component_of_wind")]
 
 dsb = xr.open_dataset(BLK_BASELINE)
 uname, vname = next(p for p in WIND_NAME_PAIRS if p[0] in dsb)
@@ -67,14 +72,17 @@ print(f"baseline wind speed range: "
      f"{float(np.sqrt(dsb[uname]**2 + dsb[vname]**2).min()):.2f} .. "
      f"{float(np.sqrt(dsb[uname]**2 + dsb[vname]**2).max()):.2f} m/s")
 ```
+
 ```python
+AMP_FACTOR = 1.5   # 
+
 dsp = dsb.copy(deep=True)
 dsp[uname] = dsb[uname] * AMP_FACTOR
 dsp[vname] = dsb[vname] * AMP_FACTOR
 dsp[uname].attrs.update(dsb[uname].attrs)
 dsp[vname].attrs.update(dsb[vname].attrs)
 dsp.attrs["history"] = (dsb.attrs.get("history", "") +
-                        f" | SEA-FORWARD 04_sensitivity: wind x{AMP_FACTOR} "
+                        f" | SEA-FORWARD 05_sensitivity: wind x{AMP_FACTOR} "
                         f"({uname},{vname}) for Step 5.3 sensitivity study")
 
 dsp.to_netcdf(BLK_PERTURBED)
@@ -87,33 +95,13 @@ print(f"wrote perturbed forcing -> {BLK_PERTURBED}")
 **In real-data mode**, this step happens *outside* the notebook, using the same forecast/hindcast orchestration script described in the Technical Specification (Step 4 of the operational workflow), pointed at `croco_blk_wind1.5.nc` instead of the baseline file:
 
 ```bash
-# from the repository root, in the seaforward conda environment:
-cd hindcast
-# edit crocotools_param.py (or the region config) so blkfilename points at
-# the perturbed file written by Part A, OR pass the override supported by
-# your run script, e.g.:
-./run_hindcast_cycle.sh --region Canary_12 --blk croco_blk_wind1.5.nc --outdir ../hindcast/model-runs/Canary_12/<DATE>/hcast_wind1p5
-```
-
-Do **not** overwrite the baseline run directory -- keep the two side by side so Part C can compare them. Once the run completes, point `HIS_PERTURBED` at its `croco_his.nc` and re-run the cell below.
-
-**In demo mode**, this cell is skipped -- `_demo_data.get_sensitivity_paths()` already generated a synthetic "perturbed" history file (stronger coastal cooling) standing in for what this re-run would produce, so Part C below still has something real to compare.
-
-```python
-if IS_DEMO:
-    HIS_BASELINE = paths["his_baseline"]
-    HIS_PERTURBED = paths["his_perturbed"]
-    print("demo mode -- using the auto-generated synthetic 'perturbed' run:")
-else:
-    HIS_BASELINE = f"../hindcast/model-runs/{REGION}/<DATE>/hcast/CROCO_FILES/croco_his.nc"
-    HIS_PERTURBED = f"../hindcast/model-runs/{REGION}/<DATE>/hcast_wind1p5/CROCO_FILES/croco_his.nc"
-    assert os.path.exists(HIS_BASELINE), f"missing baseline history: {HIS_BASELINE}"
-    assert os.path.exists(HIS_PERTURBED), (
-        f"missing perturbed-run history: {HIS_PERTURBED}"
-        " -> run Part B (the CROCO re-run) before continuing.")
-
-print(f"  baseline : {HIS_BASELINE}")
-print(f"  perturbed: {HIS_PERTURBED}")
+source ~/seaforward/env.sh
+source ~/seaforward/forecast/track.sh
+export CONFIG_NAME=Canary_12
+export FCAST=${CROCO_RUNS_ROOT}/${CONFIG_NAME}     # forecast/scratch/Canary_12
+cd ${FCAST}
+conda deactivate                                    # run outside conda
+./croco croco.in 2>&1 | tee run.log | tail -60
 ```
 
 ## Part C -- Compare the upwelling response (D1)
@@ -163,7 +151,7 @@ Reusing the Exercise 1 calculation from `03_exercises.ipynb` unchanged,applied t
 ```python
 OMEGA = 7.2921e-5
 RHO_AIR, RHO_WATER, CD = 1.22, 1025.0, 1.3e-3
-COAST_ANGLE_DEG = 0.0   # TODO: same coastline angle used in 03_exercises.ipynb
+COAST_ANGLE_DEG = 90.0   # TODO: same coastline angle used in 04_exercises.ipynb
 
 
 def bakun_index(u10, v10, lat0, coast_angle_deg=COAST_ANGLE_DEG):

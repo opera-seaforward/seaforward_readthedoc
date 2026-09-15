@@ -5,7 +5,7 @@ post-processing, exercises, sensitivity analysis, animation).
 
 ``` { .text .no-copy }
 notebooks/
-├── 01_seaforward_postprocess_plot.ipynb  ← maps, sections, profiles, Hovmöller,
+├── 01_postprocessing.ipynb               ← maps, sections, profiles, Hovmöller,
 │                                            time series (D1)
 ├── 02_validation.ipynb                   ← single-cycle validation: bias maps,
 │                                            scatter plots, Taylor diagrams, time
@@ -37,8 +37,9 @@ sftools/
 │                                    sub-areas as "validation_godae"/
 │                                    "validation_satellite"; there is no separate
 │                                    top-level module by either of those names)
-├── validation_composite.py       ← lead-time compositing across cycles (imported
+├── validation_composite.py       ← lead-time compositing across cycles (imported 
 │                                    as `vc` in 03_composite_validation.ipynb only)
+├── validation_obs.py             ← single module for some validation plots only against observations
 ├── download/cmems.py             ← Copernicus Marine availability checks + downloads
 │                                    (`from sftools.download import cmems`)
 └── animation.py                  ← sftools.animation.animate() — the single entry
