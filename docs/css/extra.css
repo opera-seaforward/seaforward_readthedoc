@@ -138,7 +138,7 @@ body {
     width: 80px;
     height: 80px;                              /* ajuste selon la taille voulue */
     margin: 20px auto 5px auto;               /* centre l'image et ajoute une petite marge en bas */
-    background-image: url('../assets/logo.png');
+    background-image: url('../assets/logo-1.png');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
