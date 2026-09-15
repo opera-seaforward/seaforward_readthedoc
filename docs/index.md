@@ -1,5 +1,4 @@
-<!-- BANNER IMAGE GOES HERE -->
-<!-- e.g. ![SEA-FORWARD](assets/banner.png) -->
+<img src="assets/banner.png" alt="SEA-FORWARD banner" style="width: 100%; max-height: 300px; object-fit: contain;">
 
 # SEA-FORWARD
 
@@ -119,10 +118,7 @@ OceanPrediction DCC _virtuous loop_, which moves through four thematic periods:
 3. Operating an Ocean Forecasting Service
 4. Applications and Digital Twins
 
-**SEA-FORWARD sits in the second of these periods, aimed at the advanced-level
-audience.** It implements OceanPrediction-A as a single deterministic run: one model,
-one grid, no data assimilation, so the full value chain from upstream data to
-downstream product stays visible without additional machinery.
+**SEA-FORWARD sits in the second of these periods, aimed at the advanced-level audience.** It implements OceanPrediction-A as a single deterministic run: one model, one grid, no data assimilation, so the full value chain from upstream data to downstream product stays visible without additional machinery.
 
 ## Partners
 
