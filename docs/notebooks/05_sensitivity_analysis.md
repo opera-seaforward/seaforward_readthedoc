@@ -44,7 +44,7 @@ MAIN_DIR = os.environ.get("SEAFORWARD_MAIN_DIR", "~/seaforward/forecast/model-ru
 AVAILABLE_CYCLES = _paths.list_cycles(os.path.expanduser(MAIN_DIR), CONFIG)
 print(f"forecast cycles found under {os.path.join(MAIN_DIR, CONFIG)}: {AVAILABLE_CYCLES}")
 
-# >>> SET THIS to the cycle you want to perturb, e.g. "20260711" <<<
+# >>> SET THIS to the cycle you want to perturb, e.g. "20260711_plain" <<<
 CYCLE = os.environ.get("SEAFORWARD_CYCLE", AVAILABLE_CYCLES[-1] if AVAILABLE_CYCLES else "")
 ```
 ```python

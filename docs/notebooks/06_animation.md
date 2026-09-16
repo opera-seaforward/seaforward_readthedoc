@@ -48,7 +48,7 @@ ds = pp.open_history(H, Yorig=YORIG)
 
 ## `anim.animate()` reference
 
-```
+``` { .text .no-copy }
 anim.animate(ds, var, depth_m=None, overlay=None, uv_depth=None, isobaths=None,
             tindex_range=None, skip=4, scale=None, interval=300, figsize=(8, 7),
             cmap=None, vmin=None, vmax=None, out=None, fps=4, dpi=110)

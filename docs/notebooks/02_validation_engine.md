@@ -3,7 +3,7 @@
 `sftools.validation` -- contents the GODAE OceanView scorecard (bias, RMSD, unbiased RMSD, correlation, two scatter-index variants, std-ratio) plus optional class-4 in-situ scoring per depth layer -- is now the **single
 statistics engine** behind every validation surface in this repo:
 
-```
+``` { .text .no-copy }
 sftools.validation.godae_scorecard_croco_vs_glorys()   <- grid vs reference, one variable
 sftools.validation.compare_timeseries()           <- grid vs reference time series, for single point or full domain
 ```

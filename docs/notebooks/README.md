@@ -149,7 +149,7 @@ guard will simply skip every reference-product comparison). Either:
 ```bash
 export SEAFORWARD_CONFIG=Canary_12
 export SEAFORWARD_MAIN_DIR=~/seaforward/forecast/model-runs
-export SEAFORWARD_CYCLE=20260711
+export SEAFORWARD_CYCLE=20260711_plain
 jupyter lab
 ```
 

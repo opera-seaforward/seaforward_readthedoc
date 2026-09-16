@@ -6,7 +6,7 @@ staggered-grid velocity handling, Hovmoller/profile/section extraction -- and
 scaling, quiver overlays -- are the **two modules** behind every static figure
 in this repo:
 
-```
+``` { .text .no-copy }
 pp.field() / pp.section() / pp.profile() / pp.hovmoller() / pp.timeseries()   <- extract
 pp.uv_at_depth() / pp.speed_map() / pp.vorticity()                            <- derive dynamics from u/v
 pl.plot() / pl.plot_eddy()                                                    <- draw one figure, one call
