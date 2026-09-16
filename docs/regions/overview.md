@@ -15,10 +15,14 @@ so you can see the region in action.
 
 ### Generating a region portrait
 
-Run this from `~/seaforward`, so `sftools` imports, pointing at the region's
-`croco_grd.nc`:
+Pointing at the region's `croco_grd.nc`:
 
-```python
+```bash
+cd ~/seaforward
+conda activate seaforward
+
+python3 << 'PYEOF'
+import matplotlib; matplotlib.use('Agg')
 import sftools.plotting as pl
 
 pl.grid_bathy_map(
@@ -26,8 +30,9 @@ pl.grid_bathy_map(
     title="Gulf of Guinea — IGOG 1/12",
     coastline=True,        # real coastline via cartopy; falls back to the land mask
     mesh_stride=2,         # draw every 2nd grid line, to thin a dense mesh
-    out="docs/img/igog_12_portrait.png",
+    out="igog_12_portrait.png",
 )
+PYEOF
 ```
 
 - **Left panel** — the grid mesh over the coastline, drawn on **ocean cells only**, so
@@ -41,14 +46,23 @@ pl.grid_bathy_map(
 
 Once a forecast exists, one more call gives the "region in action" figure:
 
-```python
+```bash
+cd ~/seaforward
+conda activate seaforward
+
+python3 << 'PYEOF'
+import glob
+import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp, sftools.plotting as pl
 
-ds = pp.open_history(
-    "forecast/model-runs/IGOG_12/<DATE>/fcst/CROCO_FILES/croco_his.nc", Yorig=2000)
+# the cycle folder is named <date>_<build>, so find it rather than typing it
+HIS = sorted(glob.glob(
+    "forecast/model-runs/IGOG_12/*/fcst/CROCO_FILES/croco_his.nc"))[-1]
+ds = pp.open_history(HIS, Yorig=2000)
 
-pl.plot(pp.field(ds, "temp"), out="docs/img/igog_12_sst.png")                # surface
-pl.plot(pp.field(ds, "temp", depth_m=100), out="docs/img/igog_12_t100.png")  # at 100 m
+pl.plot(pp.field(ds, "temp"), out="igog_12_sst.png")                # surface
+pl.plot(pp.field(ds, "temp", depth_m=100), out="igog_12_t100.png")  # at 100 m
+PYEOF
 ```
 
 `pp.field()` gives the surface by default and a true depth in metres when you pass
