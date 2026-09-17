@@ -32,7 +32,7 @@ built-in South-Africa example; you're replacing it with your own. Use
 
 ### 7.2 — Turn on online weather forcing
 
-`Ctrl-W`, type `undef  ONLINE`, Enter. You'll find:
+`Ctrl-W`, type `ONLINE`, Enter. You'll find:
 
 ``` { .text .no-copy }
 #  undef  ONLINE

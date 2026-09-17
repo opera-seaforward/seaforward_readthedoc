@@ -9,7 +9,7 @@ nano ${CF}/crocotools_param.py
 The file is empty. **Type in** the following (don't type the explanations that
 follow):
 
-``` { .python .no-copy }
+```python
 inputdata    = 'mercator'
 Nzgoodmin    = 4
 multi_files  = False
