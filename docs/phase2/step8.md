@@ -1,7 +1,23 @@
 `param.h` tells the model how big your grid is — and this must match
-`croco_grd.nc`. Open it:
+`croco_grd.nc`. Read the numbers from the grid file rather than from `grid.ini`: the
+tools add points, so the two differ.
 
 ```bash
+cd ~/seaforward
+conda activate seaforward
+python3 << 'PYEOF'
+import xarray as xr
+g = xr.open_dataset('forecast/scratch/Canary_12/CROCO_FILES/croco_grd.nc')
+xi, eta = g.sizes['xi_rho'], g.sizes['eta_rho']
+print('grid file : xi_rho=%d  eta_rho=%d' % (xi, eta))
+print('param.h   : LLm0=%d   MMm0=%d   N=50' % (xi - 2, eta - 2))
+PYEOF
+```
+
+Then open `param.h` in your config folder:
+
+```bash
+cd ${CONFIG_DIR}
 nano param.h
 ```
 
@@ -27,10 +43,25 @@ Add a new branch **just above the `# else` line**, so the block becomes:
 # endif
 ```
 
-**What:** this tells the model your grid is 79×121 (interior points) with 50
-vertical levels. **Why:** the numbers come from Step 2 (`xi_rho=81 → LLm0=79`,
-`eta_rho=123 → MMm0=121`), and `N=50` matches your `sigma_params`. The name
-`CANARY_12` must be **identical** to the one you set in `cppdefs.h`.
+**What the three numbers are:**
+
+| | |
+|---|---|
+| **`LLm0`** | interior grid points in the x direction (west–east) |
+| **`MMm0`** | interior grid points in the y direction (south–north) |
+| **`N`** | sigma levels in the vertical |
+
+**Why two less than the grid file.** `croco_grd.nc` reports `xi_rho = 81`, but two of
+those are boundary rows CROCO adds around the domain it actually computes on. `LLm0`
+counts the interior, so it is `xi_rho − 2` — here 79. Same for `MMm0` and `eta_rho`:
+123 − 2 = 121.
+
+**Why it must match.** These are compile-time constants, so the binary allocates arrays
+of exactly this size. If they disagree with `croco_grd.nc`, the model reads a grid that
+does not fit the arrays it built.
+
+`N=50` must equal the `N` in your `sigma_params` from Step 4, and the name `CANARY_12`
+must be **identical** to the one you set in `cppdefs.h`.
 
 !!! warning
     **The new `# elif` goes above `# else`, never below it.** An `# elif` after `# else` is a compile error. Put your two lines between the `GIBRALTAR_VHR5` block and the `# else`.

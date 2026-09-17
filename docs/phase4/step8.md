@@ -23,7 +23,7 @@ that line to `CANARY_12`.
 - **Why:** `param.h`, `croco.in` and `jobcomp`
   all key off this name.
 
-**Edit 2 — ONLINE + ERA5.** `Ctrl-W`, type `undef  ONLINE`, Enter — this lands in
+**Edit 2 — ONLINE + ERA5.** `Ctrl-W`, type `ONLINE`, Enter — this lands in
 **your** regional block, just below the `BULK_*` lines. Set it to:
 
 ``` { .text .no-copy }

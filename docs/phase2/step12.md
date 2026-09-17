@@ -18,9 +18,7 @@ cd ${FCAST}
 cp ${CONFIG_DIR}/croco.in .            # stage the run-time file you edited in Step 11
 TODAY=$(date -u +%Y%m%d)
 
-# NTIMES  dt  NDTFAST  NINFO
-#   2016 steps x 300 s = 7 days (the today-2 .. today+5 window)
-#   60 = barotropic sub-steps per baroclinic step; 1 = print every step
+# 2016 x 300 s = 7 days — Step 11.4 explains the four numbers
 sed -i '/^time_stepping:/{n; s/.*/                2016     300       60      1/}' croco.in
 
 # initial condition — two lines below the header (NRREC, then the filename)
