@@ -141,7 +141,7 @@ OceanPrediction DCC _virtuous loop_, which moves through four thematic periods:
 
 ## Citing and licence
 
-SEA-FORWARD is released under an open-source licence, with input data and reference results archived on Zenodo with permanent DOIs. See the [LICENSE](https://github.com/opera-seaforward/seaforward_readthedoc/blob/main/LICENSE) file and the citation guidance in the repository.
+Licensing and public release terms are being finalised. The repository is currently private, and no licence has yet been applied. Citation guidance and archived reference data will be added once those terms are agreed.
 
 <!-- TODO: confirm the Zenodo DOI and licence name once issued -->
 
