@@ -2,7 +2,7 @@
 
 # SEA-FORWARD
 
-SEA-FORWARD (**S**imple **E**ducational **A**ccess for **For**ecast and **War**ning **D**evelopers) is a free, open-source toolkit that teaches you to build and run a
+SEA-FORWARD (**S**imple **E**ducational **A**ccess for **For**ecast and **War**ning **D**evelopers) is an educational toolkit that teaches you to build and run a
 complete ocean forecasting system on your own computer — from raw input data
 through to a validated 5-day forecast you can plot and interpret. SEA-FORWARD implements the [OceanPrediction-A architecture](https://www.unoceanprediction.org/sites/default/files/file/2024-12/Architecture%20Guide%20Spreads%20MERCATOR%20EDITORIAL_241122.pdf) described in the figure below.
 
@@ -143,7 +143,6 @@ OceanPrediction DCC _virtuous loop_, which moves through four thematic periods:
 
 Licensing and public release terms are being finalised. The repository is currently private, and no licence has yet been applied. Citation guidance and archived reference data will be added once those terms are agreed.
 
-<!-- TODO: confirm the Zenodo DOI and licence name once issued -->
 
 ## Acknowledgements
 
