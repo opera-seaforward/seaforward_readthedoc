@@ -148,6 +148,9 @@ Licensing and public release terms are being finalised. The repository is curren
 
 We thank the **[SOMISANA](https://somisana.ac.za/)** team at
 **[SAEON](https://www.saeon.ac.za/)**, the South African Environmental Observation
-Network, for documenting their CROCO setup openly. Their
-[somisana-croco wiki](https://github.com/SAEON/somisana-croco/wiki) was a useful
-reference while we designed SEA-FORWARD.
+Network. Parts of `sftools` are adapted from
+[somisana-croco](https://github.com/SAEON/somisana-croco) and attributed in the source,
+and their openly documented CROCO setup was a useful reference while we built
+SEA-FORWARD.
+
+The model comes from the [CROCO](https://www.croco-ocean.org/) project.
