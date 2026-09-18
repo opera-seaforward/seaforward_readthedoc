@@ -114,10 +114,10 @@ Read this if a notebook complains about a missing file or an empty cycle list.
     (fake CROCO history, fake GLORYS reference, fake wind field) whenever
     real data wasn't found, and printed a `!! DEMO DATA !!` banner. **The
     current notebooks (`02_validation.ipynb` through `06_animation.ipynb`)
-    no longer do this** — there is no `_demo_data.py` and no synthetic
-    fallback. If your checkout still has `notebooks/_demo_data.py` and
-    notebooks that import it, you're looking at an older revision of the
-    toolkit; the rest of this page describes the current behaviour.
+    no longer do this** — no notebook imports it and there is no synthetic
+    fallback. `_demo_data.py` is still in the folder, kept only for any
+    external script that may reference it; the rest of this page describes
+    the current behaviour.
 
 Every current notebook imports the shared helper `_paths.py` (not a
 notebook itself) instead. Each notebook's setup cell reads three
