@@ -11,7 +11,8 @@ initial and boundary files to read, and where the surface forcing lives. The dri
 patches these for you; here you do it by hand.
 
 First stage the `croco.in` you edited in Step 11 into the run folder — the compile
-step staged the other three files, this is the last one — then patch it:
+step staged the other three files, this is the last one — then patch it. This is
+shell only, so it does not matter whether conda is active:
 
 ```bash
 cd ${FCAST}

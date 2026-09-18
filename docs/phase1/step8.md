@@ -42,6 +42,7 @@ must be compiled once:
 
 ```bash
 conda activate seaforward
+source ~/seaforward/env.sh      # FC and FFLAGS — the Makefile needs both
 cd ~/seaforward/code/croco_pytools/prepro/Modules/tools_fort_routines/
 make clean && make
 ```

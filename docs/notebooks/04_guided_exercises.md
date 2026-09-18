@@ -74,7 +74,7 @@ where `W_alongshore` is the wind component *parallel to the coastline* (rotate t
 * **TODO(1a):** rotate the wind vector into along-/cross-shore components.
 * **TODO(1b):** compute the Bakun transport.
 
-In demo mode, the wind field is a synthetic due-south wind (`_demo_data.make_synthetic_wind`) -- with a real ERA5 `for_croco` archive, use `sftools.validation._load_wind(ERA5_DIR, date)` instead, and set `COAST_ANGLE_DEG` to your region's actual coastline orientation, e.g. from `docs/07_regions.md` or a `grid_bathy_map` plot.
+The wind field comes from your ERA5 `for_croco` archive via `sftools.validation._load_wind(ERA5_DIR, date)`. Set `COAST_ANGLE_DEG` to your region's actual coastline orientation — read it from a `grid_bathy_map` plot, or from the Region Gallery.
 
 First download **ERA5** data:
 ```python 

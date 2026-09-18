@@ -2,7 +2,7 @@
 
 # SEA-FORWARD
 
-SEA-FORWARD (**S**imple **E**ducational **A**ccess for **For**ecast and **War**ning **D**evelopers) is a free, open-source toolkit that teaches you to build and run a
+SEA-FORWARD (**S**imple **E**ducational **A**ccess for **For**ecast and **War**ning **D**evelopers) is an educational toolkit that teaches you to build and run a
 complete ocean forecasting system on your own computer — from raw input data
 through to a validated 5-day forecast you can plot and interpret. SEA-FORWARD implements the [OceanPrediction-A architecture](https://www.unoceanprediction.org/sites/default/files/file/2024-12/Architecture%20Guide%20Spreads%20MERCATOR%20EDITORIAL_241122.pdf) described in the figure below.
 
@@ -40,7 +40,7 @@ blueprint of the OceanPrediction DCC Architecture:
 | --------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
 | Upstream Data (U)           | U1–U5   | ETOPO2 bathymetry; Copernicus Marine Service (CMEMS) initial and boundary conditions; GFS or ERA5 atmospheric forcing; TPXO tides; Dai & Trenberth river discharge |
 | Core Forecasting Engine (C) | C1      | The CROCO v2.0 ocean model, compiled from source                                                 |
-| Verification & Analysis (V) | V1      | Automated validation against a canonical reference run (RMSE, bias, spatial correlation)         |
+| Verification & Analysis (V) | V1      | Validation against satellite and analysis references, plus forecast skill relative to the parent model and to persistence (RMSE, bias, spatial correlation)         |
 | Downstream Applications (D) | D1      | Jupyter notebooks for SST, SSH, currents, MLD and salinity, with guided exercises                |
 
 The forecasting strategy follows [Tchonang et al. (2024)](https://journals.ametsoc.org/view/journals/atot/41/6/JTECH-D-23-0112.1.xml). Each cycle begins with a 2-day spin-up initialised from the global 1/12° CMEMS product — Mercator analysis-and-forecast for a forecast, GLORYS12v1 reanalysis for a hindcast — which lets the regional grid adjust dynamically. The 5-day forecast then starts from the spin-up's end state rather than from a fresh interpolation. Running one cycle gives a single 5-day forecast; cycles can be repeated on a schedule, stepping forward 2 days at a time, for continuous coverage.
@@ -69,7 +69,7 @@ command for each.
 ## Requirements at a glance
 
 - **Minimum:** 4-core CPU, 8 GB RAM, 50 GB free disk
-- **Comfortable:** 8-core CPU, 16 GB RAM — a canonical 5-day forecast completes in under 30 minutes
+- **Comfortable:** 8-core CPU, 16 GB RAM — a 5-day forecast on any of the three parent configurations completes in under 20 minutes
 - **OS:** Ubuntu 20.04+ (primary), CentOS 7+, macOS 12+; Windows via WSL2
 - **You should know:** basic Linux and Python, and have a physical oceanography background
 - **Time:** a user with that background should complete installation and a first run within one working day
@@ -141,14 +141,16 @@ OceanPrediction DCC _virtuous loop_, which moves through four thematic periods:
 
 ## Citing and licence
 
-Licensing and public release terms are being finalised. The repository is currently private, and no licence has yet been applied. Citation guidance and archived reference data will be added once those terms are agreed.
+Licensing and public release terms are being finalised. The software repository is currently private and carries no licence; the licence on this documentation repository is provisional. Citation guidance and archived reference data will be added once those terms are agreed.
 
-<!-- TODO: confirm the Zenodo DOI and licence name once issued -->
 
 ## Acknowledgements
 
 We thank the **[SOMISANA](https://somisana.ac.za/)** team at
 **[SAEON](https://www.saeon.ac.za/)**, the South African Environmental Observation
-Network, for documenting their CROCO setup openly. Their
-[somisana-croco wiki](https://github.com/SAEON/somisana-croco/wiki) was a useful
-reference while we designed SEA-FORWARD.
+Network. Parts of `sftools` are adapted from
+[somisana-croco](https://github.com/SAEON/somisana-croco) and attributed in the source,
+and their openly documented CROCO setup was a useful reference while we built
+SEA-FORWARD.
+
+The model comes from the [CROCO](https://www.croco-ocean.org/) project.

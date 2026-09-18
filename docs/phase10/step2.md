@@ -54,5 +54,9 @@ Check yours before running:
 ls ~/seaforward/data/DATASETS_CROCOTOOLS/TPXO10/ | head -6
 ```
 
+**TPXO7 is already on your machine** — it comes with the CROCO datasets from
+Phase 1, in `DATASETS_CROCOTOOLS/TPXO7/`. TPXO10 is finer but is distributed by
+Oregon State University on request, so allow time for that if you want it.
+
 TPXO7 — a single `TPXO7.nc` with `multi_files = False` — works identically; the only
 difference is the param file. The rest of this chapter is the same whichever you use.

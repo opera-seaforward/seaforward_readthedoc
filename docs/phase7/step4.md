@@ -25,10 +25,7 @@ parent's first record, with no spin-up offset.
 !!! warning
     **`--run_date` must fall inside the converted parent's time range.** Step 3 printed it — `21 time(s)` spanning the parent's forecast window. Ask for a date outside that and the interpolation has nothing to work from. Check first if you're unsure:
     ```bash
-    python3 -c "
-    import xarray as xr
-    d = xr.open_dataset('${PARENT}')
-    print(d.time.values[0], '->', d.time.values[-1])"
+    python3 -c "import xarray as xr; d = xr.open_dataset('${PARENT}'); print(d.time.values[0], '->', d.time.values[-1])"
     ```
 
 !!! check
