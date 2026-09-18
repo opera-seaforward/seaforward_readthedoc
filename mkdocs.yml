@@ -152,7 +152,7 @@ nav:
       - Overview: phase6_validation/06_validation.md
       - The references: phase6_validation/references.md
       - Against observations: phase6_validation/observations.md
-      - Metrics agains observations:  phase6_validation/observations_suite.md
+      - Metrics against observations: phase6_validation/observations_suite.md
       - Forecast skill: phase6_validation/skill.md
       - Against an analysis: phase6_validation/analysis.md
       - Below the surface: phase6_validation/depth.md
