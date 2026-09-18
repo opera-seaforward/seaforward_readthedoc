@@ -1,9 +1,9 @@
 # Before You Start
 
-1. **Activate the `seaforward` conda environment** and make sure `sftools` is
-   installed editable from the repo root (`pip install --no-deps -e .` — see
-   `sftools/README.md`). If `import sftools...` fails inside a notebook,
-   this step was skipped.
+1. **Activate the `seaforward` conda environment.** The notebooks find `sftools`
+   through the path insert in step 2, so no install is needed. If you would
+   rather install it — which also gives you a `seaforward` command instead of
+   `python seaforward.py` — run `pip install --no-deps -e .` from the repo root.
 2. **Launch Jupyter from the repository root**, not from inside `notebooks/`:
    ```bash
    cd seaforward        # repo root
