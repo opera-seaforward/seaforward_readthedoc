@@ -40,7 +40,7 @@ blueprint of the OceanPrediction DCC Architecture:
 | --------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
 | Upstream Data (U)           | U1–U5   | ETOPO2 bathymetry; Copernicus Marine Service (CMEMS) initial and boundary conditions; GFS or ERA5 atmospheric forcing; TPXO tides; Dai & Trenberth river discharge |
 | Core Forecasting Engine (C) | C1      | The CROCO v2.0 ocean model, compiled from source                                                 |
-| Verification & Analysis (V) | V1      | Automated validation against a canonical reference run (RMSE, bias, spatial correlation)         |
+| Verification & Analysis (V) | V1      | Validation against satellite and analysis references, plus forecast skill relative to the parent model and to persistence (RMSE, bias, spatial correlation)         |
 | Downstream Applications (D) | D1      | Jupyter notebooks for SST, SSH, currents, MLD and salinity, with guided exercises                |
 
 The forecasting strategy follows [Tchonang et al. (2024)](https://journals.ametsoc.org/view/journals/atot/41/6/JTECH-D-23-0112.1.xml). Each cycle begins with a 2-day spin-up initialised from the global 1/12° CMEMS product — Mercator analysis-and-forecast for a forecast, GLORYS12v1 reanalysis for a hindcast — which lets the regional grid adjust dynamically. The 5-day forecast then starts from the spin-up's end state rather than from a fresh interpolation. Running one cycle gives a single 5-day forecast; cycles can be repeated on a schedule, stepping forward 2 days at a time, for continuous coverage.
@@ -69,7 +69,7 @@ command for each.
 ## Requirements at a glance
 
 - **Minimum:** 4-core CPU, 8 GB RAM, 50 GB free disk
-- **Comfortable:** 8-core CPU, 16 GB RAM — a canonical 5-day forecast completes in under 30 minutes
+- **Comfortable:** 8-core CPU, 16 GB RAM — a 5-day forecast on any of the three parent configurations completes in under 20 minutes
 - **OS:** Ubuntu 20.04+ (primary), CentOS 7+, macOS 12+; Windows via WSL2
 - **You should know:** basic Linux and Python, and have a physical oceanography background
 - **Time:** a user with that background should complete installation and a first run within one working day
