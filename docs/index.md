@@ -141,7 +141,7 @@ OceanPrediction DCC _virtuous loop_, which moves through four thematic periods:
 
 ## Citing and licence
 
-Licensing and public release terms are being finalised. The repository is currently private, and no licence has yet been applied. Citation guidance and archived reference data will be added once those terms are agreed.
+Licensing and public release terms are being finalised. The software repository is currently private and carries no licence; the licence on this documentation repository is provisional. Citation guidance and archived reference data will be added once those terms are agreed.
 
 
 ## Acknowledgements
