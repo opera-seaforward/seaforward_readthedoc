@@ -19,7 +19,7 @@ three curves are directly comparable.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
@@ -51,12 +51,12 @@ PYEOF
 
 ![Forecast error against lead time](../img/val_skill.png)
 
-*SST, sea level anomaly, and the two velocity components at 15 m. Three cycles pooled;
-faint lines are the individual cycles. Lead zero is the initial condition.*
+_SST, sea level anomaly, and the two velocity components at 15 m. Three cycles pooled;
+faint lines are the individual cycles. Lead zero is the initial condition._
 
 ## Temperature
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 SST  vs ODYSSEA, 3 cycles pooled:
    lead       n  SEA-FWD   parent  persist
     0.0    12657    0.750    0.879    0.750
@@ -77,7 +77,7 @@ the ocean itself changes.
 
 ## Sea level
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 SSH anomaly  vs DUACS, 3 cycles pooled:
    lead       n  SEA-FWD   parent  persist
     0.0    10611    0.037    0.037    0.037
@@ -94,7 +94,7 @@ one, so this panel says more about the reference than about either model.
 
 ## Currents
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 eastward velocity 15 m  vs GlobCurrent:      northward velocity 15 m:
    lead  SEA-FWD  parent  persist               lead  SEA-FWD  parent  persist
     0.0    0.106   0.110    0.106                0.0    0.118   0.126    0.118
@@ -121,7 +121,7 @@ a result, but it is the kind of thing worth watching as more cycles accumulate.
 Both components lose to persistence from day 1, and both jump sharply at day 5.
 
 !!! note
-    `n = 2643` for the currents against `12657` for SST. GlobCurrent is 0.25°, so it has roughly a fifth as many cells over this domain — the current numbers rest on far less data and should be read more cautiously.
+`n = 2643` for the currents against `12657` for SST. GlobCurrent is 0.25°, so it has roughly a fifth as many cells over this domain — the current numbers rest on far less data and should be read more cautiously.
 
 ## Reading it honestly
 
@@ -141,4 +141,4 @@ run's end, so it is not the inputs running out — it is the model's own error g
 reaching the point where the initial state no longer constrains it.
 
 !!! note
-    Three cycles. Enough to see that a result repeats, not enough to average confidently — which is why the individual cycles are drawn rather than a confidence band. A verification figure in the literature would pool dozens.
+Three cycles. Enough to see that a result repeats, not enough to average confidently — which is why the individual cycles are drawn rather than a confidence band. A verification figure in the literature would pool dozens.

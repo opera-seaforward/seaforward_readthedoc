@@ -1,9 +1,9 @@
 ![build progress](../img/runtime_input.png)
 
-*Step 11 sets the **run-time inputs** in `croco.in` — dates, filenames, output intervals. Changing these needs no recompile.*
+_Step 11 sets the **run-time inputs** in `croco.in` — dates, filenames, output intervals. Changing these needs no recompile._
 
 `croco.in` holds the model's run-time settings. You already compiled — this file is
-read at *run* time, not compile time, which is why it comes after the build. Edit
+read at _run_ time, not compile time, which is why it comes after the build. Edit
 the copy in your config folder:
 
 ```bash
@@ -14,7 +14,7 @@ nano ${CONFIG_DIR}/croco.in
 
 `Ctrl-W`, `BENGUELA TEST`, Enter. Change the title line to your config's name:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
         CANARY_12 FORECAST
 ```
 
@@ -24,7 +24,7 @@ Cosmetic, but keeps configs identifiable.
 
 `Ctrl-W`, `S-coord`, Enter. The line below should read:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
            7.0d0     2.0d0      200.0d0
 ```
 
@@ -33,11 +33,11 @@ not use fixed depth levels; it uses terrain-following sigma levels, which stretc
 surface to the sea floor so every column has the same number of levels whether the water
 is 20 m or 4000 m deep. These three control how that stretching is distributed.
 
-| | |
-|---|---|
+|                   |                                                                                                                                          |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | **`theta_s = 7`** | surface stretching. Higher packs more levels near the surface, where the thermocline and the wind-driven layer are. 7 is strong packing. |
-| **`theta_b = 2`** | bottom stretching. Higher also packs levels near the sea floor, for the bottom boundary layer. 2 is moderate. |
-| **`hc = 200`** | the depth in metres above which the surface packing applies in full. Below it the levels spread out. |
+| **`theta_b = 2`** | bottom stretching. Higher also packs levels near the sea floor, for the bottom boundary layer. 2 is moderate.                            |
+| **`hc = 200`**    | the depth in metres above which the surface packing applies in full. Below it the levels spread out.                                     |
 
 `d0` is Fortran for a double-precision constant — `7.0d0` is just `7.0`.
 
@@ -51,7 +51,7 @@ never written for. The template usually already has these — check, don't assum
 `Ctrl-W`, `X_SPONGE`, Enter. The line **below** the header shows `XXX  XXX`, which
 CROCO cannot read. Set real numbers:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
                     0.                0.
 ```
 
@@ -69,7 +69,7 @@ smaller numbers.
 `Ctrl-W`, `time_stepping`, Enter. The driver sets this line per run, so leave it as it
 is — but it decides whether the model is stable, so it is worth knowing what it says:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
                 2016     300       60      1
 ```
@@ -80,19 +80,19 @@ salinity move at metres per second and can take a much longer one. So the fast m
 (the **barotropic** mode) and the slow ones (the **baroclinic** mode) are stepped
 separately.
 
-| | |
-|---|---|
-| **`dt`** | the slow (baroclinic) step, in seconds |
+|               |                                                           |
+| ------------- | --------------------------------------------------------- |
+| **`dt`**      | the slow (baroclinic) step, in seconds                    |
 | **`NDTFAST`** | how many fast (barotropic) steps fit inside one slow step |
-| **`NTIMES`** | how many slow steps to take — this sets the run length |
-| **`NINFO`** | how often to print a diagnostic line; `1` is every step |
+| **`NTIMES`**  | how many slow steps to take — this sets the run length    |
+| **`NINFO`**   | how often to print a diagnostic line; `1` is every step   |
 
 At `dt=300` and `NDTFAST=60`, the fast mode advances every 5 seconds and everything else
 every 5 minutes.
 
 **`NTIMES` and `dt` are coupled:**
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 NTIMES = run length in seconds / dt
 ```
 
@@ -107,7 +107,7 @@ scheme cannot follow it, and the error grows every step until the run fails.
 
 The **Courant number** measures how close you are:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 C = wave speed × timestep / cell size
 ```
 
@@ -121,7 +121,7 @@ in the model. Check yours:
 cd ${CF}
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import numpy as np, xarray as xr
 
 g  = xr.open_dataset('croco_grd.nc')
@@ -155,4 +155,4 @@ grep -n "XXX" ${CONFIG_DIR}/croco.in && echo "STILL HAS XXX — fix it" || echo 
 ```
 
 !!! note
-    The `initial`, `boundary` and `online` lines are set at run time ([Phase 3](../phase3/03_forecast.md)). The `diagnostics`, `floats`, `stations`, `psource`, `sediment`, `biology` and `wkb_*` sections are inert unless their CPP switch is on, so you can ignore them for this configuration.
+The `initial`, `boundary` and `online` lines are set at run time ([Phase 3](../phase3/03_forecast.md)). The `diagnostics`, `floats`, `stations`, `psource`, `sediment`, `biology` and `wkb_*` sections are inert unless their CPP switch is on, so you can ignore them for this configuration.

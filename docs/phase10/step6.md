@@ -4,7 +4,7 @@ itself. Track sea level at a shelf point across the hourly records:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 
@@ -35,14 +35,14 @@ fig.savefig('docs/img/tides_timeseries.png', dpi=110, bbox_inches='tight')
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 point: 16.47W 23.03N, depth 81 m
 169 records, 168.0 hours
 ```
 
 ![Tidal sea level at a shelf point](../img/tides_timeseries.png)
 
-*Sea level at 16.47°W, 23.03°N in 81 m of water, hourly through the seven-day run.*
+_Sea level at 16.47°W, 23.03°N in 81 m of water, hourly through the seven-day run._
 
 Fourteen rise-and-fall cycles in seven days — **that is M2**, at a 12.4-hour period. A
 tide-free run at the same point drifts slowly with no oscillation; this one breathes.
@@ -62,7 +62,7 @@ the initial condition carries no tidal signal at all.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 from matplotlib.colors import ListedColormap
@@ -96,7 +96,7 @@ fig.savefig('docs/img/tides_range.png', dpi=110, bbox_inches='tight')
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 tidal range: mean 1.22 m   max 2.22 m
       0-  100 m: mean range 1.55 m  (505 cells)
     100-  500 m: mean range 1.42 m  (587 cells)
@@ -106,7 +106,7 @@ tidal range: mean 1.22 m   max 2.22 m
 
 ![Tidal range across the domain](../img/tides_range.png)
 
-*Maximum minus minimum sea level over the run, with the 200 m isobath.*
+_Maximum minus minimum sea level over the run, with the 200 m isobath._
 
 **The range grows toward the coast**: 1.16 m in water deeper than 2000 m, 1.55 m on the
 shelf inside 100 m, and a maximum of 2.22 m. The map shows where the change happens —
@@ -126,4 +126,4 @@ Compare the daily-mean SSH against Mercator's, and against the same comparison f
 tide-free run. If adding tides hasn't degraded the slow ocean, the two should be close.
 
 !!! important
-    **Compare daily means, not hourly.** Mercator has no tides, so an hourly comparison shows the whole tidal signal as error — over two metres on this shelf. Averaging over 24 hours removes it, which makes the daily mean the only fair comparison.
+**Compare daily means, not hourly.** Mercator has no tides, so an hourly comparison shows the whole tidal signal as error — over two metres on this shelf. Averaging over 24 hours removes it, which makes the daily mean the only fair comparison.

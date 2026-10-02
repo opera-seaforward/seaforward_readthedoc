@@ -29,7 +29,7 @@ The snippets below continue in that session. The last section repeats everything
 block you can run start to finish.
 
 !!! note
-    **Stop the section before the coast.** Running the transect all the way to −16° puts its last points on land, which shows up as a thin spike of nonsense at the end of the figure. Ending at −17.2° keeps it in water the whole way.
+**Stop the section before the coast.** Running the transect all the way to −16° puts its last points on land, which shows up as a thin spike of nonsense at the end of the figure. Ending at −17.2° keeps it in water the whole way.
 
 ## Maps at depth
 
@@ -62,7 +62,7 @@ pp.section(ds, 'temp', -21.0, 21.0, -17.2, 21.0)
 ```
 
 !!! warning
-    **The order is `lon0, lat0, lon1, lat1`** — start point, then end point. Not all the longitudes followed by all the latitudes. Getting it wrong gives a transect somewhere unintended, usually without any error.
+**The order is `lon0, lat0, lon1, lat1`** — start point, then end point. Not all the longitudes followed by all the latitudes. Getting it wrong gives a transect somewhere unintended, usually without any error.
 
 ### Temperature
 
@@ -195,7 +195,7 @@ Everything above, as one runnable block:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp, sftools.plotting as pl
 

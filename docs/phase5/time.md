@@ -52,7 +52,7 @@ pp.hovmoller(ds, 'temp', kind='time_depth', lon0=-19.0, lat0=21.0)
 The `...` marks where your own values go — it is a placeholder, not something to type.
 
 !!! note
-    **`hovmoller` works on `temp`, `salt` and `zeta`.** It reads the variable straight from the file and indexes on the rho grid, so `u` and `v` — which live on their own staggered grids — and the derived fields are not available here. Use `pp.timeseries()` for those.
+**`hovmoller` works on `temp`, `salt` and `zeta`.** It reads the variable straight from the file and indexes on the rho grid, so `u` and `v` — which live on their own staggered grids — and the derived fields are not available here. Use `pp.timeseries()` for those.
 
 ### Time versus depth
 
@@ -158,7 +158,7 @@ fig = pl.plot(pp.timeseries(ds, 'speed', lon0=plon, lat0=plat, depth_m=50),
 ![Speed at 50 m over time](../img/phase5/g_ts_speed50.png)
 
 !!! tip
-    **Set the title.** Without one, the plotter stamps the coordinates into it — on a narrow figure that runs wider than the plot itself.
+**Set the title.** Without one, the plotter stamps the coordinates into it — on a narrow figure that runs wider than the plot itself.
 
 ## Animations
 
@@ -190,7 +190,7 @@ anim.animate(ds, 'zeta', overlay='uv', uv_depth=200, scale=2, skip=3,
 
 `uv_depth=200` puts the vectors below the Ekman layer, where the flow is geostrophic and
 follows the SSH contours — clockwise around a high, anticlockwise around a low. Leave it
-out and you get surface currents instead, which cut *across* the contours: the wind-driven
+out and you get surface currents instead, which cut _across_ the contours: the wind-driven
 Ekman transport rides on top of the geostrophic flow and is roughly perpendicular to the
 wind. Both are correct; they show different things.
 
@@ -220,7 +220,7 @@ anim.animate(ds, 'v')     # meridional current alone
 ```
 
 !!! note
-    **Depth animations are slow.** Every frame interpolates the whole grid from sigma levels to the requested depth, so a 29-frame animation means 29 full-grid interpolations. Expect minutes rather than seconds, and use `tindex_range` to test on a few frames first.
+**Depth animations are slow.** Every frame interpolates the whole grid from sigma levels to the requested depth, so a 29-frame animation means 29 full-grid interpolations. Expect minutes rather than seconds, and use `tindex_range` to test on a few frames first.
 
 **Options.** `depth_m` sets the shaded field's depth, `overlay` takes `'wind'` (surface
 wind stress, from the model's own `sustr`/`svstr`), `'uv'` (currents, at `uv_depth` metres
@@ -235,7 +235,7 @@ Everything above, as one runnable block. The animations take minutes rather than
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp, sftools.plotting as pl, sftools.animation as anim
 

@@ -8,7 +8,7 @@ those for a configuration that is not Canary_12.
 
 There is no fixed location, but the examples use:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 ~/seaforward/data/OBS/
 ```
 
@@ -46,7 +46,7 @@ Five files, each covering that one cycle.
 
 **For several cycles, one file each is awkward** — the skill figure needs every cycle
 scored against the same reference, and a file that stops short raises. Size the request
-against the *last* cycle and pad backwards far enough to reach the first:
+against the _last_ cycle and pad backwards far enough to reach the first:
 
 ```bash
 cd ~/seaforward
@@ -69,7 +69,7 @@ PYEOF
 every cycle, and the filename says so.
 
 !!! note
-    `copernicusmarine` writes `name_(1).nc` rather than overwriting when the target exists. `download_obs` deletes first when `force=True`, but a file downloaded by hand into the same name will silently leave you reading the old one. Check the timestamp if a re-download seems to have changed nothing.
+`copernicusmarine` writes `name_(1).nc` rather than overwriting when the target exists. `download_obs` deletes first when `force=True`, but a file downloaded by hand into the same name will silently leave you reading the old one. Check the timestamp if a re-download seems to have changed nothing.
 
 ## 3. Changing the region
 
@@ -82,7 +82,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
@@ -115,7 +115,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
@@ -154,15 +154,15 @@ The registry is a dictionary at the top of `validation_obs.py`. An entry looks l
     ),
 ```
 
-| Field | |
-|---|---|
-| `nrt`, `my` | the `copernicusmarine` dataset IDs; `None` where a product has only one |
-| `vars` | our short names mapped to the product's own variable names |
-| `offset`, `scale` | conversion to our units — celsius, metres, m/s |
-| `has_depth` | whether `depth_m` applies |
-| `gappy` | `True` for an L3 product, which routes comparisons through collocation |
-| `qc` | `{"var": ..., "min": ...}` for a quality flag, downloaded and applied automatically |
-| `note` | printed after a download; put the product's main caveat here |
+| Field             |                                                                                     |
+| ----------------- | ----------------------------------------------------------------------------------- |
+| `nrt`, `my`       | the `copernicusmarine` dataset IDs; `None` where a product has only one             |
+| `vars`            | our short names mapped to the product's own variable names                          |
+| `offset`, `scale` | conversion to our units — celsius, metres, m/s                                      |
+| `has_depth`       | whether `depth_m` applies                                                           |
+| `gappy`           | `True` for an L3 product, which routes comparisons through collocation              |
+| `qc`              | `{"var": ..., "min": ...}` for a quality flag, downloaded and applied automatically |
+| `note`            | printed after a download; put the product's main caveat here                        |
 
 Find the dataset ID and the variable names from CMEMS rather than guessing:
 
@@ -198,25 +198,24 @@ Finally, `identify()` needs a line so the new product is recognised from its var
 that is what lets every function take a bare path without being told which product it is.
 
 !!! warning
-    **Check the units.** A kelvin product compared without the offset gives a bias of −273, which is obvious. A product in cm rather than m gives a bias that looks plausible and is wrong by a factor of a hundred. The `offset` and `scale` fields exist for this, and the one-day download above is how to find out which are needed.
+**Check the units.** A kelvin product compared without the offset gives a bias of −273, which is obvious. A product in cm rather than m gives a bias that looks plausible and is wrong by a factor of a hundred. The `offset` and `scale` fields exist for this, and the one-day download above is how to find out which are needed.
 
 ## What the module gives you
 
-| Function | |
-|---|---|
-| `download_obs` | fetch a product sized to a run |
-| `describe` | what each reference provides |
-| `compare` | one map, or one date's statistics |
-| `compare_days` | a grid of days, gap-free references |
-| `collocate`, `scorecard` | statistics in observation space, for gappy products |
-| `collocate_days`, `plot_collocation` | the same, drawn |
-| `persistence` | one run against its own initial state |
-| `three_way`, `skill_panels` | the model, the parent and persistence together |
-| `composite`, `composite_panels` | several cycles pooled by lead time |
+| Function                             |                                                     |
+| ------------------------------------ | --------------------------------------------------- |
+| `download_obs`                       | fetch a product sized to a run                      |
+| `describe`                           | what each reference provides                        |
+| `compare`                            | one map, or one date's statistics                   |
+| `compare_days`                       | a grid of days, gap-free references                 |
+| `collocate`, `scorecard`             | statistics in observation space, for gappy products |
+| `collocate_days`, `plot_collocation` | the same, drawn                                     |
+| `persistence`                        | one run against its own initial state               |
+| `three_way`, `skill_panels`          | the model, the parent and persistence together      |
+| `composite`, `composite_panels`      | several cycles pooled by lead time                  |
 
 Sections and profiles live in `sftools.validation` — `compare_section`, `compare_profile`,
 `error_vs_depth` — and are covered on the previous page.
 
-
-!!! Important 
+!!! Important
 This section is not about how to handle all the observations, more examples can be found in the validation notebooks: `02_validation.ipynb` and `03_composite_validation.ipynb`.

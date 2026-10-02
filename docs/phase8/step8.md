@@ -22,14 +22,14 @@ nano cppdefs.h
 
 `Ctrl+W` `AGRIF_2WAY` `Enter` — again the **first** match, near line 81:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 # define AGRIF
 # undef  AGRIF_2WAY        <- change to "# define AGRIF_2WAY"
 ```
 
 becomes
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 # define AGRIF
 # define AGRIF_2WAY
 ```
@@ -40,7 +40,7 @@ becomes
 grep -n "AGRIF" cppdefs.h | head -2
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 80:# define AGRIF
 81:# define AGRIF_2WAY      <- feedback on
 ```
@@ -83,7 +83,7 @@ the child's solution.
 
 For this run, at parent step 196:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 one-way   KE 1.530e-03    NET_VOLUME 1.83197e+15
 two-way   KE 1.625e-03    NET_VOLUME 1.83591e+15
 ```
@@ -114,7 +114,7 @@ different instant:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr
 B = 'forecast/scratch/Canary_AGRIF/'
 for f, l in [('oneway/croco_his.nc', 'one-way parent'),
@@ -125,7 +125,7 @@ for f, l in [('oneway/croco_his.nc', 'one-way parent'),
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 one-way parent    5 records  9686.0000 .. 9687.0000
 two-way parent    5 records  9686.0000 .. 9687.0000
 ```
@@ -135,7 +135,7 @@ Then plot:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 
@@ -174,8 +174,8 @@ PYEOF
 
 ![The parent with and without feedback](../img/agrif_2way_diff.png)
 
-*The parent's surface temperature after one day, one-way and two-way, and the
-difference. The child's footprint is outlined on all three.*
+_The parent's surface temperature after one day, one-way and two-way, and the
+difference. The child's footprint is outlined on all three._
 
 The two SST panels look nearly identical, which is the honest result at one day. The
 difference panel is where the feedback shows.

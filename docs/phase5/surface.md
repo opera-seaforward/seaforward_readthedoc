@@ -28,7 +28,7 @@ The snippets below continue in that session — they use `ds`, `depth` and `isob
 here. The last section repeats everything as one block you can run start to finish.
 
 !!! note
-    **Sigma level versus true depth.** `pp.field_map(ds, 'temp', level=-30)` selects sigma index −30 — a terrain-following layer whose real depth changes with the bathymetry. `pp.field(ds, 'temp', depth_m=30)` gives temperature at a fixed 30 m, interpolated. Points where the sea floor is shallower than the requested depth come back blank.
+**Sigma level versus true depth.** `pp.field_map(ds, 'temp', level=-30)` selects sigma index −30 — a terrain-following layer whose real depth changes with the bathymetry. `pp.field(ds, 'temp', depth_m=30)` gives temperature at a fixed 30 m, interpolated. Points where the sea floor is shallower than the requested depth come back blank.
 
 ## Temperature
 
@@ -104,7 +104,7 @@ Everything above, as one runnable block:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp, sftools.plotting as pl
 

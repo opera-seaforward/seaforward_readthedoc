@@ -99,27 +99,27 @@ is 0/62 ocean, the African coast, so `east_obc = False` — exactly as the paren
 east boundary is closed. Set yours from your own check, not from this example.
 
 !!! warning
-    **Pasting long heredocs into a terminal is unreliable.** A `cat > file << 'EOF'` block can collide with whatever you paste after it and truncate the file without saying so. Use nano as above, or a Python block. Either way, check the result with `wc -l` and `tail`.
+**Pasting long heredocs into a terminal is unreliable.** A `cat > file << 'EOF'` block can collide with whatever you paste after it and truncate the file without saying so. Use nano as above, or a Python block. Either way, check the result with `wc -l` and `tail`.
 
 **Section by section:**
 
-| Section | Key | Meaning |
-|---|---|---|
-| `[Croco_Files]` | `croco_files_dir` | where the child grid gets written |
-| | `croco_grd_prefix` | base name; `agrif_level` appends the `.1` |
-| `[Zoom_Options]` | `is_zoom` / `is_agrif` | both True — a zoom grid, AGRIF-style |
-| | `agrif_level = 1` | first-level child, so it writes `croco_grd.nc.1` |
-| | `parent_grid` | must already exist, from 2b |
-| `[Grid_Zoom_Params]` | `*_obc` | which edges are open, from your Step 1 mask check |
-| | `merging_area = 5` | blend the child's bathymetry into the parent's over 5 child cells at each open edge, so the two agree on depth where they exchange data |
-| `[Grid_Zoom_Agrif]` | `coef = 3` | the refinement ratio |
-| | `imin/imax/jmin/jmax` | the box, in parent indices, from Step 1 |
-| `[Grid_Smoothing_Params]` | `hmin` | minimum depth in metres — shallower cells are raised to this |
-| | `hmax` | maximum depth |
-| | `rfact` | bathymetry smoothing target; lower is smoother and more stable, but less faithful |
-| | `smooth_meth` | the smoothing algorithm |
-| `[Grid_Input_Files]` | `topo_file` | the bathymetry dataset |
-| | `shp_file` | the coastline shapefile |
+| Section                   | Key                    | Meaning                                                                                                                                 |
+| ------------------------- | ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `[Croco_Files]`           | `croco_files_dir`      | where the child grid gets written                                                                                                       |
+|                           | `croco_grd_prefix`     | base name; `agrif_level` appends the `.1`                                                                                               |
+| `[Zoom_Options]`          | `is_zoom` / `is_agrif` | both True — a zoom grid, AGRIF-style                                                                                                    |
+|                           | `agrif_level = 1`      | first-level child, so it writes `croco_grd.nc.1`                                                                                        |
+|                           | `parent_grid`          | must already exist, from 2b                                                                                                             |
+| `[Grid_Zoom_Params]`      | `*_obc`                | which edges are open, from your Step 1 mask check                                                                                       |
+|                           | `merging_area = 5`     | blend the child's bathymetry into the parent's over 5 child cells at each open edge, so the two agree on depth where they exchange data |
+| `[Grid_Zoom_Agrif]`       | `coef = 3`             | the refinement ratio                                                                                                                    |
+|                           | `imin/imax/jmin/jmax`  | the box, in parent indices, from Step 1                                                                                                 |
+| `[Grid_Smoothing_Params]` | `hmin`                 | minimum depth in metres — shallower cells are raised to this                                                                            |
+|                           | `hmax`                 | maximum depth                                                                                                                           |
+|                           | `rfact`                | bathymetry smoothing target; lower is smoother and more stable, but less faithful                                                       |
+|                           | `smooth_meth`          | the smoothing algorithm                                                                                                                 |
+| `[Grid_Input_Files]`      | `topo_file`            | the bathymetry dataset                                                                                                                  |
+|                           | `shp_file`             | the coastline shapefile                                                                                                                 |
 
 **Two things are absent, and both are constraints in disguise:**
 
@@ -140,7 +140,7 @@ grep -iE "shp_file|topo_file|topo_file_reader" ~/seaforward/forecast/configs/Can
 
 ```bash
 cd ~/seaforward/code/croco_pytools/prepro
-python3 << 'PYEOF'
+python3 << PYEOF
 import configparser
 c = configparser.ConfigParser(); c.read('canary_zoom_agrif.ini')
 print('sections:', c.sections())
@@ -151,7 +151,7 @@ print('agrif:', c['Zoom_Options']['is_agrif'], 'level', c['Zoom_Options']['agrif
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 sections: ['Croco_Files', 'Zoom_Options', 'Grid_Zoom_Params', 'Grid_Zoom_Agrif',
            'Grid_Smoothing_Params', 'Grid_Isolated_Waterbodies', 'Grid_Input_Files']
 box: imin=12 imax=74 jmin=49 jmax=110 coef=3
@@ -224,7 +224,7 @@ conda activate seaforward                     # the env that built the parent's 
 python build_canary_agrif.py 2>&1 | tail -20
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 === loading canary_zoom_agrif.ini
 === create_grid()
 Reading CROCO grid: .../Canary_AGRIF/CROCO_FILES/croco_grd.nc
@@ -255,7 +255,7 @@ Two lines there are AGRIF-specific:
 ls -la ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 AGRIF_FixedGrids.in    <- the child-in-parent definition
 croco_grd.nc           <- the parent (you copied it)
 croco_grd.nc.1         <- the child grid
@@ -274,7 +274,7 @@ your check that the box landed where you meant it to.
 cat ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES/AGRIF_FixedGrids.in
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
     1
     13    75    50    111    3    3    3    3
     0
@@ -294,7 +294,7 @@ moved.**
 
 `easygrid.py` sometimes moves your box, and says so only in passing:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 ==> North limits displacement +1
 ```
 
@@ -313,11 +313,11 @@ for one whose mask is uniform in the boundary-normal direction. It can march sev
 cells before it settles.
 
 **It didn't fire here**, and the reason is worth understanding: the Canary coast runs
-roughly north–south, *parallel* to the child's east edge, and that edge is already
+roughly north–south, _parallel_ to the child's east edge, and that edge is already
 uniformly land. The north and south edges each carry land only at their eastern end,
 contiguous rather than crossing. There was nothing for the loop to hunt.
 
-A coast running *diagonally* across an edge the tool is trying to open is what makes
+A coast running _diagonally_ across an edge the tool is trying to open is what makes
 it march — and it does not check whether the destination makes sense. A solid-land
 edge is perfectly uniform, so it passes the test whether or not you meant that edge to
 be open. Setting `north_obc = False` does not stop it either: the loop runs on mask
@@ -329,7 +329,7 @@ Always compare what you asked for against what `AGRIF_FixedGrids.in` says.
 
 ```bash
 cd ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, numpy as np
 g = xr.open_dataset('croco_grd.nc.1')
 print('grid: %d x %d' % (g.sizes['xi_rho'], g.sizes['eta_rho']))
@@ -345,7 +345,7 @@ for n, r in [('south', m[0,:]), ('north', m[-1,:]), ('west', m[:,0]), ('east', m
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 grid: 188 x 185
 lon: -21.09 to -15.82 E
 lat: 18.02 to 23.10 N
@@ -364,17 +364,17 @@ north and south mixed where they meet the coast.
 Note the spacing: **2.88 km, not 3.06 km.** Same 1/36° grid, but a degree of longitude
 is shorter at 20°N than at the equator. Always read `pm` and `pn` rather than assuming.
 
-| | Parent Canary_12 | AGRIF child |
-|---|---|---|
-| Resolution | 1/12° ≈ 9.2 km | **1/36° ≈ 2.88 km** |
-| Grid | 81 × 123 × 50 | 188 × 185 × 50 |
-| dt | 300 s | 100 s |
+|            | Parent Canary_12 | AGRIF child         |
+| ---------- | ---------------- | ------------------- |
+| Resolution | 1/12° ≈ 9.2 km   | **1/36° ≈ 2.88 km** |
+| Grid       | 81 × 123 × 50    | 188 × 185 × 50      |
+| dt         | 300 s            | 100 s               |
 
 ### Grid stiffness
 
 When the model runs it reports, for each grid:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
  Maximum grid stiffness ratios:   rx0 = 0.20006   rx1 = 14.836     <- parent
  Maximum grid stiffness ratios:   rx0 = 0.20000   rx1 = 14.837     <- child
 ```
@@ -387,6 +387,6 @@ The child's `rx1` is **essentially unchanged from its parent's** — 14.837 agai
 14.836. That is worth noting, because refining a grid does not automatically make it
 stiffer: it depends on what the finer grid resolves. Over Canary's shelf break the
 extra resolution did not sharpen the slope enough to matter, while elsewhere it can.
-[Phase 9](../phase9/09_agulhas.md)'s Agulhas child, built at a lower `rfact`, came out *lower* than its parent.
+[Phase 9](../phase9/09_agulhas.md)'s Agulhas child, built at a lower `rfact`, came out _lower_ than its parent.
 
 `rx0` landed on the requested `rfact = 0.2` for both grids.

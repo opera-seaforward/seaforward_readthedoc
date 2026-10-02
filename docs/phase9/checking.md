@@ -14,7 +14,7 @@ echo "using ${D}"
 cp $D/croco_his.nc   /tmp/ag_p.nc
 cp $D/croco_his.nc.1 /tmp/ag_c.nc
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr
 for f, l in [('/tmp/ag_p.nc', 'parent'), ('/tmp/ag_c.nc', 'child ')]:
     d = xr.open_dataset(f, decode_times=False)
@@ -23,7 +23,7 @@ for f, l in [('/tmp/ag_p.nc', 'parent'), ('/tmp/ag_c.nc', 'child ')]:
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 parent 6 records, t = [9692.0, 9692.25, 9692.5, 9692.75, 9693.0, 9693.25]
 child  6 records, t = [9692.0, 9692.25, 9692.5, 9692.75, 9693.0, 9693.25]
 ```
@@ -35,7 +35,7 @@ comparison needs interpolating.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 
@@ -71,9 +71,9 @@ PYEOF
 
 ![Agulhas parent and child](../img/agulhas_parent_child.png)
 
-*Surface temperature and sea-surface height, both grids, 1.25 days into the spin-up.
+_Surface temperature and sea-surface height, both grids, 1.25 days into the spin-up.
 The box on the parent panels is the child's footprint. Each row shares a colour scale,
-so the two panels are directly comparable.*
+so the two panels are directly comparable._
 
 Two things to read here:
 **Temperature** — same water masses, but the child resolves filaments the parent
@@ -95,7 +95,7 @@ confesses.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import xarray as xr, numpy as np, pandas as pd, glob
@@ -164,9 +164,9 @@ which is what matters.
 
 ![Agulhas AGRIF temperature vs Mercator](../img/agulhas_agrif_temp_vs_merc.png)
 
-*Both grids against Mercator, surface temperature.*
+_Both grids against Mercator, surface temperature._
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 parent RMSE = 0.2443     child RMSE = 0.2233
 ```
 
@@ -177,9 +177,9 @@ spin-up.
 
 ![Agulhas AGRIF SSH vs Mercator](../img/agulhas_agrif_zeta_vs_merc.png)
 
-*Both grids against Mercator, sea-surface height anomaly.*
+_Both grids against Mercator, sea-surface height anomaly._
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 parent RMSE = 0.0521     child RMSE = 0.0677
 ```
 
@@ -198,7 +198,7 @@ contains more easy ocean.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, numpy as np, pandas as pd, glob
 MERC = sorted(glob.glob(
     'forecast/model-runs/Agulhas_AGRIF/*/downloaded_data/MERCATOR/'
@@ -236,7 +236,7 @@ for var, src in [('temp', m.thetao.isel(time=k, depth=0)), ('zeta', m.zos.isel(t
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 parent cells inside the child box: 5177
 
 TEMP
@@ -260,6 +260,6 @@ Whether that means the child's SSH is wrong, or that a 1/12° reference cannot s
 a 2.5 km grid resolves, this comparison cannot tell you.
 
 !!! note
-    **The honest limit of all of this.** Every comparison in this chapter is against Mercator, which supplied the initial and boundary conditions. It tests **consistency**, not skill. Real assessment needs independent, high-resolution data: along-track satellite altimetry, L2 SST, drifters, Argo. That is a different chapter.
+**The honest limit of all of this.** Every comparison in this chapter is against Mercator, which supplied the initial and boundary conditions. It tests **consistency**, not skill. Real assessment needs independent, high-resolution data: along-track satellite altimetry, L2 SST, drifters, Argo. That is a different chapter.
 
 Both are from 1.5 days of spin-up. Redo them on the finished forecast.

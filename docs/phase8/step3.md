@@ -6,15 +6,15 @@ cell, at the moment the run begins.
 
 Unlike a standalone run, it does **not** need boundary conditions:
 
-| File | Parent | AGRIF child | Why |
-|---|---|---|---|
-| grid | `croco_grd.nc` | `croco_grd.nc.1` | built in Step 2 |
-| initial condition | `croco_ini.nc` | **`croco_ini.nc.1`** | this step |
-| boundary conditions | `croco_bry.nc` | **none** | AGRIF supplies them every barotropic step |
-| surface forcing | GFS (online) | same GFS | both grids read the same atmosphere |
+| File                | Parent         | AGRIF child          | Why                                       |
+| ------------------- | -------------- | -------------------- | ----------------------------------------- |
+| grid                | `croco_grd.nc` | `croco_grd.nc.1`     | built in Step 2                           |
+| initial condition   | `croco_ini.nc` | **`croco_ini.nc.1`** | this step                                 |
+| boundary conditions | `croco_bry.nc` | **none**             | AGRIF supplies them every barotropic step |
+| surface forcing     | GFS (online)   | same GFS             | both grids read the same atmosphere       |
 
 **That missing bry file is the whole point of online nesting.** In the [Phase 7](../phase7/07_nesting.md) offline
-nest, `croco_bry_NEST_*.nc` *was* the mechanism — the entire coupling lived in that
+nest, `croco_bry_NEST_*.nc` _was_ the mechanism — the entire coupling lived in that
 file. Here there is nothing, because the parent hands the child its boundaries in
 memory, every step, while both are running.
 
@@ -24,9 +24,9 @@ Mercator, interpolated onto the child grid — not from the parent's output.
 ### 3b — Which tool, and why it matters
 
 !!! warning
-    **Use SEA-FORWARD's `make_ini`, not croco_pytools'.**
+**Use SEA-FORWARD's `make_ini`, not croco_pytools'.**
 
-croco_pytools ships a zoom-aware IC builder, and it *looks* right. There is an example
+croco_pytools ships a zoom-aware IC builder, and it _looks_ right. There is an example
 config to copy from — `Examples/benguela_multifiles/ibc_zoom_agrif.ini` — and adapting
 it for the child runs cleanly:
 
@@ -40,7 +40,7 @@ It reads the child grid correctly and writes a `.nc.1` file. Every sign says suc
 **And the file can be unusable.** Along the way it prints warnings that are easy to
 scroll past:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
   Interpolate v from OGCM to CROCO grid on each z level
 [########....] 45/50   Warning: less than 10 good values in this layer
 [#########...] 46/50   Warning: no good data in this layer
@@ -82,13 +82,13 @@ That rename is the trick: `make_ini` reads whatever `croco_grd.nc` it finds in
 `--output_dir`, and neither knows nor cares that the grid is a child.
 
 **Check the child's boundaries** against the copied `crocotools_param.py`, which holds
-the *parent's* `obc_dict`:
+the _parent's_ `obc_dict`:
 
 ```bash
 grep -E "obc_dict|sigma_params" "$CGEN/crocotools_param.py"
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 sigma_params = dict(theta_s=7, theta_b=2, N=50, hc=200)
 obc_dict     = dict(south=1, west=1, east=0, north=1)   # E=African coast (closed); S,W,N open
 ```
@@ -117,7 +117,7 @@ python seaforward.py make_ini \
 ```
 
 `--run_date` is the **cycle** date and `--hdays 2` walks back two days, which lands on
-2026-07-09 — the same instant as the parent's IC. See *Matching the clocks* below.
+2026-07-09 — the same instant as the parent's IC. See _Matching the clocks_ below.
 
 **Verify before going further:**
 
@@ -125,7 +125,7 @@ python seaforward.py make_ini \
 cd ~/seaforward
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, numpy as np, glob, os
 CGEN = os.path.expanduser('~/seaforward/forecast/scratch/Canary_AGRIF/child_gen/CROCO_FILES')
 f = sorted(glob.glob(CGEN + '/croco_ini_*.nc'))[-1]
@@ -139,7 +139,7 @@ print('time =', float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 croco_ini_MERCATOR_20260711_00.nc
 temp  min=          0 max=      27.47 nan=0
 salt  min=          0 max=      37.31 nan=0
@@ -167,7 +167,7 @@ Verify explicitly rather than assume:
 cd ~/seaforward
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, os, glob
 # glob rather than name them: the filenames carry the cycle date, and the
 # parent's folder carries the driver's flag tag too (20260711_plain)
@@ -183,7 +183,7 @@ for f, lbl in [(P, 'parent'), (C, 'child ')]:
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 parent 9686.0 days
 child  9686.0 days
 ```
