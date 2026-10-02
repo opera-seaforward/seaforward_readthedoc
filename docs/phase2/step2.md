@@ -1,6 +1,6 @@
 ![build progress](../img/model_grid.png)
 
-*Step 2 builds the **model grid** from bathymetry (ETOPO2) and coastline (GSHHS).*
+_Step 2 builds the **model grid** from bathymetry (ETOPO2) and coastline (GSHHS)._
 
 ```bash
 cd ${CROCO_PYTOOLS_DIR}/prepro
@@ -28,7 +28,7 @@ ncdump -h ${CF}/croco_grd.nc | grep -E "xi_rho|eta_rho"
 ```
 
 !!! check
-    For Canary_12: `xi_rho = 81`, `eta_rho = 123`.
+For Canary_12: `xi_rho = 81`, `eta_rho = 123`.
 
 **Write these two numbers down.** You'll need them (minus 2) for `param.h` later:
 
@@ -36,7 +36,7 @@ ncdump -h ${CF}/croco_grd.nc | grep -E "xi_rho|eta_rho"
 - `MMm0 = eta_rho − 2 = 121`
 
 !!! warning
-    **Use the numbers from the file, not the estimate.** The estimate said 79×121; the real grid is 81×123. The `− 2` removes two boundary rows CROCO adds internally.
+**Use the numbers from the file, not the estimate.** The estimate said 79×121; the real grid is 81×123. The `− 2` removes two boundary rows CROCO adds internally.
 
 ### Look at what you built
 
@@ -58,6 +58,8 @@ pl.grid_bathy_map(
     out='canary_12_portrait.png',
 )
 PYEOF
+ls -la canary_12_portrait.png
+xdg-open canary_12_portrait.png >/dev/null 2>&1 || echo "Image générée : $(pwd)/canary_12_portrait.png"
 ```
 
 ![Canary_12 grid and bathymetry](../img/canary_12_portrait.png)
