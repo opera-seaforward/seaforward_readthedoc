@@ -408,7 +408,7 @@ through the eastern corner of the north edge — those 5 water cells the rule of
 said to close. Closed, it would have had nowhere to come from.
 
 !!! note
-This is one day from a Mercator cold start, so most of this structure is Mercator's, lightly adjusted. That is what a proof run should show: the interpolation, boundaries and forcing all work together. Judging the model's own dynamics needs a spun-up run.
+This is one day from a Mercator cold start, so most of this structure is Mercator's, lightly adjusted. That is what a proof run should show: the interpolation, boundaries and forcing all work togeth\her. Judging the model's own dynamics needs a spun-up run.
 
 ### Comparing against Mercator
 
