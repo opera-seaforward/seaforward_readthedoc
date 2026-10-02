@@ -2,7 +2,7 @@ This step is entirely diagnostic — you write no config here. You interrogate t
 parent's mask until you know where the child can go.
 
 !!! important
-    **Read the mask, not a plot.** A saturated colour map will make dry land look like ocean. A box chosen from an SST figure can land hundreds of kilometres inland. The mask is the only authority.
+**Read the mask, not a plot.** A saturated colour map will make dry land look like ocean. A box chosen from an SST figure can land hundreds of kilometres inland. The mask is the only authority.
 
 Run these from `~/seaforward`.
 
@@ -14,7 +14,7 @@ Every index below is relative to this grid, so start by reading it:
 cd ~/seaforward
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, numpy as np
 g   = xr.open_dataset('forecast/scratch/Canary_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values
@@ -24,7 +24,7 @@ print('Canary_12: xi=%d eta=%d, lon %.2f-%.2fE, lat %.2f-%.2fN'
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 Canary_12: xi=81 eta=123, lon -21.95--15.55E, lat 13.94-24.00N
 ```
 
@@ -38,7 +38,7 @@ and the land/water pattern along each of the four edges.
 cd ~/seaforward
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, numpy as np
 g   = xr.open_dataset('forecast/scratch/Canary_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values[0, :]     # 1-D along xi
@@ -79,7 +79,7 @@ check('C) front and shelf',      -21.0, -16.0, 18.0, 23.0)
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 A) offshore only
   lon -21.0--18.5E lat 20.0-23.0N
   -> imin=12 imax=43 jmin=73 jmax=110
@@ -121,30 +121,30 @@ fully open ocean.
 
 **Why not A or B?** Box A is entirely deep water: it would run cleanly and show almost
 nothing, since open ocean at 2.9 km looks much like open ocean at 9 km. Box B reaches
-the shelf but leaves 9 land cells in the *middle* of its east edge, which is the one
+the shelf but leaves 9 land cells in the _middle_ of its east edge, which is the one
 pattern to avoid — an open boundary slicing through a coastline. Box C pushes east
 until that edge is uniformly land, and closes it.
 
 **Reading the output:**
 
-| Field | What it tells you |
-|---|---|
-| `imin/imax/jmin/jmax` | goes straight into the zoom `.ini` |
-| `child at 3x` | the cost — cells scale as the square, and the child sub-steps 3× as well |
-| `margin` | parent cells between the child and the parent's own edge; under 10 leaves AGRIF little room on an **open** edge, and doesn't matter on a closed one |
-| `ocean %` | how much of the box is water — low means cells spent on land |
-| `depth` | the child's `hmax`, and a warning of steep bathymetry |
-| edge strips | the decisive check — see below |
+| Field                 | What it tells you                                                                                                                                   |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `imin/imax/jmin/jmax` | goes straight into the zoom `.ini`                                                                                                                  |
+| `child at 3x`         | the cost — cells scale as the square, and the child sub-steps 3× as well                                                                            |
+| `margin`              | parent cells between the child and the parent's own edge; under 10 leaves AGRIF little room on an **open** edge, and doesn't matter on a closed one |
+| `ocean %`             | how much of the box is water — low means cells spent on land                                                                                        |
+| `depth`               | the child's `hmax`, and a warning of steep bathymetry                                                                                               |
+| edge strips           | the decisive check — see below                                                                                                                      |
 
 ### Reading the edges
 
 An AGRIF child edge must be one of:
 
-| Edge mask | Setting | Verdict |
-|---|---|---|
-| All water | **open** | parent supplies data across the whole edge |
-| All land | **closed** | a coastal wall, which is true |
-| Water then land, **contiguous** | open | an open boundary that terminates at a coast |
+| Edge mask                       | Setting    | Verdict                                     |
+| ------------------------------- | ---------- | ------------------------------------------- |
+| All water                       | **open**   | parent supplies data across the whole edge  |
+| All land                        | **closed** | a coastal wall, which is true               |
+| Water then land, **contiguous** | open       | an open boundary that terminates at a coast |
 
 **Mixed edges are fine.** Box C's south and north boundaries carry land only at their
 eastern ends, where they run into the coast, and the run below is stable with them.

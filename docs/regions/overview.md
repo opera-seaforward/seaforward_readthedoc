@@ -2,12 +2,12 @@
 
 This is a **reference gallery**, not a tutorial. Each card is a worked region built
 with the Phase 2 recipe — a compact "what does this domain look like, and how was it
-set up" reference you can scan when building your own. The *method* for every region
+set up" reference you can scan when building your own. The _method_ for every region
 is the same (see **[Phase 2](../phase2/02_forecast_config.md)**); only the numbers
 change.
 
 !!! note
-    **How to build a new region.** Follow Phase 2. The only per-region decisions are the **box** (lon/lat extent), the **resolution**, which **boundaries** are open or closed — read from the mask, where an edge is open if it's mostly ocean and closed if it's mostly coast — and a couple of flags: `FIX_GFS_LON` is 0 in the eastern hemisphere, 1 in the western. Everything else — the vertical grid, the config-file structure, the compile — is identical. Each card records exactly those per-region choices, so you can build a similar domain by analogy.
+**How to build a new region.** Follow Phase 2. The only per-region decisions are the **box** (lon/lat extent), the **resolution**, which **boundaries** are open or closed — read from the mask, where an edge is open if it's mostly ocean and closed if it's mostly coast — and a couple of flags: `FIX_GFS_LON` is 0 in the eastern hemisphere, 1 in the western. Everything else — the vertical grid, the config-file structure, the compile — is identical. Each card records exactly those per-region choices, so you can build a similar domain by analogy.
 
 Every card shows the region **portrait** — grid mesh and bathymetry, from
 `sftools.plotting.grid_bathy_map` — and, where a forecast has run, a **result** panel
@@ -21,7 +21,7 @@ Pointing at the region's `croco_grd.nc`:
 cd ~/seaforward
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.plotting as pl
 
@@ -50,7 +50,7 @@ Once a forecast exists, one more call gives the "region in action" figure:
 cd ~/seaforward
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import glob
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp, sftools.plotting as pl

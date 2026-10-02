@@ -28,13 +28,13 @@ pkill -f "croco croco.in"
 ```
 
 !!! warning
-    **Run one instance at a time.** Two `croco` processes in the same directory write over each other's output and produce nonsense that looks like a physics problem.
+**Run one instance at a time.** Two `croco` processes in the same directory write over each other's output and produce nonsense that looks like a physics problem.
 
 ### 7b — What the startup tells you
 
 Early in the log, CROCO lists the CPP options it was compiled with:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
  Activated C-preprocessing Options:
           REGIONAL
           CANARY_12
@@ -43,7 +43,7 @@ Early in the log, CROCO lists the CPP options it was compiled with:
 
 Further down, the child's boundary conditions appear:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
           AGRIF_OBC_WEST
           AGRIF_OBC_NORTH
           AGRIF_OBC_SOUTH
@@ -60,7 +60,7 @@ closed on the African coast.
 
 You will also see a wall of warnings. Most are harmless:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
  WARNING: Unrecognized keyword: start_date  --> DISREGARDED.
  WARNING: Unrecognized keyword: bulk_forcing  --> DISREGARDED.
 ```
@@ -72,13 +72,13 @@ directly.
 
 The forcing confirmation is worth checking:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
  Online forcing: datasets in .../Canary_12/downloaded_data/GFS/for_croco/ with 24 records per day.
 ```
 
 And each grid announces itself:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
  CANARY_12 FORECAST                     <- parent (croco.in)
        288  ntimes
     300.00  dt
@@ -93,14 +93,14 @@ dt and NTIMES section on that page.
 
 Look for the grid stiffness too:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
  Maximum grid stiffness ratios:   rx0 = 0.20006   rx1 = 14.836     <- parent
  Maximum grid stiffness ratios:   rx0 = 0.20000   rx1 = 14.837     <- child
 ```
 
 And confirm the child is writing its own output:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
  DEF_HIS/AVG - Created new netCDF file 'CROCO_FILES/croco_his.nc.1'.
 ```
 
@@ -111,7 +111,7 @@ If `croco_his.nc.1` never appears, the child is not running at all — check tha
 
 Both grids print their own step tables, interleaved:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
       12  9686.04167 1.530301513E-03 3.8066511E+01 3.8068042E+01 1.8319687E+15  0   <- parent
       36  9686.04167 1.754320347E-03 3.5356282E+01 3.5358036E+01 6.6786900E+14  0   <- child
       37  9686.04282 1.754488569E-03 3.5356300E+01 3.5358055E+01 6.6786877E+14  0
@@ -131,14 +131,14 @@ three times faster (36, 37, 38, 39, …) with `NET_VOLUME ≈ 6.68e+14`.
 36 both read `9686.04167`; parent 13 and child 39 both read `9686.04514`. That
 lock-step is the single best evidence the nest is correctly configured.
 
-| Check | Good | Bad, and what it means |
-|---|---|---|
-| **step zero, both grids** | same time, KE ~1e-3 | child KE `1e+71` → broken IC (fill values, Step 3), not instability |
-| **clock lock** | parent 12 = child 36 = same time | child racing ahead → child `dt` not divided (Step 5b) |
-| **child KE vs parent** | child **higher** — 1.75e-3 against 1.53e-3 here | a finer grid resolves more flow |
-| **child NET_VOLUME** | smaller, in proportion to the box | a geometry artefact, not a symptom |
-| **`trd`, last column** | `0` | non-zero is a blowup counter |
-| **volume drift** | conserved to ~5 s.f. | steady loss or gain is a boundary problem |
+| Check                     | Good                                            | Bad, and what it means                                              |
+| ------------------------- | ----------------------------------------------- | ------------------------------------------------------------------- |
+| **step zero, both grids** | same time, KE ~1e-3                             | child KE `1e+71` → broken IC (fill values, Step 3), not instability |
+| **clock lock**            | parent 12 = child 36 = same time                | child racing ahead → child `dt` not divided (Step 5b)               |
+| **child KE vs parent**    | child **higher** — 1.75e-3 against 1.53e-3 here | a finer grid resolves more flow                                     |
+| **child NET_VOLUME**      | smaller, in proportion to the box               | a geometry artefact, not a symptom                                  |
+| **`trd`, last column**    | `0`                                             | non-zero is a blowup counter                                        |
+| **volume drift**          | conserved to ~5 s.f.                            | steady loss or gain is a boundary problem                           |
 
 ### 7c — Finishing
 
@@ -150,13 +150,13 @@ ls -lh CROCO_FILES/croco_his.nc CROCO_FILES/croco_his.nc.1
 ```
 
 !!! note
-    **Both grids should write the same number of records.** `NWRT` counts *steps*, and the child takes three times as many, so an unscaled child writes three times as often and every comparison then needs interpolating. Multiply the child's output intervals by `timeref`. The operational driver does this — `NWRT_CHD=$(( NWRT * COEF ))` in `run_forecast_cycle.sh`.
+**Both grids should write the same number of records.** `NWRT` counts _steps_, and the child takes three times as many, so an unscaled child writes three times as often and every comparison then needs interpolating. Multiply the child's output intervals by `timeref`. The operational driver does this — `NWRT_CHD=$(( NWRT * COEF ))` in `run_forecast_cycle.sh`.
 
 If the parent says `DONE` and the child says `Abnormal termination: BLOWUP`, that is
 **one-way isolation working as designed** — the child died without poisoning the
 parent, and it tells you exactly where to look.
 
-Diagnose it by *when* it died:
+Diagnose it by _when_ it died:
 
 - **step zero** — the IC, from fill values or a wrong clock
 - **mid-run** — stability: high `rx1`, or the timestep
@@ -167,7 +167,7 @@ Diagnose it by *when* it died:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 
@@ -197,8 +197,8 @@ PYEOF
 
 ![parent vs AGRIF child SST](../img/agrif_sst.png)
 
-*The same water at 9.2 km and 2.88 km, with the child's footprint outlined on the
-parent. Both panels share a colour scale.*
+_The same water at 9.2 km and 2.88 km, with the child's footprint outlined on the
+parent. Both panels share a colour scale._
 
 The upwelling front is the thing to look at. In the parent it is a broad cold tongue
 running offshore near 21–22°N; in the child the same tongue carries filaments and

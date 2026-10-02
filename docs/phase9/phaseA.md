@@ -47,17 +47,17 @@ python3 make_grid.py ${CONFIG_DIR}/grid.ini 2>&1 | tail -20
 ncdump -h ${CF}/croco_grd.nc | grep -E "xi_rho|eta_rho"
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 xi_rho = 159 ;
 eta_rho = 99 ;
 ```
 
 !!! important
-    **Read the file, don't trust the arithmetic.** 13° ÷ (1/12°) + 2 predicts 158. The generator produced **159** — it rounds to whole cells, and it is the authority. The same lesson applies to the grid's north edge landing at **31.79°S** rather than the 32.0 requested.
+**Read the file, don't trust the arithmetic.** 13° ÷ (1/12°) + 2 predicts 158. The generator produced **159** — it rounds to whole cells, and it is the authority. The same lesson applies to the grid's north edge landing at **31.79°S** rather than the 32.0 requested.
 
 Carry these forward:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 LLm0 = xi_rho  - 2 = 157
 MMm0 = eta_rho - 2 =  97
 N                  =  50
@@ -69,7 +69,7 @@ N                  =  50
 cd ~/seaforward
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr
 g = xr.open_dataset('${CF}/croco_grd.nc'); m = g.mask_rho.values
 strip = lambda r: ''.join('O' if v == 1 else '.' for v in r)
@@ -80,7 +80,7 @@ print('east :', int(m[:,-1].sum()), '/', m.shape[0]); print('   S', strip(m[:,-1
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 south: 159 / 159   OOOOOOOO...(all)...OOOOOOOO
 north:  18 / 159   OOOOOOOOOOOOO....(140 land)....OOOOO
 west :  99 / 99    OOOOOOOO...(all)...OOOOOOOO
@@ -110,7 +110,7 @@ genuine coastline, not two open-ocean corners.
 
 **Could the north edge move south instead?** A scan says no:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 -32.0N:  23/159 ocean
 -32.5N:  30/159
 -33.0N:  37/159
@@ -175,7 +175,7 @@ du -sh ${FCAST}/downloaded_data/MERCATOR ${FCAST}/downloaded_data/GFS
 ls ${FCAST}/downloaded_data/GFS/for_croco/
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 croco_ini_MERCATOR_20260717_00.nc     16 MB    (159x99x50)
 croco_bry_MERCATOR_20260717_00.nc    4.9 MB
 
@@ -193,6 +193,7 @@ UPWARD_LONG-WAVE_RAD_FLUX_SURFACE_Y9999M01.nc
 UPWARD_SHORT-WAVE_RAD_FLUX_SURFACE_Y9999M01.nc
 V-COMPONENT_OF_WIND_Y9999M01.nc
 ```
+
 The atmosphere goes through two stages. `download_atmosphere` fetches hourly GRIB files
 (`2026071500_f001.grb` and so on); `make_forcing` converts them into the ten netCDF
 files above, one per variable — wind components, air temperature, humidity, pressure,
@@ -214,11 +215,11 @@ nano cppdefs.h
 
 **`cppdefs.h`** — two edits, not three:
 
-| | edit |
-|---|---|
-| name | `# define BENGUELA_LR` → `# define AGULHAS_12` |
-| forcing | `#  undef  ONLINE` → `#  define ONLINE` |
-| boundaries | **nothing** — all four `OBC_*` stay defined |
+|            | edit                                           |
+| ---------- | ---------------------------------------------- |
+| name       | `# define BENGUELA_LR` → `# define AGULHAS_12` |
+| forcing    | `#  undef  ONLINE` → `#  define ONLINE`        |
+| boundaries | **nothing** — all four `OBC_*` stay defined    |
 
 That third row is the difference from Canary and IGOG, which both closed edges. Verify:
 
@@ -228,7 +229,7 @@ sed -n '185,192p' cppdefs.h        # ONLINE on, AROME and ERA_ECMWF off
 ```
 
 !!! warning
-    `grep -n "define ONLINE"` finds nothing even when it is correct — the file has `# define  ONLINE` with **two** spaces. Grep for `ONLINE` alone.
+`grep -n "define ONLINE"` finds nothing even when it is correct — the file has `# define  ONLINE` with **two** spaces. Grep for `ONLINE` alone.
 
 Open it:
 
@@ -249,7 +250,7 @@ Verify with the preprocessor, not by eye:
 cpp -DREGIONAL -DAGULHAS_12 param.h 2>/dev/null | grep "parameter (LLm0"
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 parameter (LLm0=157, MMm0=97, N=50) ! Agulhas_12 159x99
 ```
 
@@ -274,7 +275,7 @@ nano jobcomp
 
 **`jobcomp`** — set `SOURCE1` to your own path:
 
-``` { .bash .no-copy }
+```{ .bash .no-copy }
 SOURCE1=/home/you/seaforward/code/croco/OCEAN
 ```
 
@@ -325,7 +326,7 @@ conda deactivate; source ~/seaforward/env.sh
 
 ### The result, and what it told us
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 288  9693.00000 2.609597096E-02 4.3049518E+01 4.3075614E+01 2.6352238E+15  0
 MAIN: DONE
 ```
@@ -334,7 +335,7 @@ MAIN: DONE
 grep -i stiffness run.log
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 Maximum grid stiffness ratios:   rx0 = 0.20009909855131378   rx1 = 14.835722451244909
 ```
 
@@ -368,7 +369,7 @@ gets `dt = 100` and therefore even more headroom.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import sftools.postprocess as pp
 import sftools.plotting as pl
 
@@ -385,9 +386,9 @@ PYEOF
 
 ![Agulhas_12 sea-surface temperature and currents](../img/agulhas_12_sst.png)
 
-*Surface temperature and currents after the one-day proof run. The Agulhas enters at
+_Surface temperature and currents after the one-day proof run. The Agulhas enters at
 30°E, runs south-west along the shelf edge, and turns back east near 17°E — the
-retroflection, visible in the arrows.*
+retroflection, visible in the arrows._
 
 This one figure tells you the config is right:
 
@@ -400,14 +401,14 @@ This one figure tells you the config is right:
 - **An eddy** sits in the middle, the vectors circling a cold core beneath the
   current's path.
 - **Benguela upwelling** — cold water pinned against the west coast, top left, with the
-  flow running offshore and north. 
+  flow running offshore and north.
 
 The figure also settles the north-boundary decision from A3. The current enters
 through the eastern corner of the north edge — those 5 water cells the rule of thumb
 said to close. Closed, it would have had nowhere to come from.
 
 !!! note
-    This is one day from a Mercator cold start, so most of this structure is Mercator's, lightly adjusted. That is what a proof run should show: the interpolation, boundaries and forcing all work together. Judging the model's own dynamics needs a spun-up run.
+This is one day from a Mercator cold start, so most of this structure is Mercator's, lightly adjusted. That is what a proof run should show: the interpolation, boundaries and forcing all work togeth\her. Judging the model's own dynamics needs a spun-up run.
 
 ### Comparing against Mercator
 
@@ -419,7 +420,7 @@ directly.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, glob
 import sftools.postprocess as pp
 # the filename carries your download's date, so find it
@@ -434,7 +435,7 @@ print('croco his times:', ds.time.values)
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 mercator records: 10
    0 2026-07-14      2 2026-07-16   <-- this one
    1 2026-07-15      3 2026-07-17   ...
@@ -448,7 +449,7 @@ cycle date. Check rather than assume.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import xarray as xr, numpy as np, glob
@@ -494,7 +495,7 @@ PYEOF
 
 ![Agulhas_12 vs Mercator](../img/agulhas_12_vs_mercator.png)
 
-*CROCO, Mercator, and their difference at the same instant, 2026-07-16 00:00.*
+_CROCO, Mercator, and their difference at the same instant, 2026-07-16 00:00._
 
 **How to read the difference panel — the shape matters more than the size:**
 
@@ -507,18 +508,18 @@ PYEOF
   different numerics, that is the expected outcome.
 - **±0.7 °C maximum, in thin filaments only.** No broad patches, no drift, no runaway.
 
-What *would* be a problem:
+What _would_ be a problem:
 
-| Where the difference sits | Meaning |
-|---|---|
-| thin dipoles on fronts | normal — front displacement |
-| **broad patches** in a water mass | the model is drifting; check the forcing |
-| **banding along a domain edge** | boundary condition trouble |
-| growing with each record | instability |
-| in the upwelling, responding to wind | good — the model reacting to GFS |
+| Where the difference sits            | Meaning                                  |
+| ------------------------------------ | ---------------------------------------- |
+| thin dipoles on fronts               | normal — front displacement              |
+| **broad patches** in a water mass    | the model is drifting; check the forcing |
+| **banding along a domain edge**      | boundary condition trouble               |
+| growing with each record             | instability                              |
+| in the upwelling, responding to wind | good — the model reacting to GFS         |
 
 There is faint banding along the **west edge**, 17–18°E, worth watching in a longer
 run. At one day it is most likely the boundary still adjusting.
 
 !!! important
-    **What this does and does not prove.** The model's IC *came from* Mercator at 07-15, so after 24 hours they cannot have diverged much. This is a **consistency** check, not a skill test: it proves the interpolation did not corrupt anything, the boundaries feed sensible water, and the forcing is being read. Real skill assessment needs a spun-up run compared against **independent** data — satellite SST, drifters, Argo — not against the model's own initial condition.
+**What this does and does not prove.** The model's IC _came from_ Mercator at 07-15, so after 24 hours they cannot have diverged much. This is a **consistency** check, not a skill test: it proves the interpolation did not corrupt anything, the boundaries feed sensible water, and the forcing is being read. Real skill assessment needs a spun-up run compared against **independent** data — satellite SST, drifters, Argo — not against the model's own initial condition.

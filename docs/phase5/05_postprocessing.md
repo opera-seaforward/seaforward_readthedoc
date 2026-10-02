@@ -10,17 +10,17 @@ against the parent product it was downscaled from is the next chapter, Validatio
 
 The toolkit lives in `sftools/` and this chapter uses three of its modules:
 
-| Module | Purpose |
-| --- | --- |
-| `postprocess.py` | Load CROCO output; extract fields, sections, profiles and time series; compute derived quantities (speed, vorticity, EKE) at the surface or any depth. |
-| `define_attrs.py` | One registry of CF metadata **and** display defaults — colormap, range — for every variable. Plots label and colour themselves from this. |
-| `plotting.py` | Attribute-driven plotting: generic builders plus a `plot()` wrapper that detects the plot type from the data. |
+| Module            | Purpose                                                                                                                                                |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `postprocess.py`  | Load CROCO output; extract fields, sections, profiles and time series; compute derived quantities (speed, vorticity, EKE) at the surface or any depth. |
+| `define_attrs.py` | One registry of CF metadata **and** display defaults — colormap, range — for every variable. Plots label and colour themselves from this.              |
+| `plotting.py`     | Attribute-driven plotting: generic builders plus a `plot()` wrapper that detects the plot type from the data.                                          |
 
 The design is a clean split:
 
-- **Extractors** in `postprocess` build a labelled `xarray.DataArray`. They decide *what*
+- **Extractors** in `postprocess` build a labelled `xarray.DataArray`. They decide _what_
   — which variable, which depth, which time.
-- **Plotters** in `plotting` decide *how* it looks, reading the labels from the data by
+- **Plotters** in `plotting` decide _how_ it looks, reading the labels from the data by
   default.
 
 So a typical call reads:
@@ -28,7 +28,7 @@ So a typical call reads:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp
 import sftools.plotting as pl

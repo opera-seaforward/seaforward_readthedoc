@@ -1,6 +1,6 @@
 # Dynamics
 
-Currents, vorticity and the eddy field — what the ocean is *doing*, rather than what it is
+Currents, vorticity and the eddy field — what the ocean is _doing_, rather than what it is
 made of. These are derived quantities: the toolkit computes them from the model's `u` and
 `v` rather than reading them from the file.
 
@@ -33,7 +33,7 @@ The snippets that follow continue in that same session — they use `ds`, `depth
 finish.
 
 !!! note
-    `pp.uv_at_depth()` needs a real depth — it has no surface shortcut. For surface currents use `pp.surface_uv(ds, tindex=-1)` and rotate them yourself with `pp.rotate_uv(ds, u, v)`.
+`pp.uv_at_depth()` needs a real depth — it has no surface shortcut. For surface currents use `pp.surface_uv(ds, tindex=-1)` and rotate them yourself with `pp.rotate_uv(ds, u, v)`.
 
 ## Currents and speed
 
@@ -56,7 +56,7 @@ legend.
 ## Vorticity
 
 Relative vorticity, ζ = ∂v/∂x − ∂u/∂y, picks out the rotating structures. Dividing by the
-Coriolis parameter *f* makes it dimensionless and of order ±1 for a strong eddy, which is
+Coriolis parameter _f_ makes it dimensionless and of order ±1 for a strong eddy, which is
 the usual way to look at the mesoscale.
 
 ```python
@@ -154,7 +154,7 @@ Everything above, as one runnable block:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp, sftools.plotting as pl
 

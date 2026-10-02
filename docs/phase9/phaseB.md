@@ -8,7 +8,7 @@ edge.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, numpy as np
 g = xr.open_dataset('forecast/scratch/Agulhas_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values[0,:]; lat = g.lat_rho.values[:,0]
@@ -32,7 +32,7 @@ for e, v in [('S', sm[0,:]), ('N', sm[-1,:]), ('W', sm[:,0]), ('E', sm[:,-1])]:
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 imin=39 imax=119 jmin=23 jmax=83
 child at 3x: 241 x 181 x 50
 margin: W=39 E=39 S=23 N=15 parent cells
@@ -99,15 +99,15 @@ shp_file = /home/you/seaforward/data/DATASETS_CROCOTOOLS/gshhs/GSHHS_shp/i/GSHHS
 Two deliberate departures from the parent:
 
 - **`north_obc = False`** — the north edge is 0/81 ocean. Genuine coast, correctly
-  closed. Note the parent's north is *open* and the child's is *closed*: different
+  closed. Note the parent's north is _open_ and the child's is _closed_: different
   latitudes, different masks.
 - **`rfact = 0.15`**, not the parent's 0.2. The parent already reports `rx1 = 14.84`,
   and the reasoning was that refining the shelf break 3× would resolve the same slope
   with thinner layers, making the tilt per layer thickness worse. This is the one place
   we don't copy the parent.
 
-    **That reasoning did not predict what happened** — see *The `rx1` result* at the
-    end of this page.
+  **That reasoning did not predict what happened** — see _The `rx1` result_ at the
+  end of this page.
 
 **Set up the directory** — the parent grid goes alongside the child, since
 croco_pytools reads both:
@@ -123,7 +123,8 @@ below into it, save with `Ctrl-O`, exit with `Ctrl-X`:
 
 cd ~/seaforward/code/croco_pytools/prepro
 nano build_agulhas_agrif.py
-```
+
+````
 
 ```python
 import matplotlib
@@ -143,7 +144,7 @@ plt.savefig("/tmp/ag_bathy.png", dpi=110, bbox_inches="tight"); plt.close("all")
 print("=== save_grid_nc()")
 croco.save_grid_nc()
 print("DONE")
-```
+````
 
 ```bash
 conda activate seaforward
@@ -158,7 +159,7 @@ For a clearer view of the same thing, with the child's footprint drawn on the pa
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << 'PYEOF'
+python3 << PYEOF
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 from matplotlib.patches import Rectangle
@@ -187,9 +188,9 @@ PYEOF
 
 ![Agulhas parent bathymetry with the child box](../img/agulhas_bathy.png)
 
-*The child sits on the **Agulhas Bank**, the shelf between 20 and 27°E. Its southern
+_The child sits on the **Agulhas Bank**, the shelf between 20 and 27°E. Its southern
 half crosses the shelf break, roughly 100 m to 4000 m running diagonally through the
-box. That diagonal is both the reason to nest here and the reason `rx1` is a worry.*
+box. That diagonal is both the reason to nest here and the reason `rx1` is a worry._
 
 ## B3 — check where the box actually landed
 
@@ -199,7 +200,7 @@ echo "requested:  39  119  23  83"
 cat AGRIF_FixedGrids.in
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 requested:  39  119   23   83
 written:    39  121   24   84        <- imax +2, jmin +1, jmax +1
 ```
@@ -209,14 +210,14 @@ one each.
 
 That is because the loop hunts for edges with no coastline crossing them, and here
 there was nothing to hunt: the Agulhas coast runs east–west, **parallel** to the north
-edge, and that edge is closed on solid land. A coast running *diagonally* across an
+edge, and that edge is closed on solid land. A coast running _diagonally_ across an
 edge the tool is trying to open is what makes it march, sometimes by ten cells or more.
 
 ```bash
 cd ~/seaforward
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, numpy as np
 g = xr.open_dataset('croco_grd.nc.1'); m = g.mask_rho.values
 print('child: %d x %d   ocean %.1f%%' % (m.shape[1], m.shape[0], float(m.mean())*100))
@@ -234,7 +235,7 @@ for e, v in [('S', m[0,:]), ('N', m[-1,:]), ('W', m[:,0]), ('E', m[:,-1])]:
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 child: 248 x 182   ocean 80.4%
 box: 20.04-27.04E  -38.12--33.09N
 depth 48-5556 m
@@ -285,7 +286,7 @@ grid it finds in `--output_dir` and neither knows nor cares that it is a child.
 
 **Verify:**
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 temp  min=          0  max=      23.44  nan=0
 salt  min=          0  max=       35.6  nan=0
 u     min=     -1.831  max=       1.21  nan=0
@@ -303,7 +304,7 @@ in the initial condition — the interpolation captured it rather than smearing 
 cd ~/seaforward
 conda activate seaforward
 
-python3 << 'PYEOF'
+python3 << PYEOF
 import xarray as xr, os, glob
 H = os.path.expanduser('~/seaforward/forecast/scratch/')
 for f, lbl in [
@@ -314,7 +315,7 @@ for f, lbl in [
 PYEOF
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 parent 9692.0 days
 child  9692.0 days
 ```
@@ -333,7 +334,7 @@ nano croco.in.1
 
 Six edits, as in Phase 8 Step 5. The one that matters:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
                  288     100       60      1
                          ^^^ = 300/3.  NTIMES stays 288 -- AGRIF multiplies it.
@@ -346,7 +347,7 @@ parent's output:
 grep -n "CROCO_FILES/" croco.in.1
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 23:    CROCO_FILES/croco_grd.nc.1     <- required
 34:    CROCO_FILES/croco_ini.nc.1     <- required
 37:    CROCO_FILES/croco_rst.nc.1     <- required
@@ -360,7 +361,7 @@ grep -n "CROCO_FILES/" croco.in.1
 plus `boundary:` set to `XXXXXXXXX`.
 
 !!! note
-    Getting `his` and `avg` wrong is the easy mistake: both grids write to the same file, you lose both, and it looks like a physics problem.
+Getting `his` and `avg` wrong is the easy mistake: both grids write to the same file, you lose both, and it looks like a physics problem.
 
 Verify the driver's sed targets exist:
 
@@ -384,7 +385,7 @@ nano cppdefs.h
 `Ctrl+W` `AGRIF`, and take the **first** match — around line 80, in your
 REGIONAL block. The one near line 1066 belongs to the VORTEX test case. Set:
 
-``` { .c .no-copy }
+```{ .c .no-copy }
 # define AGRIF
 # undef  AGRIF_2WAY
 ```
@@ -407,7 +408,7 @@ nano cppdefs.h
 
 `Ctrl+W` `AGRIF_2WAY`, line 81 only. Line 80 stays as it is:
 
-``` { .c .no-copy }
+```{ .c .no-copy }
 # define AGRIF
 # define AGRIF_2WAY
 ```
@@ -437,7 +438,7 @@ RUN=$(ls -d ~/seaforward/forecast/model-runs/Agulhas_AGRIF/*/ | sort | tail -1)
 grep -i stiffness ${RUN}spinup/croco_spinup.out
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
  Maximum grid stiffness ratios:   rx0 = 0.2001   rx1 = 14.836     <- parent
  Maximum grid stiffness ratios:   rx0 = 0.2115   rx1 = 13.416     <- child
 ```
@@ -464,7 +465,7 @@ cp CROCO_FILES/AGRIF_FixedGrids.in .          # RUN dir, not CROCO_FILES
 grep -H obc_dict CROCO_FILES/crocotools_param.py CROCO_FILES/crocotools_param_child.py
 ```
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 crocotools_param.py:       obc_dict = dict(south=1, west=1, east=1, north=1)
 crocotools_param_child.py: obc_dict = dict(south=1, west=1, east=1, north=0)
 ```
