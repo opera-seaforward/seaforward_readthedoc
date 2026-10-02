@@ -53,7 +53,7 @@ eta_rho = 99 ;
 ```
 
 !!! important
-**Read the file, don't trust the arithmetic.** 13° ÷ (1/12°) + 2 predicts 158. The generator produced **159** — it rounds to whole cells, and it is the authority. The same lesson applies to the grid's north edge landing at **31.79°S** rather than the 32.0 requested.
+    **Read the file, don't trust the arithmetic.** 13° ÷ (1/12°) + 2 predicts 158. The generator produced **159** — it rounds to whole cells, and it is the authority. The same lesson applies to the grid's north edge landing at **31.79°S** rather than the 32.0 requested.
 
 Carry these forward:
 
@@ -229,7 +229,7 @@ sed -n '185,192p' cppdefs.h        # ONLINE on, AROME and ERA_ECMWF off
 ```
 
 !!! warning
-`grep -n "define ONLINE"` finds nothing even when it is correct — the file has `# define  ONLINE` with **two** spaces. Grep for `ONLINE` alone.
+    `grep -n "define ONLINE"` finds nothing even when it is correct — the file has `# define  ONLINE` with **two** spaces. Grep for `ONLINE` alone.
 
 Open it:
 
@@ -408,7 +408,7 @@ through the eastern corner of the north edge — those 5 water cells the rule of
 said to close. Closed, it would have had nowhere to come from.
 
 !!! note
-This is one day from a Mercator cold start, so most of this structure is Mercator's, lightly adjusted. That is what a proof run should show: the interpolation, boundaries and forcing all work togeth\her. Judging the model's own dynamics needs a spun-up run.
+    This is one day from a Mercator cold start, so most of this structure is Mercator's, lightly adjusted. That is what a proof run should show: the interpolation, boundaries and forcing all work togeth\her. Judging the model's own dynamics needs a spun-up run.
 
 ### Comparing against Mercator
 
@@ -522,4 +522,4 @@ There is faint banding along the **west edge**, 17–18°E, worth watching in a 
 run. At one day it is most likely the boundary still adjusting.
 
 !!! important
-**What this does and does not prove.** The model's IC _came from_ Mercator at 07-15, so after 24 hours they cannot have diverged much. This is a **consistency** check, not a skill test: it proves the interpolation did not corrupt anything, the boundaries feed sensible water, and the forcing is being read. Real skill assessment needs a spun-up run compared against **independent** data — satellite SST, drifters, Argo — not against the model's own initial condition.
+    **What this does and does not prove.** The model's IC _came from_ Mercator at 07-15, so after 24 hours they cannot have diverged much. This is a **consistency** check, not a skill test: it proves the interpolation did not corrupt anything, the boundaries feed sensible water, and the forcing is being read. Real skill assessment needs a spun-up run compared against **independent** data — satellite SST, drifters, Argo — not against the model's own initial condition.
