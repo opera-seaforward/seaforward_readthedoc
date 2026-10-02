@@ -140,7 +140,7 @@ grep -iE "shp_file|topo_file|topo_file_reader" ~/seaforward/forecast/configs/Can
 
 ```bash
 cd ~/seaforward/code/croco_pytools/prepro
-python3 << PYEOF
+python3 << 'PYEOF'
 import configparser
 c = configparser.ConfigParser(); c.read('canary_zoom_agrif.ini')
 print('sections:', c.sections())
@@ -148,7 +148,7 @@ z = c['Grid_Zoom_Agrif']
 print('box: imin=%s imax=%s jmin=%s jmax=%s coef=%s'
       % (z['imin'], z['imax'], z['jmin'], z['jmax'], z['coef']))
 print('agrif:', c['Zoom_Options']['is_agrif'], 'level', c['Zoom_Options']['agrif_level'])
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }
@@ -329,7 +329,7 @@ Always compare what you asked for against what `AGRIF_FixedGrids.in` says.
 
 ```bash
 cd ~/seaforward/forecast/scratch/Canary_AGRIF/CROCO_FILES
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g = xr.open_dataset('croco_grd.nc.1')
 print('grid: %d x %d' % (g.sizes['xi_rho'], g.sizes['eta_rho']))
@@ -342,7 +342,7 @@ print('dx: %.2f - %.2f km' % (dx.min()/1000, dx.max()/1000))
 m = g.mask_rho.values
 for n, r in [('south', m[0,:]), ('north', m[-1,:]), ('west', m[:,0]), ('east', m[:,-1])]:
     print('  %-6s %4d/%4d ocean' % (n, int(r.sum()), len(r)))
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }

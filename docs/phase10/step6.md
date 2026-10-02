@@ -4,7 +4,7 @@ itself. Track sea level at a shelf point across the hourly records:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 
@@ -32,7 +32,7 @@ ax.set_title('Tidal sea level at %.2f°W %.2f°N, %.0f m depth'
              % (-lon[j,i], lat[j,i], h[j,i]))
 ax.grid(alpha=0.3)
 fig.savefig('docs/img/tides_timeseries.png', dpi=110, bbox_inches='tight')
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }
@@ -62,7 +62,7 @@ the initial condition carries no tidal signal at all.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 from matplotlib.colors import ListedColormap
@@ -93,7 +93,7 @@ ax.set_title('Tidal range over the run')
 fig.colorbar(mm, ax=ax, label='max - min sea level (m)', shrink=0.8, pad=0.02,
              extend='both')
 fig.savefig('docs/img/tides_range.png', dpi=110, bbox_inches='tight')
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }

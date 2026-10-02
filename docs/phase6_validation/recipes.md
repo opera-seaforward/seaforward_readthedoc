@@ -31,7 +31,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << PYEOF
+python3 << 'PYEOF'
 import sftools.validation_obs as vo
 
 HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
@@ -39,7 +39,7 @@ OBS = '~/seaforward/data/OBS'
 
 for src in ('ostia', 'odyssea', 'duacs', 'globcurrent', 'armor3d'):
     print(vo.download_obs(HIS, src, OBS, Yorig=2000))
-PYEOF
+'PYEOF'
 ```
 
 Five files, each covering that one cycle.
@@ -54,7 +54,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << PYEOF
+python3 << 'PYEOF'
 import sftools.validation_obs as vo
 
 LAST = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
@@ -62,7 +62,7 @@ OBS  = '~/seaforward/data/OBS'
 
 for src in ('odyssea', 'duacs', 'globcurrent'):
     print(vo.download_obs(LAST, src, OBS, Yorig=2000, pad_days=6))
-PYEOF
+'PYEOF'
 ```
 
 `pad_days=6` widens the window by six days on each side. One file per product then covers
@@ -82,7 +82,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
@@ -91,7 +91,7 @@ OBS = '~/seaforward/data/OBS'
 
 ost = vo.download_obs(HIS, 'ostia', OBS, Yorig=2000)
 vo.compare(HIS, ost, 'temp', daily_mean=True, Yorig=2000, out='igog_sst.png')
-PYEOF
+'PYEOF'
 ```
 
 Two things to check for a new region.
@@ -115,7 +115,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
@@ -124,7 +124,7 @@ OBS = '~/seaforward/data/OBS'
 
 ost = vo.download_obs(HIS, 'ostia', OBS, Yorig=1993, track='my')
 vo.compare(HIS, ost, 'temp', daily_mean=True, Yorig=1993, out='hcast_sst.png')
-PYEOF
+'PYEOF'
 ```
 
 `track='my'` selects the reprocessed twin of each product — the same split as Mercator and

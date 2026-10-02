@@ -154,7 +154,7 @@ Everything above, as one runnable block:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp, sftools.plotting as pl
 
@@ -188,7 +188,7 @@ pl.plot_eddy(base, ('uv', (u, v)), ds=ds, isobaths=iso,
 
 vort_da = pp.vorticity(ds, depth_m=depth, normalized=True)
 pl.plot_eddy(base, ('vort', vort_da), ds=ds, isobaths=iso, out='g_eddy.png')
-PYEOF
+'PYEOF'
 ```
 
 ## The extractors

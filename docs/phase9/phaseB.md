@@ -8,7 +8,7 @@ edge.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g = xr.open_dataset('forecast/scratch/Agulhas_12/CROCO_FILES/croco_grd.nc')
 lon = g.lon_rho.values[0,:]; lat = g.lat_rho.values[:,0]
@@ -29,7 +29,7 @@ for e, v in [('S', sm[0,:]), ('N', sm[-1,:]), ('W', sm[:,0]), ('E', sm[:,-1])]:
            'ALL LAND' if v.sum() == 0 else
            'MIXED(%d land)' % int((v == 0).sum()))
     print('  %s: %3d/%3d %-16s %s' % (e, int(v.sum()), len(v), tag, strip(v)))
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }
@@ -159,7 +159,7 @@ For a clearer view of the same thing, with the child's footprint drawn on the pa
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 from matplotlib.patches import Rectangle
@@ -183,7 +183,7 @@ ax.set_aspect('equal'); ax.set_xlabel('longitude'); ax.set_ylabel('latitude')
 ax.set_title('Agulhas parent bathymetry, with the child box')
 fig.colorbar(m, ax=ax, label='depth (m)', shrink=0.85)
 fig.savefig('docs/img/agulhas_bathy.png', dpi=110, bbox_inches='tight')
-PYEOF
+'PYEOF'
 ```
 
 ![Agulhas parent bathymetry with the child box](../img/agulhas_bathy.png)
@@ -217,7 +217,7 @@ edge the tool is trying to open is what makes it march, sometimes by ten cells o
 cd ~/seaforward
 conda activate seaforward
 
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr, numpy as np
 g = xr.open_dataset('croco_grd.nc.1'); m = g.mask_rho.values
 print('child: %d x %d   ocean %.1f%%' % (m.shape[1], m.shape[0], float(m.mean())*100))
@@ -232,7 +232,7 @@ for e, v in [('S', m[0,:]), ('N', m[-1,:]), ('W', m[:,0]), ('E', m[:,-1])]:
            'ALL LAND' if v.sum() == 0 else
            'MIXED(%d land)' % int((v == 0).sum()))
     print('  %s: %3d/%3d  %s' % (e, int(v.sum()), len(v), tag))
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }
@@ -304,7 +304,7 @@ in the initial condition — the interpolation captured it rather than smearing 
 cd ~/seaforward
 conda activate seaforward
 
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr, os, glob
 H = os.path.expanduser('~/seaforward/forecast/scratch/')
 for f, lbl in [
@@ -312,7 +312,7 @@ for f, lbl in [
     (sorted(glob.glob(H + 'Agulhas_AGRIF/child_gen/CROCO_FILES/croco_ini_MERCATOR_*.nc'))[-1], 'child ')]:
     d = xr.open_dataset(f, decode_times=False)
     print(lbl, float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }

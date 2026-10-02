@@ -15,7 +15,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import numpy as np
 import sftools.validation_obs as vo
@@ -29,7 +29,7 @@ OST = max(glob.glob('data/OBS/ostia_*.nc'),
 vo.compare_days(HIS, OST, 'temp',
                 days=3,                    # the first three records
                 daily_mean=True, Yorig=2000, out='days.png')
-PYEOF
+'PYEOF'
 ```
 
 ``` { .text .no-copy }
@@ -82,7 +82,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import numpy as np
 import sftools.validation_obs as vo
@@ -95,7 +95,7 @@ OST = max(glob.glob('data/OBS/ostia_*.nc'),
 
 vo.compare(HIS, OST, 'temp', daily_mean=True,   # no date = last record
            Yorig=2000, out='one_day.png')
-PYEOF
+'PYEOF'
 ```
 
 Same three panels, one column. `kind='stats'` returns the numbers without drawing
@@ -111,7 +111,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import numpy as np
 import sftools.validation_obs as vo
@@ -128,7 +128,7 @@ vo.compare_days(HIS, OST, 'temp', days=3, Yorig=2000,
                 cmap='RdYlBu_r', dcmap='RdBu_r',
                 title='Canary_12, mid-July',
                 out='days.png')
-PYEOF
+'PYEOF'
 ```
 
 Left alone, the field limits come from the 1st and 99th percentiles of both fields together
@@ -147,7 +147,7 @@ conda activate seaforward
 
 # the cycle folder carries the driver's flag tag, so find it
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import glob, os
 import numpy as np
@@ -169,7 +169,7 @@ vo.compare_days(HIS, GC,    'speed', days=days, depth_m=15, Yorig=2000,
                 out='days_speed.png')
 vo.compare_days(HIS, ARM,   'salt',  days=days, depth_m=100, min_depth=500,
                 Yorig=2000, out='days_salt.png')
-PYEOF
+'PYEOF'
 ```
 
 Each reference carries only some variables — `vo.describe()` lists them. Asking for one a

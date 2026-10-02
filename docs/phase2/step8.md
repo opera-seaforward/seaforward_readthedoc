@@ -5,13 +5,13 @@ tools add points, so the two differ.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr
 g = xr.open_dataset('forecast/scratch/Canary_12/CROCO_FILES/croco_grd.nc')
 xi, eta = g.sizes['xi_rho'], g.sizes['eta_rho']
 print('grid file : xi_rho=%d  eta_rho=%d' % (xi, eta))
 print('param.h   : LLm0=%d   MMm0=%d   N=50' % (xi - 2, eta - 2))
-PYEOF
+'PYEOF'
 ```
 
 Then open `param.h` in your config folder:

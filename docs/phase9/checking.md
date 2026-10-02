@@ -14,13 +14,13 @@ echo "using ${D}"
 cp $D/croco_his.nc   /tmp/ag_p.nc
 cp $D/croco_his.nc.1 /tmp/ag_c.nc
 
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr
 for f, l in [('/tmp/ag_p.nc', 'parent'), ('/tmp/ag_c.nc', 'child ')]:
     d = xr.open_dataset(f, decode_times=False)
     print(l, d.sizes['time'], 'records, t =',
           [round(float(t)/86400, 3) for t in d.scrum_time.values])
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }
@@ -35,7 +35,7 @@ comparison needs interpolating.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 
@@ -66,7 +66,7 @@ for row, (v, cmap, unit) in enumerate([('temp', 'RdYlBu_r', 'SST (C)'),
     fig.colorbar(h, ax=ax[row, :], label=unit, shrink=0.9, pad=0.01, aspect=30)
 
 fig.savefig('docs/img/agulhas_parent_child.png', dpi=100)
-PYEOF
+'PYEOF'
 ```
 
 ![Agulhas parent and child](../img/agulhas_parent_child.png)
@@ -95,7 +95,7 @@ confesses.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import xarray as xr, numpy as np, pandas as pd, glob
@@ -151,7 +151,7 @@ for var, cmap, unit in [('temp','RdYlBu_r','SST (C)'), ('zeta','RdBu_r','SSH ano
         x.set_xlabel('lon'); x.set_ylabel('lat')
     fig.suptitle('Agulhas AGRIF %s vs Mercator  %s' % (var, t.date()))
     fig.savefig('docs/img/agulhas_agrif_%s_vs_merc.png' % var, dpi=100)
-PYEOF
+'PYEOF'
 ```
 
 Note the printed offset: CROCO's last record is at **06:00** and Mercator is daily at
@@ -198,7 +198,7 @@ contains more easy ocean.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr, numpy as np, pandas as pd, glob
 MERC = sorted(glob.glob(
     'forecast/model-runs/Agulhas_AGRIF/*/downloaded_data/MERCATOR/'
@@ -233,7 +233,7 @@ for var, src in [('temp', m.thetao.isel(time=k, depth=0)), ('zeta', m.zos.isel(t
     print('  parent, WHOLE domain   RMSE = %.4f' % rmse(p, var, src))
     print('  parent, child box only RMSE = %.4f   <- the fair comparison' % rmse(p, var, src, inbox))
     print('  child                  RMSE = %.4f' % rmse(c, var, src))
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }

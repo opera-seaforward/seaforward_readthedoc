@@ -61,7 +61,7 @@ conda activate seaforward
 #     CYCLE=~/seaforward/forecast/model-runs/Canary_12/20260711_plain/
 CYCLE=$(ls -d ~/seaforward/forecast/model-runs/Canary_12/*/ | sort | tail -1)
 echo "using $(basename ${CYCLE})"
-python3 << PYEOF
+python3 << 'PYEOF'
 import sftools.validation_obs as vo
 
 HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
@@ -69,7 +69,7 @@ OBS = '~/seaforward/data/OBS'
 
 for src in ('ostia', 'odyssea', 'duacs', 'globcurrent', 'armor3d'):
     print(vo.download_obs(HIS, src, OBS, Yorig=2000))
-PYEOF
+'PYEOF'
 ```
 
 ``` { .text .no-copy }

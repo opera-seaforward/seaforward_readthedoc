@@ -167,7 +167,7 @@ Diagnose it by _when_ it died:
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import matplotlib.pyplot as plt, xarray as xr, numpy as np
 
@@ -192,7 +192,7 @@ for a in ax:
 ax[0].set_ylabel('latitude')
 fig.colorbar(m1, ax=ax, label='SST (C)', shrink=0.85, pad=0.02)
 fig.savefig('docs/img/agrif_sst.png', dpi=110)
-PYEOF
+'PYEOF'
 ```
 
 ![parent vs AGRIF child SST](../img/agrif_sst.png)

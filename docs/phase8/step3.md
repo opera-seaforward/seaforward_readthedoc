@@ -125,7 +125,7 @@ python seaforward.py make_ini \
 cd ~/seaforward
 conda activate seaforward
 
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr, numpy as np, glob, os
 CGEN = os.path.expanduser('~/seaforward/forecast/scratch/Canary_AGRIF/child_gen/CROCO_FILES')
 f = sorted(glob.glob(CGEN + '/croco_ini_*.nc'))[-1]
@@ -136,7 +136,7 @@ for v in ['temp', 'salt', 'u', 'v', 'zeta']:
     print('%-5s min=%11.4g max=%11.4g nan=%d'
           % (v, np.nanmin(a), np.nanmax(a), int(np.isnan(a).sum())))
 print('time =', float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }
@@ -167,7 +167,7 @@ Verify explicitly rather than assume:
 cd ~/seaforward
 conda activate seaforward
 
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr, os, glob
 # glob rather than name them: the filenames carry the cycle date, and the
 # parent's folder carries the driver's flag tag too (20260711_plain)
@@ -180,7 +180,7 @@ C = sorted(glob.glob(os.path.expanduser(
 for f, lbl in [(P, 'parent'), (C, 'child ')]:
     d = xr.open_dataset(f, decode_times=False)
     print(lbl, float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
-PYEOF
+'PYEOF'
 ```
 
 ```{ .text .no-copy }

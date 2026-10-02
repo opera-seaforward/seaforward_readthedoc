@@ -43,7 +43,7 @@ index e992e32..3b3aa4d 100755
 +cp $D/croco_avg.nc /tmp/ag_pavg.nc; cp $D/croco_avg.nc.1 /tmp/ag_cavg.nc
 +
 +cd ~/seaforward
-+python3 << PYEOF
++python3 << 'PYEOF'
 +import xarray as xr, numpy as np, pandas as pd
 +MERC = ('forecast/model-runs/Agulhas_AGRIF/20260717_1way/'
 +        'downloaded_data/MERCATOR/MERCATOR_20260717_00.nc')
@@ -84,7 +84,7 @@ index e992e32..3b3aa4d 100755
 +print('  parent whole domain    %.4f' % diff(p, pz))
 +print('  parent child box only  %.4f   <- fair' % diff(p, pz, inbox))
 +print('  child                  %.4f' % diff(c, cz))
-+PYEOF
++'PYEOF'
 +```
 +
 +![Agulhas AGRIF daily-mean SSH](img/agulhas_ssh_daily.png)

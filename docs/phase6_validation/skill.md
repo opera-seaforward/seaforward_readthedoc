@@ -19,7 +19,7 @@ three curves are directly comparable.
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.validation_obs as vo
 
@@ -46,7 +46,7 @@ vo.skill_panels(runs,
                 variables=('temp', 'ssh', 'u', 'v'),
                 depths={'u': 15, 'v': 15},
                 Yorig=2000, out='skill.png')
-PYEOF
+'PYEOF'
 ```
 
 ![Forecast error against lead time](../img/val_skill.png)

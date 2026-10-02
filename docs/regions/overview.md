@@ -21,7 +21,7 @@ Pointing at the region's `croco_grd.nc`:
 cd ~/seaforward
 conda activate seaforward
 
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.plotting as pl
 
@@ -32,7 +32,7 @@ pl.grid_bathy_map(
     mesh_stride=2,         # draw every 2nd grid line, to thin a dense mesh
     out="igog_12_portrait.png",
 )
-PYEOF
+'PYEOF'
 ```
 
 - **Left panel** — the grid mesh over the coastline, drawn on **ocean cells only**, so
@@ -50,7 +50,7 @@ Once a forecast exists, one more call gives the "region in action" figure:
 cd ~/seaforward
 conda activate seaforward
 
-python3 << PYEOF
+python3 << 'PYEOF'
 import glob
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp, sftools.plotting as pl
@@ -62,7 +62,7 @@ ds = pp.open_history(HIS, Yorig=2000)
 
 pl.plot(pp.field(ds, "temp"), out="igog_12_sst.png")                # surface
 pl.plot(pp.field(ds, "temp", depth_m=100), out="igog_12_t100.png")  # at 100 m
-PYEOF
+'PYEOF'
 ```
 
 `pp.field()` gives the surface by default and a true depth in metres when you pass

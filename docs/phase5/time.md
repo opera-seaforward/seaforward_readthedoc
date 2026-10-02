@@ -235,7 +235,7 @@ Everything above, as one runnable block. The animations take minutes rather than
 ```bash
 cd ~/seaforward
 conda activate seaforward
-python3 << PYEOF
+python3 << 'PYEOF'
 import matplotlib; matplotlib.use('Agg')
 import sftools.postprocess as pp, sftools.plotting as pl, sftools.animation as anim
 
@@ -270,5 +270,5 @@ anim.animate(ds, 'zeta', overlay='uv', uv_depth=200, scale=2, skip=3,
 
 anim.animate(ds, 'speed', depth_m=200, overlay='uv', uv_depth=200,
              scale=2, skip=3, vmin=0, vmax=0.2, out='anim_3.gif')
-PYEOF
+'PYEOF'
 ```

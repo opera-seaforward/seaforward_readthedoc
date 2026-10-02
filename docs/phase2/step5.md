@@ -149,7 +149,7 @@ run the one-time conversion that shifts the axis to −180..180:
 
 ```bash
 cd ${FCAST}
-python3 << PYEOF
+python3 << 'PYEOF'
 import xarray as xr, glob, os
 for f in sorted(glob.glob('downloaded_data/GFS/for_croco/*.nc')):
     d = xr.open_dataset(f); lon = d['lon'].values
@@ -160,7 +160,7 @@ for f in sorted(glob.glob('downloaded_data/GFS/for_croco/*.nc')):
     else:
         d.close()
 print('done')
-PYEOF
+'PYEOF'
 ```
 
 !!! check
