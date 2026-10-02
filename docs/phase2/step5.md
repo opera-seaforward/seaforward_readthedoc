@@ -80,6 +80,15 @@ python seaforward.py make_ini \
     --run_date "${RUN_DT}" --hdays ${HDAYS} --Yorig ${YORIG}
 ```
 
+!!! important
+    Important: if you change the value of EXTENTS (for example after changing your region), you must delete the previously downloaded files before running the script again:
+
+    ```bash
+    rm -f ${FCAST}/downloaded_data/MERCATOR/*.nc
+    ```
+
+    Then download the data again with the new EXTENTS. Files downloaded with an older, smaller box are reused as they are, and make_ini will fail with an "extents not sufficient" error even though EXTENTS is now correct.
+
 !!! check
     It interpolates temp/salt/u/v onto the sigma layers and prints `Initial file created … croco_ini_MERCATOR_<date>_00.nc`.
 
