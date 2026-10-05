@@ -43,6 +43,31 @@ must be compiled once:
 ```bash
 conda activate seaforward
 source ~/seaforward/env.sh      # FC and FFLAGS — the Makefile needs both
+
+echo "FC     = ${FC:-(empty)}"
+echo "FFLAGS = ${FFLAGS:-(empty)}"
+```
+
+Both must be non-empty before you build:
+
+```text
+FC     = gfortran
+FFLAGS = -ffree-line-length-none -fallow-argument-mismatch -O3
+```
+
+!!! warning "If `FFLAGS` is empty"
+    The Makefile passes `$(FFLAGS)` straight to the compiler and supplies no
+    default of its own, so an empty value means the Fortran is compiled with no
+    flags at all. `-fallow-argument-mismatch` is the one that matters:
+    gfortran 10 and later reject this legacy Fortran without it, so the build
+    fails with an argument-mismatch error that says nothing about `env.sh`.
+
+    Empty means you have not sourced `env.sh` in this shell. Source it and
+    check again.
+
+Now build:
+
+```bash
 cd ~/seaforward/code/croco_pytools/prepro/Modules/tools_fort_routines/
 make clean && make
 ```
