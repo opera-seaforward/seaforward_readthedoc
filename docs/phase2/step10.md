@@ -2,38 +2,44 @@
 
 *Step 10 **compiles** the model into a runnable program.*
 
-This turns the source + your compile-time files into an executable called `croco`.
-It's a command, not an edit — but one detail matters a lot.
+This turns the source and your compile-time files into an executable called
+`croco`. It is a command rather than an edit, but where you run it from matters.
 
 First, **stage** the three compile-time files from the config folder into the run
-folder (where the build happens). `croco.in` is *not* needed yet — it's a run-time
-file, edited next in Step 11 — so only these three go in now:
+folder, where the build happens:
 
 ```bash
 cd ${FCAST}
-cp ${CONFIG_DIR}/{cppdefs.h,param.h,jobcomp} .
+cp ${CONFIG_DIR}/{cppdefs.h,param.h,jobcomp} .   # croco.in is run-time — Step 11
 ```
 
-Then set the compile environment and build. **Compile outside conda** so the
-system linker uses your `opt_seq` NetCDF, not conda's:
+Then set the compile environment:
 
 ```bash
 conda deactivate                 # leave conda for the link step
 source ~/seaforward/env.sh       # ensures opt_seq's nf-config + compilers are set
-which nf-config                  # must show .../seaforward/opt_seq/bin/nf-config
+
+echo "CONDA_PREFIX = ${CONDA_PREFIX:-(none - good)}"
+nf-config --flibs                # the -L path the linker will actually use
+```
+
+`CONDA_PREFIX` must print `(none - good)` and `--flibs` must point into
+`opt_seq`. If `CONDA_PREFIX` shows a path instead, conda is still active —
+deactivate, source `env.sh` again and re-check before going on.
+
+```bash
 ./jobcomp 2>&1 | tee compile.log | tail -40
 ```
 
-**Why `conda deactivate` first:** conda ships its own NetCDF, and if it's ahead
-on the path the build fails with a confusing `libcurl` / `CURL_OPENSSL` error.
-Leaving conda lets the system linker use your `opt_seq` build. Sourcing `env.sh`
-keeps `opt_seq/bin` on `PATH` and the compilers set.
-
-!!! warning
-    **`which nf-config` must show `opt_seq`, not a conda path.** If it shows conda, run `conda deactivate`, `source ~/seaforward/env.sh`, and re-check before `./jobcomp`.
+**Why conda has to be off:** conda ships its own NetCDF, and an active conda
+environment points the linker at `$CONDA_PREFIX/lib` through `LDFLAGS` and its
+own binutils. `-lnetcdf` then resolves there rather than in `opt_seq`, and the
+build fails — either with `cannot find -lnetcdf`, or with a confusing `libcurl`
+/ `CURL_OPENSSL` error from a NetCDF built against a different curl. Sourcing
+`env.sh` keeps `opt_seq/bin` on `PATH` and the compilers set.
 
 !!! check
     After a few minutes you see the CROCO ASCII logo and **`CROCO is OK`**, and a `croco` program appears:
-    ```bash
+```bash
     ls -lh ${FCAST}/croco
-    ```
+```
