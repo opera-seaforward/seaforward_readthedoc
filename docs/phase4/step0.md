@@ -19,7 +19,9 @@ export CF=${HCAST}/CROCO_FILES
 export LON_MIN=-22.0; export LON_MAX=-15.5      # grid box
 export LAT_MIN=14.0;  export LAT_MAX=24.0
 export RES=$(echo "1/12" | bc -l)
-export EXTENTS=-23.5,-14.0,12.5,25.5            # GLORYS download box (grid + ~1.5°)
+export MARGIN=1.5                             # download-box margin, in degrees
+export EXTENTS=$(awk -v a="$LON_MIN" -v b="$LON_MAX" -v c="$LAT_MIN" -v d="$LAT_MAX" -v m="$MARGIN" \
+                 'BEGIN { printf "%g,%g,%g,%g", a-m, b+m, c-m, d+m }')
 export ERA5_BOX="-22,-15.5,14,24"               # ERA5 grid box (a 2° margin is added)
 export YORIG=1993                               # reanalysis time origin — NOT 2000
 

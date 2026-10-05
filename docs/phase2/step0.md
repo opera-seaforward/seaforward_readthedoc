@@ -26,7 +26,9 @@ export CONFIG_NAME=Canary_12                     # your region's name (used ever
 export LON_MIN=-22.0; export LON_MAX=-15.5       # west/east edges of your box
 export LAT_MIN=14.0;  export LAT_MAX=24.0        # south/north edges
 export RES=$(echo "1/12" | bc -l)                # grid spacing: 1/12° (~9 km)
-export EXTENTS=-23.5,-14.0,12.5,25.5             # DOWNLOAD box = your box + ~1.5° margin
+export MARGIN=1.5                              # download-box margin, in degrees
+export EXTENTS=$(awk -v a="$LON_MIN" -v b="$LON_MAX" -v c="$LAT_MIN" -v d="$LAT_MAX" -v m="$MARGIN" \
+                 'BEGIN { printf "%g,%g,%g,%g", a-m, b+m, c-m, d+m }')
 export HDAYS=2; export FDAYS=5                   # 2 days spin-up + 5 days forecast
 export YORIG=2000                                # time reference year (leave at 2000)
 
@@ -41,6 +43,7 @@ mkdir -p ${CONFIG_DIR} ${CF} \
          ${FCAST}/downloaded_data/GFS/for_croco
 
 echo "Building ${CONFIG_NAME}: lon ${LON_MIN}..${LON_MAX}, lat ${LAT_MIN}..${LAT_MAX}"
+echo "  download box: ${EXTENTS}  (grid box + ${MARGIN}° every side)"
 ```
 
 **Two folders, two jobs.** `CONFIG_DIR` (`forecast/configs/Canary_12`) holds the
