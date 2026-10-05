@@ -283,8 +283,8 @@ their suffixes.
 ## B.7 — Scheduling it
 
 cron starts your job with almost no environment: no conda, no `env.sh`, and a
-`PATH` of a few system directories. So the entry cannot just call the driver — it
-has to build the session first, in the same order as [B.5](#b5-running-it).
+`PATH` of a few system directories. So the entry cannot just call the driver — it has
+to build the session first, in the same order as [B.5](#b5-running-it).
 
 Put that in a wrapper, so you can test it by hand instead of waiting for 06:00 to
 find out:
@@ -297,18 +297,27 @@ source ~/miniconda3/etc/profile.d/conda.sh    # miniforge: ~/miniforge3/...
 conda activate seaforward
 source ~/seaforward/env.sh
 cd ~/seaforward/forecast
-./run_forecast_cycle.sh
+./run_forecast_cycle.sh "$@"
 EOF
 
 chmod +x ~/seaforward/forecast/cron_forecast.sh
 ```
 
-Now test it the way cron will run it — `env -i` strips your environment, so this
-proves the wrapper stands on its own:
+The `"$@"` passes whatever follows the wrapper's name straight to the driver, so
+this one file covers every run the driver can do — plain, tides, an AGRIF child,
+rivers. You choose which by what you write in the cron line, not by editing the
+wrapper.
+
+Now test it the way cron will run it — `env -i` strips your environment, so
+this proves the wrapper stands on its own:
 
 ```bash
 env -i HOME="$HOME" /bin/bash ~/seaforward/forecast/cron_forecast.sh 2>&1 | tail -20
 ```
+
+With no flags the driver takes its defaults `child=none, tides=0`, so the line
+above tests a plain run. Pass here whatever you intend to put in the cron line, or
+you have tested a different run than the one you are scheduling.
 
 If it runs with nothing inherited, it will run from cron. Then `crontab -e` and add:
 
@@ -316,6 +325,8 @@ If it runs with nothing inherited, it will run from cron. Then `crontab -e` and 
 CRON_TZ=UTC
 0 6 * * *  /bin/bash ~/seaforward/forecast/cron_forecast.sh >> ~/seaforward/forecast/cron.log 2>&1
 ```
+
+Add the flags you want on that line, after the wrapper's name.
 
 Once it is in, these are how you check on it:
 
@@ -326,8 +337,22 @@ tail -40 ~/seaforward/forecast/cron.log                # what the last run did
 grep -c "MAIN: DONE" ~/seaforward/forecast/cron.log    # 2 = both legs finished
 ```
 
-A missing `cron.log` means it never fired. One with no `MAIN: DONE` means it fired
-and failed, and the log names the stage it stopped at.
+A missing `cron.log` means it never fired. One with no `MAIN: DONE` means it
+fired and failed, and the log names the stage it stopped at.
+
+**Stopping it.** The schedule and the run are separate things, so removing the entry
+does not stop a cycle already in progress:
+
+```bash
+crontab -l > ~/crontab.bak      # keep a copy you can put back
+crontab -r                      # remove the schedule
+
+pgrep -af "cron_forecast|run_forecast_cycle|croco"   # still going?
+pkill -f cron_forecast.sh
+pkill -x croco
+```
+
+Put the schedule back with `crontab ~/crontab.bak`.
 
 !!! warning
     **`conda activate` needs conda's own setup script, not a login shell.** The
