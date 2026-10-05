@@ -14,6 +14,7 @@ export CROCO_PYTOOLS_DIR=${SEA_FORWARD_ROOT}/code/croco_pytools
 export CROCO_DATA_ROOT=${SEA_FORWARD_ROOT}/data
 export SEAFORWARD=${SEA_FORWARD_ROOT}/sftools
 export CC=gcc; export FC=gfortran; export F90=gfortran; export F77=gfortran
+export FFLAGS="-ffree-line-length-none -fallow-argument-mismatch -O3"
 export SEA_FORWARD_PREFIX=${SEA_FORWARD_ROOT}/opt_seq
 export NETCDF=${SEA_FORWARD_PREFIX}
 export PATH=${SEA_FORWARD_PREFIX}/bin:${PATH}
@@ -26,7 +27,16 @@ You **source** it (run it in your current shell) at the start of each session:
 source ~/seaforward/env.sh
 ```
 
-It prints `SEA-FORWARD environment set (root: /home/<you>/seaforward)`.
+It prints two lines — what it set, and what to do next:
+
+``` { .text .no-copy }
+SEA-FORWARD environment set (root: /home/<you>/seaforward)
+  next: source forecast/track.sh  OR  hindcast/track.sh, then conda activate seaforward
+```
+
+That second line is the running order for the rest of your session, and getting it
+wrong is a common way to lose an hour: `env.sh` sets the shared paths, a track
+script picks forecast or hindcast, and conda comes last.
 
 !!! note
     **Sourcing vs running.** `source env.sh` (or `. env.sh`) applies the variables to *your* shell. Running `./env.sh` would set them only inside a throwaway sub-shell and lose them — so always `source` it.

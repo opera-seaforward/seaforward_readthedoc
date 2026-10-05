@@ -188,7 +188,7 @@ pl.plot_eddy(base, ('uv', (u, v)), ds=ds, isobaths=iso,
 
 vort_da = pp.vorticity(ds, depth_m=depth, normalized=True)
 pl.plot_eddy(base, ('vort', vort_da), ds=ds, isobaths=iso, out='g_eddy.png')
-'PYEOF'
+PYEOF
 ```
 
 ## The extractors

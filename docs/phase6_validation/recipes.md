@@ -39,7 +39,7 @@ OBS = '~/seaforward/data/OBS'
 
 for src in ('ostia', 'odyssea', 'duacs', 'globcurrent', 'armor3d'):
     print(vo.download_obs(HIS, src, OBS, Yorig=2000))
-'PYEOF'
+PYEOF
 ```
 
 Five files, each covering that one cycle.
@@ -62,7 +62,7 @@ OBS  = '~/seaforward/data/OBS'
 
 for src in ('odyssea', 'duacs', 'globcurrent'):
     print(vo.download_obs(LAST, src, OBS, Yorig=2000, pad_days=6))
-'PYEOF'
+PYEOF
 ```
 
 `pad_days=6` widens the window by six days on each side. One file per product then covers
@@ -91,7 +91,7 @@ OBS = '~/seaforward/data/OBS'
 
 ost = vo.download_obs(HIS, 'ostia', OBS, Yorig=2000)
 vo.compare(HIS, ost, 'temp', daily_mean=True, Yorig=2000, out='igog_sst.png')
-'PYEOF'
+PYEOF
 ```
 
 Two things to check for a new region.
@@ -124,7 +124,7 @@ OBS = '~/seaforward/data/OBS'
 
 ost = vo.download_obs(HIS, 'ostia', OBS, Yorig=1993, track='my')
 vo.compare(HIS, ost, 'temp', daily_mean=True, Yorig=1993, out='hcast_sst.png')
-'PYEOF'
+PYEOF
 ```
 
 `track='my'` selects the reprocessed twin of each product — the same split as Mercator and

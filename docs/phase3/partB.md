@@ -8,6 +8,26 @@ The driver replaces the whole manual sequence — download, prepare, patch `croc
 run — with one command that produces today's forecast in two phases and files the
 result.
 
+**First, the driver needs a binary named `croco_plain`.** It selects a binary by
+name from the flags you pass, and Phase 2's `jobcomp` produced one called `croco`.
+Give it the name the driver expects — once per region:
+
+```bash
+cd ~/seaforward/forecast/scratch/Canary_12
+cp croco croco_plain
+```
+
+!!! warning
+    **Without this rename the driver fails immediately:**
+    ``` { .text .no-copy }
+    ERROR: binary not found: .../scratch/Canary_12/croco_plain
+      (child=none, tides=0) needs its own build.
+    ```
+    The error also prints the CPP switches for whichever combination it couldn't find.
+
+Then the whole cycle is one command (the full invocation, with the environment
+set up, is in [B.5](#b5-running-it)):
+
 ```bash
 cd ~/seaforward/forecast
 ./run_forecast_cycle.sh
@@ -112,21 +132,7 @@ Every build is the same three steps: set the switches in `cppdefs.h`, compile, r
 the result. `jobcomp` always produces a file called `croco`, and each build overwrites
 the last — so **rename before building the next**.
 
-**The plain binary — do this one first.** [Phase 2](../phase2/02_forecast_config.md) already built it; it just needs the
-name:
-
-```bash
-cd ~/seaforward/forecast/scratch/Canary_12
-cp croco croco_plain
-```
-
-!!! warning
-    **Without this rename the driver fails immediately**, because Phase 2's `jobcomp` produces `croco` while the driver looks for `croco_plain`:
-    ``` { .text .no-copy }
-    ERROR: binary not found: .../scratch/Canary_12/croco_plain
-      (child=none, tides=0) needs its own build.
-    ```
-    The error also prints the CPP switches for whichever combination it couldn't find.
+The plain binary was already named in [B.1](#b1-what-the-driver-does).
 
 **A tides build:**
 
@@ -276,15 +282,93 @@ their suffixes.
 
 ## B.7 — Scheduling it
 
-To produce a fresh forecast every morning, add a cron entry with `crontab -e`. For
-06:00 UTC:
+cron starts your job with almost no environment: no conda, no `env.sh`, and a
+`PATH` of a few system directories. So the entry cannot just call the driver — it has
+to build the session first, in the same order as [B.5](#b5-running-it).
 
-``` { .text .no-copy }
-0 6 * * *  /bin/bash -lc 'source ~/seaforward/env.sh && cd ~/seaforward/forecast && ./run_forecast_cycle.sh >> ~/seaforward/forecast/cron.log 2>&1'
+Put that in a wrapper, so you can test it by hand instead of waiting for 06:00 to
+find out:
+
+```bash
+cat > ~/seaforward/forecast/cron_forecast.sh << 'EOF'
+#!/bin/bash
+# cron provides no environment, so set one up explicitly
+source ~/miniconda3/etc/profile.d/conda.sh    # miniforge: ~/miniforge3/...
+conda activate seaforward
+source ~/seaforward/env.sh
+cd ~/seaforward/forecast
+./run_forecast_cycle.sh "$@"
+EOF
+
+chmod +x ~/seaforward/forecast/cron_forecast.sh
 ```
 
-The `-lc` matters: cron runs with a minimal environment, so the shell has to be a login
-shell for conda and the paths to resolve.
+The `"$@"` passes whatever follows the wrapper's name straight to the driver, so
+this one file covers every run the driver can do — plain, tides, an AGRIF child,
+rivers. You choose which by what you write in the cron line, not by editing the
+wrapper.
+
+Now test it the way cron will run it — `env -i` strips your environment, so
+this proves the wrapper stands on its own:
+
+```bash
+env -i HOME="$HOME" /bin/bash ~/seaforward/forecast/cron_forecast.sh 2>&1 | tail -20
+```
+
+With no flags the driver takes its defaults `child=none, tides=0`, so the line
+above tests a plain run. Pass here whatever you intend to put in the cron line, or
+you have tested a different run than the one you are scheduling.
+
+If it runs with nothing inherited, it will run from cron. Then `crontab -e` and add:
+
+``` { .text .no-copy }
+CRON_TZ=UTC
+0 6 * * *  /bin/bash ~/seaforward/forecast/cron_forecast.sh >> ~/seaforward/forecast/cron.log 2>&1
+```
+
+Add the flags you want on that line, after the wrapper's name.
+
+Once it is in, these are how you check on it:
+
+```bash
+crontab -l                                            # what is scheduled
+pgrep -x cron >/dev/null && echo "daemon up"           # whether cron can run it
+tail -40 ~/seaforward/forecast/cron.log                # what the last run did
+grep -c "MAIN: DONE" ~/seaforward/forecast/cron.log    # 2 = both legs finished
+```
+
+A missing `cron.log` means it never fired. One with no `MAIN: DONE` means it
+fired and failed, and the log names the stage it stopped at.
+
+**Stopping it.** The schedule and the run are separate things, so removing the entry
+does not stop a cycle already in progress:
+
+```bash
+crontab -l > ~/crontab.bak      # keep a copy you can put back
+crontab -r                      # remove the schedule
+
+pgrep -af "cron_forecast|run_forecast_cycle|croco"   # still going?
+pkill -f cron_forecast.sh
+pkill -x croco
+```
+
+Put the schedule back with `crontab ~/crontab.bak`.
+
+!!! warning
+    **`conda activate` needs conda's own setup script, not a login shell.** The
+    usual advice is to wrap the command in `bash -lc`, on the grounds that a login
+    shell reads your startup files. It does not help: `bash -lc` is
+    non-interactive, and Ubuntu's `~/.bashrc` begins by returning immediately for
+    non-interactive shells — which is exactly where `conda init` wrote its block.
+    So `conda` is undefined, and the driver dies at stage 1 on a Python import.
+    Sourcing `etc/profile.d/conda.sh` is what makes it available.
+
+!!! note
+    **cron uses the system timezone, not UTC.** `0 6 * * *` means six in the
+    morning wherever the machine thinks it is. The `CRON_TZ=UTC` line above fixes
+    the schedule to UTC, which is what you want when the data you are waiting for
+    is published on a UTC clock. Check with `timedatectl` what your machine is set
+    to before deciding.
 
 !!! warning
     **Check the data is published before your cron time.** Mercator and GFS for "today" appear at different hours. If a download returns nothing, the cycle fails at stage 1 — move the cron later rather than retrying.

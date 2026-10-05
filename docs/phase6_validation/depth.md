@@ -25,7 +25,7 @@ MERC = glob.glob("${CYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc")[0]
 val.compare_section(HIS, MERC, 'temp', -21.0, 21.0, -17.0, 21.0,
                     depth_max=1000, Yorig=2000,
                     out='section.png')
-'PYEOF'
+PYEOF
 ```
 
 ![Temperature section across the shelf](../img/val_section.png)
@@ -58,7 +58,7 @@ MERC = glob.glob("${CYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc")[0]
 
 val.compare_profile(HIS, MERC, 'temp', -19.0, 21.0,
                     Yorig=2000, out='profile.png')
-'PYEOF'
+PYEOF
 ```
 
 ![Temperature profile](../img/val_profile.png)
@@ -87,7 +87,7 @@ MERC = glob.glob("${CYCLE}downloaded_data/MERCATOR/MERCATOR_*.nc")[0]
 
 val.error_vs_depth(HIS, MERC, field='temp', Yorig=2000,
                    out='depth.png')
-'PYEOF'
+PYEOF
 ```
 
 ![Error against depth](../img/val_depth.png)
@@ -127,7 +127,7 @@ for lo, hi in [(100, 200), (200, 500), (500, 1000), (1000, 9000)]:
     if s.sum():
         print('h %5d-%5d m: n=%5d  bias %+6.2f  rmse %5.2f'
               % (lo, hi, s.sum(), np.nanmean(d[s]), np.sqrt(np.nanmean(d[s]**2))))
-'PYEOF'
+PYEOF
 ```
 
 ``` { .text .no-copy }

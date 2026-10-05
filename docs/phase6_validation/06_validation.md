@@ -69,7 +69,7 @@ OBS = '~/seaforward/data/OBS'
 
 for src in ('ostia', 'odyssea', 'duacs', 'globcurrent', 'armor3d'):
     print(vo.download_obs(HIS, src, OBS, Yorig=2000))
-'PYEOF'
+PYEOF
 ```
 
 ``` { .text .no-copy }
@@ -92,8 +92,8 @@ the forecast track, 1993 for hindcasts.
 
 ## What this chapter reports
 
-The examples come from three consecutive Canary_12 forecast cycles in July 2026 — 11, 12
-and 13 July, each a two-day spin-up and a five-day forecast. Three cycles is enough to see
+The examples come from three Canary_12 forecast cycles in July 2026 — 11, 23 and 29
+July, each a two-day spin-up and a five-day forecast. Three cycles is enough to see
 whether a result is consistent, not enough to average confidently, so the figures show the
 individual cycles rather than a confidence band.
 
@@ -102,9 +102,11 @@ Three findings:
 - **Against independent SST observations, SEA-FORWARD is substantially closer than its
   parent** — 0.79 °C against Mercator's 1.16 °C at five days, and closer at every lead.
 - **Against Mercator it is also better for the northward current** at every lead but the
-  last. Against persistence it is level for currents and slightly worse for SST — the
-  ocean surface changes slowly enough that assuming nothing changed is a strong baseline
-  at these lead times.
+  last. Against persistence it does not win: the eastward current matches it out to two
+  days and falls behind from day three, the northward current is behind from day one, and
+  both degrade sharply at day five. SST is slightly worse throughout — the ocean surface
+  changes slowly enough that assuming nothing changed is a strong baseline at these lead
+  times.
 - **Two independent SST products agree about the model.** ODYSSEA, which assimilates
   nothing, gives essentially the same numbers as OSTIA, which assimilates in-situ data —
   which is what makes the first finding credible.

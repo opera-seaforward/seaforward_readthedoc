@@ -22,7 +22,7 @@ ODY = 'data/OBS/odyssea_2026-07-07_2026-07-24.nc'
 
 vo.compare(HIS, ODY, 'temp', method='collocate', date='2026-07-14',
            daily_mean=True, Yorig=2000, out='collocation.png')
-'PYEOF'
+PYEOF
 ```
 
 ![SEA-FORWARD against ODYSSEA, collocated](../img/val_collocation.png)
@@ -50,7 +50,7 @@ HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 ODY = 'data/OBS/odyssea_2026-07-07_2026-07-24.nc'
 
 vo.scorecard(HIS, ODY, 'temp', days=5, Yorig=2000)
-'PYEOF'
+PYEOF
 ```
 
 ``` { .text .no-copy }
@@ -100,7 +100,7 @@ HIS = "${CYCLE}fcst/CROCO_FILES/croco_his.nc"
 OST = 'data/OBS/ostia_2026-07-08_2026-07-17.nc'
 
 vo.scorecard(HIS, OST, 'temp', days=5, Yorig=2000)
-'PYEOF'
+PYEOF
 ```
 
 ``` { .text .no-copy }

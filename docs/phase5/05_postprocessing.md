@@ -37,7 +37,7 @@ ds = pp.open_history('forecast/scratch/Canary_12/CROCO_FILES/croco_his.nc',
                      Yorig=2000)
 
 pl.plot(pp.field(ds, 'temp', depth_m=50), out='temp_50m.png')
-'PYEOF'
+PYEOF
 ```
 
 ![Temperature at 50 m](../img/phase5_temp_50m.png)

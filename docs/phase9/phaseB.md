@@ -29,7 +29,7 @@ for e, v in [('S', sm[0,:]), ('N', sm[-1,:]), ('W', sm[:,0]), ('E', sm[:,-1])]:
            'ALL LAND' if v.sum() == 0 else
            'MIXED(%d land)' % int((v == 0).sum()))
     print('  %s: %3d/%3d %-16s %s' % (e, int(v.sum()), len(v), tag, strip(v)))
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }
@@ -183,7 +183,7 @@ ax.set_aspect('equal'); ax.set_xlabel('longitude'); ax.set_ylabel('latitude')
 ax.set_title('Agulhas parent bathymetry, with the child box')
 fig.colorbar(m, ax=ax, label='depth (m)', shrink=0.85)
 fig.savefig('docs/img/agulhas_bathy.png', dpi=110, bbox_inches='tight')
-'PYEOF'
+PYEOF
 ```
 
 ![Agulhas parent bathymetry with the child box](../img/agulhas_bathy.png)
@@ -232,7 +232,7 @@ for e, v in [('S', m[0,:]), ('N', m[-1,:]), ('W', m[:,0]), ('E', m[:,-1])]:
            'ALL LAND' if v.sum() == 0 else
            'MIXED(%d land)' % int((v == 0).sum()))
     print('  %s: %3d/%3d  %s' % (e, int(v.sum()), len(v), tag))
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }
@@ -312,7 +312,7 @@ for f, lbl in [
     (sorted(glob.glob(H + 'Agulhas_AGRIF/child_gen/CROCO_FILES/croco_ini_MERCATOR_*.nc'))[-1], 'child ')]:
     d = xr.open_dataset(f, decode_times=False)
     print(lbl, float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }

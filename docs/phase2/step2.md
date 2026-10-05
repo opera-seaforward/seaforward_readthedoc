@@ -57,7 +57,7 @@ pl.grid_bathy_map(
     mesh_stride=2,
     out='canary_12_portrait.png',
 )
-'PYEOF'
+PYEOF
 ls -la canary_12_portrait.png
 xdg-open canary_12_portrait.png >/dev/null 2>&1 || echo "Image générée : $(pwd)/canary_12_portrait.png"
 ```

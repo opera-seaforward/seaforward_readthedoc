@@ -148,7 +148,7 @@ z = c['Grid_Zoom_Agrif']
 print('box: imin=%s imax=%s jmin=%s jmax=%s coef=%s'
       % (z['imin'], z['imax'], z['jmin'], z['jmax'], z['coef']))
 print('agrif:', c['Zoom_Options']['is_agrif'], 'level', c['Zoom_Options']['agrif_level'])
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }
@@ -342,7 +342,7 @@ print('dx: %.2f - %.2f km' % (dx.min()/1000, dx.max()/1000))
 m = g.mask_rho.values
 for n, r in [('south', m[0,:]), ('north', m[-1,:]), ('west', m[:,0]), ('east', m[:,-1])]:
     print('  %-6s %4d/%4d ocean' % (n, int(r.sum()), len(r)))
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }

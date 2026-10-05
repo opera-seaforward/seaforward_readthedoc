@@ -12,7 +12,9 @@ export CONFIG_NAME=Agulhas_12
 export LON_MIN=17.0;  export LON_MAX=30.0
 export LAT_MIN=-40.0; export LAT_MAX=-32.0
 export RES=$(echo "1/12" | bc -l)
-export EXTENTS=15.5,31.5,-41.5,-30.5        # grid box + 1.5 deg every side
+export MARGIN=1.5                         # download-box margin, in degrees
+export EXTENTS=$(awk -v a="$LON_MIN" -v b="$LON_MAX" -v c="$LAT_MIN" -v d="$LAT_MAX" -v m="$MARGIN" \
+                 'BEGIN { printf "%g,%g,%g,%g", a-m, b+m, c-m, d+m }')
 export HDAYS=2; export FDAYS=5
 export YORIG=2000
 

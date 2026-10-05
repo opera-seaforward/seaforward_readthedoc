@@ -8,7 +8,12 @@ these for you, but for this one manual run you set them by hand. Still in
 
 ```bash
 cd ${FCAST}
-TODAY=$(date -u +%Y%m%d)
+# Take the date from the input files you actually prepared, not from today's
+# clock: the two differ as soon as you prepare the inputs on one day and run
+# the model on another.
+TODAY=$(ls CROCO_FILES/croco_ini_MERCATOR_*_00.nc 2>/dev/null | tail -1 \
+        | sed 's#.*croco_ini_MERCATOR_##; s#_00\.nc$##')
+echo "patching croco.in for: ${TODAY:-NO INITIAL FILE FOUND}"
 
 # how long / what timestep: NTIMES = (spin-up+forecast days)*86400/dt = (2+5)*86400/300 = 2016
 sed -i '/^time_stepping:/{n; s/.*/                2016     300       60      1/}' croco.in

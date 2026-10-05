@@ -10,6 +10,12 @@ python seaforward.py download_ocean_hindcast \
     --outputDir ${HCAST}/downloaded_data/GLORYS
 ```
 
+!!! note
+    **If it seems to hang, give it time — and interrupting is safe.** The client
+    prints nothing while Copernicus prepares the subset, and on a busy server or
+    a slow connection that wait can stretch to an hour. If you do stop it,
+    re-running the same command skips the months already downloaded.
+
 **What each flag is:**
 
 - `--domain` — the download box. Use the `--domain="${EXTENTS}"` form with the equals
@@ -33,7 +39,7 @@ python seaforward.py download_ocean_hindcast \
     ```
 
     You want `2025_12.nc` and `2026_01.nc`, each with **`time = 31`** (daily records — this is
-    the check that catches the monthly-mean mistake), `depth = 50`, and the ocean variables Re-running skips months already present.
+    the check that catches the monthly-mean mistake), `depth = 50`, and the ocean variables.
 
 !!! note
     **Neighbour months for boundaries.** Boundary conditions need ocean data slightly *beyond* the run window. For a cycle near a month edge — Dec 30 to Jan 4, say — the tools read **both** `2025_12.nc` and `2026_01.nc`. So download the month before and after your period too. The operational driver does this automatically.

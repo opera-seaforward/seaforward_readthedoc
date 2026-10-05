@@ -122,7 +122,7 @@ for f, l in [('oneway/croco_his.nc', 'one-way parent'),
     d = xr.open_dataset(B + f, decode_times=False)
     t = d.scrum_time.values / 86400
     print('%-16s %2d records  %.4f .. %.4f' % (l, len(t), t[0], t[-1]))
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }
@@ -169,7 +169,7 @@ for a in ax:
     a.set_aspect('equal'); a.set_xlabel('longitude')
 ax[0].set_ylabel('latitude')
 fig.savefig('docs/img/agrif_2way_diff.png', dpi=110)
-'PYEOF'
+PYEOF
 ```
 
 ![The parent with and without feedback](../img/agrif_2way_diff.png)
