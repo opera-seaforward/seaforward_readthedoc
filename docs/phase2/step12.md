@@ -17,7 +17,12 @@ shell only, so it does not matter whether conda is active:
 ```bash
 cd ${FCAST}
 cp ${CONFIG_DIR}/croco.in .            # stage the run-time file you edited in Step 11
-TODAY=$(date -u +%Y%m%d)
+# Take the date from the input files you actually prepared, not from today's
+# clock: the two differ as soon as you prepare the inputs on one day and run
+# the model on another.
+TODAY=$(ls CROCO_FILES/croco_ini_MERCATOR_*_00.nc 2>/dev/null | tail -1 \
+        | sed 's#.*croco_ini_MERCATOR_##; s#_00\.nc$##')
+echo "patching croco.in for: ${TODAY:-NO INITIAL FILE FOUND}"
 
 # 2016 x 300 s = 7 days — Step 11.4 explains the four numbers
 sed -i '/^time_stepping:/{n; s/.*/                2016     300       60      1/}' croco.in
@@ -32,6 +37,10 @@ sed -i "/^boundary:/{n; s|.*|    CROCO_FILES/croco_bry_MERCATOR_${TODAY}_00.nc|}
 sed -i '/^online:/{n;   s/.*/           9999   1      24            9999     1/}' croco.in
 sed -i "/^online:/{n; n; s|.*|    ${FCAST}/downloaded_data/GFS/for_croco/|}" croco.in
 ```
+
+`TODAY` is read from the file names rather than from the clock, so the run uses
+whichever day you prepared inputs for. Preparing them one day and running the next
+no longer points `croco.in` at files that do not exist.
 
 Each `sed` finds a section header in `croco.in` and rewrites the line below it —
 `{n;}` moves down one line, `{n; n;}` two. Nothing else in the file is touched.
