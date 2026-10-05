@@ -8,6 +8,26 @@ The driver replaces the whole manual sequence — download, prepare, patch `croc
 run — with one command that produces today's forecast in two phases and files the
 result.
 
+**First, the driver needs a binary named `croco_plain`.** It selects a binary by
+name from the flags you pass, and Phase 2's `jobcomp` produced one called `croco`.
+Give it the name the driver expects — once per region:
+
+```bash
+cd ~/seaforward/forecast/scratch/Canary_12
+cp croco croco_plain
+```
+
+!!! warning
+    **Without this rename the driver fails immediately:**
+    ``` { .text .no-copy }
+    ERROR: binary not found: .../scratch/Canary_12/croco_plain
+      (child=none, tides=0) needs its own build.
+    ```
+    The error also prints the CPP switches for whichever combination it couldn't find.
+
+Then the whole cycle is one command (the full invocation, with the environment
+set up, is in [B.5](#b5-running-it)):
+
 ```bash
 cd ~/seaforward/forecast
 ./run_forecast_cycle.sh
@@ -112,21 +132,7 @@ Every build is the same three steps: set the switches in `cppdefs.h`, compile, r
 the result. `jobcomp` always produces a file called `croco`, and each build overwrites
 the last — so **rename before building the next**.
 
-**The plain binary — do this one first.** [Phase 2](../phase2/02_forecast_config.md) already built it; it just needs the
-name:
-
-```bash
-cd ~/seaforward/forecast/scratch/Canary_12
-cp croco croco_plain
-```
-
-!!! warning
-    **Without this rename the driver fails immediately**, because Phase 2's `jobcomp` produces `croco` while the driver looks for `croco_plain`:
-    ``` { .text .no-copy }
-    ERROR: binary not found: .../scratch/Canary_12/croco_plain
-      (child=none, tides=0) needs its own build.
-    ```
-    The error also prints the CPP switches for whichever combination it couldn't find.
+The plain binary was already named in [B.1](#b1-what-the-driver-does).
 
 **A tides build:**
 
