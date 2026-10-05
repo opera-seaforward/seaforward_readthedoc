@@ -192,7 +192,7 @@ for a in ax:
 ax[0].set_ylabel('latitude')
 fig.colorbar(m1, ax=ax, label='SST (C)', shrink=0.85, pad=0.02)
 fig.savefig('docs/img/agrif_sst.png', dpi=110)
-'PYEOF'
+PYEOF
 ```
 
 ![parent vs AGRIF child SST](../img/agrif_sst.png)

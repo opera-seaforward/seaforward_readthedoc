@@ -46,7 +46,7 @@ vo.skill_panels(runs,
                 variables=('temp', 'ssh', 'u', 'v'),
                 depths={'u': 15, 'v': 15},
                 Yorig=2000, out='skill.png')
-'PYEOF'
+PYEOF
 ```
 
 ![Forecast error against lead time](../img/val_skill.png)

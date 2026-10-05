@@ -134,7 +134,7 @@ print('fast step  : %.1f s   (dt / NDTFAST)' % (dt / ndtfast))
 print('slow step  : %.0f s' % dt)
 print('barotropic Courant : %.2f' % np.nanmax(c * (dt / ndtfast) / dx))
 print('baroclinic Courant : %.2f' % np.nanmax(2.0 * dt / dx))
-'PYEOF'
+PYEOF
 ```
 
 Keep it below about **0.7** — a conventional working margin rather than a hard threshold.

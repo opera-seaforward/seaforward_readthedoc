@@ -21,7 +21,7 @@ lon = g.lon_rho.values
 lat = g.lat_rho.values
 print('Canary_12: xi=%d eta=%d, lon %.2f-%.2fE, lat %.2f-%.2fN'
       % (lon.shape[1], lon.shape[0], lon.min(), lon.max(), lat.min(), lat.max()))
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }
@@ -76,7 +76,7 @@ def check(name, lo0, lo1, la0, la1, coef=3):
 check('A) offshore only',        -21.0, -18.5, 20.0, 23.0)
 check('B) upwelling front',      -20.0, -17.0, 19.0, 23.0)
 check('C) front and shelf',      -21.0, -16.0, 18.0, 23.0)
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }

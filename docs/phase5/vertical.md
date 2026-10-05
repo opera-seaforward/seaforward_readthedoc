@@ -223,5 +223,5 @@ for var, name in fields:
     fig = pl.plot(pp.profile(ds, var, plon, plat), title=name)
     fig.axes[0].set_ylim(-1500, 0)
     fig.savefig('g_prof_' + var + '.png', dpi=110, bbox_inches='tight')
-'PYEOF'
+PYEOF
 ```

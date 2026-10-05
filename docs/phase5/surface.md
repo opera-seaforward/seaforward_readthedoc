@@ -125,7 +125,7 @@ se, sn = pp.rotate_uv(ds, su, sv)
 pl.plot_map(pp.field(ds, 'temp'), ds=ds, uv=(se, sn), uv_kind='wind',
             uv_skip=4, uv_scale=2, uv_ref=0.1, vmin=20, vmax=26,
             out='g_sst_wind.png')
-'PYEOF'
+PYEOF
 ```
 
 ## The extractors

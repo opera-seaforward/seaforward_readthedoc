@@ -160,7 +160,7 @@ for f in sorted(glob.glob('downloaded_data/GFS/for_croco/*.nc')):
     else:
         d.close()
 print('done')
-'PYEOF'
+PYEOF
 ```
 
 !!! check

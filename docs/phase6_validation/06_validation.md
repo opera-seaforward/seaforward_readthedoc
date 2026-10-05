@@ -69,7 +69,7 @@ OBS = '~/seaforward/data/OBS'
 
 for src in ('ostia', 'odyssea', 'duacs', 'globcurrent', 'armor3d'):
     print(vo.download_obs(HIS, src, OBS, Yorig=2000))
-'PYEOF'
+PYEOF
 ```
 
 ``` { .text .no-copy }

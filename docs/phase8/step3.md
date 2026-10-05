@@ -136,7 +136,7 @@ for v in ['temp', 'salt', 'u', 'v', 'zeta']:
     print('%-5s min=%11.4g max=%11.4g nan=%d'
           % (v, np.nanmin(a), np.nanmax(a), int(np.isnan(a).sum())))
 print('time =', float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }
@@ -180,7 +180,7 @@ C = sorted(glob.glob(os.path.expanduser(
 for f, lbl in [(P, 'parent'), (C, 'child ')]:
     d = xr.open_dataset(f, decode_times=False)
     print(lbl, float(d.scrum_time.values.ravel()[0]) / 86400, 'days')
-'PYEOF'
+PYEOF
 ```
 
 ```{ .text .no-copy }
