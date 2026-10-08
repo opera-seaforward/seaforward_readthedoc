@@ -37,9 +37,39 @@ Two ways in, depending on what you have:
 ds = pp.open_history('forecast/scratch/Canary_12/CROCO_FILES/croco_his.nc',
                      Yorig=2000)
 
-# a dated run folder produced by the operational driver — Phase 3
-ds = pp.open_run('forecast/model-runs/Canary_12/20260711',
+# every cycle of a run, concatenated in time — the driver, Phase 3
+ds = pp.open_run('forecast/model-runs/Canary_12',
                  phase='fcst', Yorig=2000)
+```
+
+`open_run` takes the **configuration** directory, not a cycle. It globs
+`<root>/*/<phase>/CROCO_FILES/croco_his.nc`, where the `*` is the cycle. Give it a
+dated cycle directory and it looks one level too deep and stops with
+*`no croco_his.nc under ...`*, printing the pattern it tried — read that
+pattern and the mistake is usually obvious.
+
+Three things follow from how it globs:
+
+- **It concatenates every cycle under that configuration**, whichever binary produced
+  it. A directory holding both plain and tidal cycles comes back as a single
+  timeline.
+- **Cycle directories carry the binary's name** — `20261007_plain_tides`, not
+  `20261007`. To open one cycle on its own, use `open_history` on its file:
+
+```python
+ds = pp.open_history('forecast/model-runs/Canary_12/20261007_plain_tides/'
+                     'fcst/CROCO_FILES/croco_his.nc', Yorig=2000)
+```
+
+- **`phase` is the leg inside each cycle**: `fcst` for the forecast, `spinup` for the
+  leg that precedes it, and `hcast` on the hindcast track. Asking for a leg the
+  cycles do not contain gives the same empty-glob error.
+
+Check what is actually there before blaming the call:
+
+```bash
+ls -1d ~/seaforward/forecast/model-runs/Canary_12/*/
+ls -1  ~/seaforward/forecast/model-runs/Canary_12/*/
 ```
 
 !!! warning
