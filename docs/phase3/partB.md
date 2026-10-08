@@ -290,6 +290,8 @@ Put that in a wrapper, so you can test it by hand instead of waiting for 06:00 t
 find out:
 
 ```bash
+mkdir -p ~/seaforward/forecast/logs
+
 cat > ~/seaforward/forecast/cron_forecast.sh << 'EOF'
 #!/bin/bash
 # cron provides no environment, so set one up explicitly
@@ -323,22 +325,43 @@ If it runs with nothing inherited, it will run from cron. Then `crontab -e` and 
 
 ``` { .text .no-copy }
 CRON_TZ=UTC
-0 6 * * *  /bin/bash ~/seaforward/forecast/cron_forecast.sh >> ~/seaforward/forecast/cron.log 2>&1
+0 6 * * *  /bin/bash ~/seaforward/forecast/cron_forecast.sh >> ~/seaforward/forecast/logs/$(date -u +\%Y\%m\%d).log 2>&1
 ```
 
 Add the flags you want on that line, after the wrapper's name.
 
+!!! important
+    **One log per day, and `%` must be escaped.** A single log that every cycle
+    appends to makes the checks below meaningless, because the counts accumulate
+    across every run you have ever done. The `$(date ...)` gives each cycle its own
+    file. Inside a crontab `%` is a special character, so it has to be written
+    `\%` — unescaped, cron silently truncates the command at the first one.
+
+That redirection is also the only record of the early stages. A cycle that fails in
+preprocessing writes nothing into its run directory, so without it there is nothing
+to read afterwards.
+
 Once it is in, these are how you check on it:
 
 ```bash
-crontab -l                                            # what is scheduled
-pgrep -x cron >/dev/null && echo "daemon up"           # whether cron can run it
-tail -40 ~/seaforward/forecast/cron.log                # what the last run did
-grep -c "MAIN: DONE" ~/seaforward/forecast/cron.log    # 2 = both legs finished
+LOG=~/seaforward/forecast/logs/$(date -u +%Y%m%d).log
+
+crontab -l                                   # what is scheduled
+pgrep -x cron >/dev/null && echo "daemon up"  # whether cron can run it
+tail -40 "$LOG"                              # what today's run did
+grep -c "MAIN: DONE" "$LOG"                  # 2 = both legs finished
+ls -lt ~/seaforward/forecast/logs | head     # the cycles before it
 ```
 
-A missing `cron.log` means it never fired. One with no `MAIN: DONE` means it
-fired and failed, and the log names the stage it stopped at.
+No log for today means it never fired. A log without two `MAIN: DONE` means it
+fired and failed, and that file names the stage it stopped at.
+
+You can also count cycles from what they leave behind, which survives the logs being
+cleaned out — one dated directory per cycle:
+
+```bash
+ls -1dt ~/seaforward/forecast/model-runs/*/*/ | head
+```
 
 **Stopping it.** The schedule and the run are separate things, so removing the entry
 does not stop a cycle already in progress:

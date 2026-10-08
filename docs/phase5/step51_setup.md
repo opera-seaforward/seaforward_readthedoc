@@ -37,13 +37,49 @@ Two ways in, depending on what you have:
 ds = pp.open_history('forecast/scratch/Canary_12/CROCO_FILES/croco_his.nc',
                      Yorig=2000)
 
-# a dated run folder produced by the operational driver — Phase 3
-ds = pp.open_run('forecast/model-runs/Canary_12/20260711',
+# every cycle of a run, concatenated in time — the driver, Phase 3
+ds = pp.open_run('forecast/model-runs/Canary_12',
                  phase='fcst', Yorig=2000)
 ```
 
+`open_run` takes the **configuration** directory, not a cycle. It globs
+`<root>/*/<phase>/CROCO_FILES/croco_his.nc`, where the `*` is the cycle. Give it a
+dated cycle directory and it looks one level too deep and stops with
+*`no croco_his.nc under ...`*, printing the pattern it tried — read that
+pattern and the mistake is usually obvious.
+
+Three things follow from how it globs:
+
+- **It concatenates every cycle under that configuration**, whichever binary produced
+  it. A directory holding both plain and tidal cycles comes back as a single
+  timeline.
+- **Cycle directories carry the binary's name** — `20261007_plain_tides`, not
+  `20261007`. The dates are whatever you have run, so let the same glob
+  list them rather than typing one:
+
+  ```python
+  import glob
+
+  cycles = sorted(glob.glob('forecast/model-runs/Canary_12/*/fcst/CROCO_FILES/croco_his.nc'))
+  for c in cycles:
+      print(c)
+
+  ds = pp.open_history(cycles[-1], Yorig=2000)   # the most recent cycle
+  ```
+
+- **`phase` is the leg inside each cycle**: `fcst` for the forecast, `spinup` for the
+  leg that precedes it, and `hcast` on the hindcast track. Asking for a leg the
+  cycles do not contain gives the same empty-glob error.
+
+Check what is actually there before blaming the call:
+
+```bash
+ls -1d ~/seaforward/forecast/model-runs/Canary_12/*/
+ls -1  ~/seaforward/forecast/model-runs/Canary_12/*/
+```
+
 !!! warning
-    **`Yorig` must match the track.** CROCO stores time as seconds since a reference year: **2000** for a forecast, **1993** for a hindcast. The wrong value doesn't crash anything — the fields are right, but every date is wrong by years, which quietly ruins any comparison or animation title. The same applies to `phase`: `'fcst'` for a forecast, `'hcast'` for a hindcast.
+    **`Yorig` must match the track.** CROCO stores time as seconds since a reference year: **2000** for a forecast, **1993** for a hindcast. The wrong value doesn't crash anything — the fields are right, but every date is wrong by years, which quietly ruins any comparison or animation title.
 
 Confirm it decoded properly:
 
