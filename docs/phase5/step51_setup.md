@@ -54,12 +54,18 @@ Three things follow from how it globs:
   it. A directory holding both plain and tidal cycles comes back as a single
   timeline.
 - **Cycle directories carry the binary's name** — `20261007_plain_tides`, not
-  `20261007`. To open one cycle on its own, use `open_history` on its file:
+  `20261007`. The dates are whatever you have run, so let the same glob
+  list them rather than typing one:
 
-```python
-ds = pp.open_history('forecast/model-runs/Canary_12/20261007_plain_tides/'
-                     'fcst/CROCO_FILES/croco_his.nc', Yorig=2000)
-```
+  ```python
+  import glob
+
+  cycles = sorted(glob.glob('forecast/model-runs/Canary_12/*/fcst/CROCO_FILES/croco_his.nc'))
+  for c in cycles:
+      print(c)
+
+  ds = pp.open_history(cycles[-1], Yorig=2000)   # the most recent cycle
+  ```
 
 - **`phase` is the leg inside each cycle**: `fcst` for the forecast, `spinup` for the
   leg that precedes it, and `hcast` on the hindcast track. Asking for a leg the
@@ -73,7 +79,7 @@ ls -1  ~/seaforward/forecast/model-runs/Canary_12/*/
 ```
 
 !!! warning
-    **`Yorig` must match the track.** CROCO stores time as seconds since a reference year: **2000** for a forecast, **1993** for a hindcast. The wrong value doesn't crash anything — the fields are right, but every date is wrong by years, which quietly ruins any comparison or animation title. The same applies to `phase`: `'fcst'` for a forecast, `'hcast'` for a hindcast.
+    **`Yorig` must match the track.** CROCO stores time as seconds since a reference year: **2000** for a forecast, **1993** for a hindcast. The wrong value doesn't crash anything — the fields are right, but every date is wrong by years, which quietly ruins any comparison or animation title.
 
 Confirm it decoded properly:
 
