@@ -8,7 +8,7 @@ cp ${CROCO_MODEL_DIR}/OCEAN/{cppdefs.h,param.h,croco.in,jobcomp} .
 ```
 
 !!! note
-    **nano reminders** (same as Phase 2): `Ctrl-W` = search (type text, Enter, it jumps there), edit with arrow keys, `Ctrl-O` then Enter = save, `Ctrl-X` = exit.
+**nano reminders** (same as Phase 2): `Ctrl-W` = search (type text, Enter, it jumps there), edit with arrow keys, `Ctrl-O` then Enter = save, `Ctrl-X` = exit.
 
 ### 8.1 `cppdefs.h` — config name, boundaries, and **ERA5 forcing**
 
@@ -26,7 +26,7 @@ that line to `CANARY_12`.
 **Edit 2 — ONLINE + ERA5.** `Ctrl-W`, type `ONLINE`, Enter — this lands in
 **your** regional block, just below the `BULK_*` lines. Set it to:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 #  define ONLINE
 #  ifdef ONLINE
 #   undef  AROME
@@ -48,28 +48,28 @@ yours:
 grep -nE "define CANARY_12|^# *(define|undef) +OBC_(EAST|WEST|NORTH|SOUTH)" cppdefs.h | head
 ```
 
-The block just below your config name is the one to edit. Reopen there — `nano +N`
+The block just below your config name is the one to edit. Reopen there — `nano +N cppdefs.h`
 puts the cursor on line N — and set:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 # undef  OBC_EAST
 ```
 
-- **What:** closes the eastern boundary (the African coast). 
+- **What:** closes the eastern boundary (the African coast).
 - **Why:** the same
   boundary choice as the forecast — open south, west and north, closed east.
 
 Save: `Ctrl-O`, Enter. Exit: `Ctrl-X`.
 
 !!! check
-    ```bash
+`bash
     grep -nE "define +CANARY_12|define +ONLINE|define +ERA_ECMWF|undef +AROME|^# *(define|undef)+OBC_" cppdefs.h
-    ```
+    `
 
     You want `CANARY_12` define, `ONLINE` define, `ERA_ECMWF` define, `AROME` undef, `OBC_EAST` undef and the other three OBC define — **and the OBC lines must be the ones immediately below your `CANARY_12` line**, not matches further down.
 
 !!! note
-    **Pressure (`msl`) is optional.** CROCO only reads `msl` if `READ_PATM` is defined. Leave it **undef** for a basic run; you have the file, and enabling it is a later refinement.
+**Pressure (`msl`) is optional.** CROCO only reads `msl` if `READ_PATM` is defined. Leave it **undef** for a basic run; you have the file, and enabling it is a later refinement.
 
 ### 8.2 `param.h` — grid size (identical to forecast)
 
@@ -80,7 +80,7 @@ nano param.h
 `Ctrl-W`, type `YOUR REGIONAL CONFIG`, Enter. Add your branch **above** the `# else`
 line:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 # elif defined  CANARY_12
       parameter (LLm0=79,   MMm0=121,   N=50)   ! Canary_12 hindcast
 ```
@@ -96,7 +96,7 @@ cpp -DREGIONAL -DCANARY_12 param.h 2>/dev/null | grep "parameter (LLm0"
 ```
 
 !!! check
-    Expect `parameter (LLm0=79, MMm0=121, N=50)`.
+Expect `parameter (LLm0=79, MMm0=121, N=50)`.
 
 ### 8.3 `jobcomp` — source path (identical to forecast)
 
@@ -106,7 +106,7 @@ nano jobcomp
 
 `Ctrl-W`, type `SOURCE1=`, Enter. Set that line to your CROCO source:
 
-``` { .text .no-copy }
+```{ .text .no-copy }
 SOURCE1=/home/<you>/seaforward/code/croco/OCEAN
 ```
 
@@ -114,4 +114,4 @@ Replace `<you>` with your username. Save `Ctrl-O` Enter, exit `Ctrl-X`.
 
 ---
 
-*Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them.*
+_Something not working? [Troubleshooting](trouble.md) collects the errors this phase throws, and what fixes them._
