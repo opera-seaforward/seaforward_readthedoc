@@ -4,7 +4,6 @@ prefixes. Create it in the child's `CROCO_FILES`:
 ```bash
 nano ${CF}/crocotools_param.py
 ```
-
 Type in:
 
 ```python
@@ -19,6 +18,11 @@ bry_prefix   = 'croco_bry_NEST'
 obc_dict     = dict(south=1, west=1, east=0, north=1)
 cycle_bry    = 0
 ```
+!!! note
+    **nano routine:** open `nano` and wait for the empty editor. Paste the entire
+    Python block into the file, then save with `Ctrl+O`, press `Enter` to keep the
+    filename, and exit with `Ctrl+X`.
+
 
 **Line by line — what changed from the parent:**
 

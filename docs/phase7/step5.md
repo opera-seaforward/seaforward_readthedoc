@@ -74,6 +74,9 @@ nano croco.in
 !!! note
     **Why a smaller timestep.** The child's cells are about half the parent's size, and the CFL condition ties timestep to cell size — halve the grid, halve the timestep. The parent ran `dt=300`; the child uses `dt=150`. `NTIMES=2880` gives a 5-day run (2880 × 150 s = 432000 s). Too large a `dt` at 1/25° blows up.
 
+!!! important
+    **4-day case:** use `NTIMES = 2304` to keep the child at 4 days.
+
 **boundary** (`Ctrl-W` → `boundary:`), the filename line:
 
 ``` { .text .no-copy }
