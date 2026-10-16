@@ -49,10 +49,12 @@ vo.skill_panels(runs,
 PYEOF
 ```
 
-![Forecast error against lead time](../img/val_skill.png)
-
-_SST, sea level anomaly, and the two velocity components at 15 m. Three cycles pooled;
-faint lines are the individual cycles. Lead zero is the initial condition._
+<figure style="text-align: center; margin: 20px 0;">
+  <img src="../../img/val_skill.png" alt="Forecast error against lead time" style="max-width: 100%; height: auto;">
+  <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
+    SST, sea level anomaly, and the two velocity components at 15 m. Three cycles pooled; faint lines are the individual cycles. Lead zero is the initial condition.
+  </figcaption>
+</figure>
 
 ## Temperature
 
@@ -121,7 +123,7 @@ a result, but it is the kind of thing worth watching as more cycles accumulate.
 Both components lose to persistence from day 1, and both jump sharply at day 5.
 
 !!! note
-`n = 2643` for the currents against `12657` for SST. GlobCurrent is 0.25°, so it has roughly a fifth as many cells over this domain — the current numbers rest on far less data and should be read more cautiously.
+    `n = 2643` for the currents against `12657` for SST. GlobCurrent is 0.25°, so it has roughly a fifth as many cells over this domain — the current numbers rest on far less data and should be read more cautiously.
 
 ## Reading it honestly
 
@@ -141,4 +143,4 @@ run's end, so it is not the inputs running out — it is the model's own error g
 reaching the point where the initial state no longer constrains it.
 
 !!! note
-Three cycles. Enough to see that a result repeats, not enough to average confidently — which is why the individual cycles are drawn rather than a confidence band. A verification figure in the literature would pool dozens.
+    Three cycles. Enough to see that a result repeats, not enough to average confidently — which is why the individual cycles are drawn rather than a confidence band. A verification figure in the literature would pool dozens.

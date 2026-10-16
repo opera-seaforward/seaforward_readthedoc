@@ -126,4 +126,4 @@ Compare the daily-mean SSH against Mercator's, and against the same comparison f
 tide-free run. If adding tides hasn't degraded the slow ocean, the two should be close.
 
 !!! important
-**Compare daily means, not hourly.** Mercator has no tides, so an hourly comparison shows the whole tidal signal as error — over two metres on this shelf. Averaging over 24 hours removes it, which makes the daily mean the only fair comparison.
+    **Compare daily means, not hourly.** Mercator has no tides so an hourly comparison shows the whole tidal signal as error — over two metres on this shelf. Averaging over 24 hours removes it, which makes the daily mean the only fair comparison.

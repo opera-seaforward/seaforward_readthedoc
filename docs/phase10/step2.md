@@ -87,10 +87,15 @@ whichever you use.
     **Keeping both.** `make_tides` imports a module named `crocotools_param`, so only
     one can live in a directory under that name. To hold both, name them differently
     and say which to use:
-
-```bash
+    ```bash
     cp tpxo7_params.py  "$TGEN/crocotools_param_tpxo7.py"
     cp tpxo10_params.py "$TGEN/crocotools_param_tpxo10.py"
 
-    python seaforward.py make_tides ... --param_file crocotools_param_tpxo10.py
-```
+    python seaforward.py make_tides \
+    --input_dir ~/seaforward/data/DATASETS_CROCOTOOLS/TPXO10/ \
+    --output_dir "$TGEN" \
+    --run_date "$(date -u +'%Y-%m-%d') 00:00:00" \
+    --Yorig 2000 \
+    --fname_out croco_frc.nc \
+    --param_file crocotools_param_tpxo10.py
+    ```

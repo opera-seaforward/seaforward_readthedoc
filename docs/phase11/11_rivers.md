@@ -15,6 +15,4 @@ a longer list.
 
 ![Where this phase sits in the build chain](../img/river_discharges.png)
 
-*The rivers boxes are highlighted: the discharge data comes in with the other forcing
-downloads, and the runoff file is built alongside the surface, initial and boundary
-conditions.*
+*The rivers boxes are highlighted: the discharge data comes in with the other forcing downloads, and the runoff file is built alongside the surface, initial and boundary conditions.*

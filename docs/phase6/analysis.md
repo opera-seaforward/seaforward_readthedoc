@@ -39,10 +39,13 @@ SST  SEA-FORWARD vs OSTIA:
    2026-07-15   rmse  0.7391   bias -0.0949   corr  0.934
 ```
 
-![SEA-FORWARD against OSTIA over three days](../img/val_days.png)
 
-*OSTIA on top, SEA-FORWARD below it, the difference at the bottom. The two field rows
-share one colour scale; the difference has its own.*
+<figure style="text-align: center; margin: 20px 0;">
+  <img src="../../img/val_days.png" alt="SEA-FORWARD against OSTIA over three days" style="max-width: 100%; height: auto;">
+  <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
+    OSTIA on top, SEA-FORWARD below it, the difference at the bottom. The two field rows share one colour scale; the difference has its own.
+  </figcaption>
+</figure>
 
 Sharing the colour scale between the field rows is the point. Scaled independently, each
 panel fills its own range and two quite different fields look alike; shared, a difference

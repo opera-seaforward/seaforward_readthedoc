@@ -28,9 +28,13 @@ val.compare_section(HIS, MERC, 'temp', -21.0, 21.0, -17.0, 21.0,
 PYEOF
 ```
 
-![Temperature section across the shelf](../img/val_section.png)
 
-*A zonal transect at 21°N, the top 1000 m.*
+<figure style="text-align: center; margin: 20px 0;">
+  <img src="../../img/val_section.png" alt="Temperature section across the shelf" style="max-width: 100%; height: auto;">
+  <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
+    A zonal transect at 21°N, the top 1000 m.
+  </figcaption>
+</figure>
 
 The bathymetry is the thing to notice. SEA-FORWARD follows the slope smoothly on
 terrain-following coordinates; the parent renders it as a staircase of z-levels. That
@@ -61,13 +65,14 @@ val.compare_profile(HIS, MERC, 'temp', -19.0, 21.0,
 PYEOF
 ```
 
-![Temperature profile](../img/val_profile.png)
+<figure style="text-align: center; margin: 20px 0;">
+  <img src="../../img/val_profile.png" alt="Temperature profile" style="max-width: 100%; height: auto;">
+  <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
+    At 19°W, 21°N.
+  </figcaption>
+</figure>
 
-*At 19°W, 21°N.*
-
-Offshore the two agree closely — the thermocline is at the same depth with the same shape,
-which says the downscaling inherited its stratification faithfully. Differences appear
-near the coast and near the surface, which is where the finer grid does its work.
+Offshore the two agree closely the thermocline is at the same depth with the same shape, which says the downscaling inherited its stratification faithfully. Differences appear near the coast and near the surface, which is where the finer grid does its work.
 
 ## Error against depth
 
@@ -90,10 +95,12 @@ val.error_vs_depth(HIS, MERC, field='temp', Yorig=2000,
 PYEOF
 ```
 
-![Error against depth](../img/val_depth.png)
-
-One number per level, so you can see whether a disagreement is a surface problem, a
-thermocline problem, or throughout the water column.
+<figure style="text-align: center; margin: 20px 0;">
+  <img src="../../img/val_depth.png" alt="Error against depth" style="max-width: 100%; height: auto;">
+  <figcaption style="font-size: 1em; color: #555; margin-top: 8px; font-style: italic;">
+    One number per level, so you can see whether a disagreement is a surface problem, a thermocline problem, or throughout the water column.
+  </figcaption>
+</figure>
 
 ## The reference is the difficulty here
 

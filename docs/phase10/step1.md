@@ -20,7 +20,7 @@ python seaforward.py make_tides \
 tide-specific `crocotools_param.py` from `--output_dir`, and fails without them:
 
 ```bash
-TGEN=~/seaforward/forecast/scratch/Canary_12/tide_gen/CROCO_FILES
+export TGEN=~/seaforward/forecast/scratch/Canary_12/tide_gen/CROCO_FILES
 mkdir -p "$TGEN"
 cp ~/seaforward/forecast/scratch/Canary_12/CROCO_FILES/croco_grd.nc "$TGEN/"
 
@@ -45,18 +45,11 @@ EOF
 !!! important
     **Two values here are not free choices.**
 
-    `inputdata` must be a tag the reader knows — `tpxo7_croco`, `tpxo9`,
-    `tpxo9_lowres` or `tpxo10`, listed in
-    `croco_pytools/prepro/Readers/tides_reader.py`. Anything else, including the
-    plausible-looking `'tpxo7'`, stops with *"No 'tpxo7' dico available"*. (That
-    message names `Modules/tides_readers.py`, which does not exist — the file is
+    `inputdata` must be a tag the reader knows `tpxo7_croco`, `tpxo9`, `tpxo9_lowres` or `tpxo10`, listed in `croco_pytools/prepro/Readers/tides_reader.py`. Anything else, including the plausible-looking `'tpxo7'`, stops with *"No 'tpxo7' dico available"*. (That message names `Modules/tides_readers.py`, which does not exist the file is
     `Readers/tides_reader.py`.)
 
-    `tides` must only list waves the file actually contains. **TPXO7 carries the
-    eight diurnal and semi-diurnal constituents above and no long-period ones**,
-    so asking for `Mf` or `Mm` stops with *"Did not find wave Mf in input file"*
-    after the first eight have already been written. The atlas products do carry
-    them — see [Step 2](step2.md).
+    `tides` must only list waves the file actually contains. **TPXO7 carries the eight diurnal and semi-diurnal constituents above and no long-period ones**,
+    so asking for `Mf` or `Mm` stops with *"Did not find wave Mf in input file"* after the first eight have already been written. The atlas products do carry them see [Step 2](step2.md).
 
 **Then run it:**
 

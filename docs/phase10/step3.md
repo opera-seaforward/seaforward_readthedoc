@@ -5,7 +5,7 @@ cd ~/seaforward/forecast/scratch/Canary_12
 TGEN=$PWD/tide_gen/CROCO_FILES
 mkdir -p "$TGEN"
 cp CROCO_FILES/croco_grd.nc              "$TGEN/"
-cp CROCO_FILES/crocotools_param_tides.py "$TGEN/crocotools_param.py"
+cp CROCO_FILES/crocotools_param.py "$TGEN/crocotools_param_tides.py"
 
 cd ~/seaforward/sftools
 conda activate seaforward

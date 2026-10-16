@@ -20,12 +20,12 @@ theme:
 #      link: /pdf/documentation.pdf
 #      name: Télécharger en PDF
 
-extra:
-  footer: |
-    <div style="text-align:center; padding:10px;">
-      <img src="/img/mooc.png" alt="SEA-FORWARD Footer Logo" height="40">
-      <p>© {{ now().year }} SEA-FORWARD — Documentation générée avec MkDocs</p>
-    </div>
+#extra:
+#  footer: |
+#    <div style="text-align:center; padding:10px;">
+#      <img src="/img/mooc.png" alt="SEA-FORWARD Footer Logo" height="40">
+#      <p>© {{ now().year }} SEA-FORWARD — Documentation générée avec MkDocs</p>
+#    </div>
 
 hooks:
   - hooks.py
@@ -149,14 +149,14 @@ nav:
       - Vertical structure: phase5/vertical.md
       - Through time: phase5/time.md
   - Phase 6 — Validation:
-      - Overview: phase6_validation/06_validation.md
-      - The references: phase6_validation/references.md
-      - Against observations: phase6_validation/observations.md
-      - Metrics against observations: phase6_validation/observations_suite.md
-      - Forecast skill: phase6_validation/skill.md
-      - Against an analysis: phase6_validation/analysis.md
-      - Below the surface: phase6_validation/depth.md
-      - Doing this for your own run: phase6_validation/recipes.md
+      - Overview: phase6/06_validation.md
+      - The references: phase6/references.md
+      - Against observations: phase6/observations.md
+      - Metrics against observations: phase6/observations_suite.md
+      - Forecast skill: phase6/skill.md
+      - Against an analysis: phase6/analysis.md
+      - Below the surface: phase6/depth.md
+      - Doing this for your own run: phase6/recipes.md
   - Phase 7 — Nesting (offline):
       - Overview: phase7/07_nesting.md
       - Step 0 — Session setup: phase7/step0.md

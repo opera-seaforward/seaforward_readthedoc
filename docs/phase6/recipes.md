@@ -13,9 +13,7 @@ There is no fixed location, but the examples use:
 ```
 
 alongside `data/DATASETS_CROCOTOOLS/`, which [Phase 1](../phase1/01_setup.md) sets up for the static datasets.
-Observations differ from those: they are per-run rather than build-once, so they
-accumulate. The filenames carry their window — `ostia_2026-07-10_2026-07-17.nc` — which
-keeps cycles apart and makes it obvious what can be deleted.
+Observations differ from those: they are per-run rather than build-once, so they accumulate. The filenames carry their window `ostia_2026-07-10_2026-07-17.nc` which keeps cycles apart and makes it obvious what can be deleted.
 
 ```bash
 mkdir -p ~/seaforward/data/OBS
@@ -65,16 +63,14 @@ for src in ('odyssea', 'duacs', 'globcurrent'):
 PYEOF
 ```
 
-`pad_days=6` widens the window by six days on each side. One file per product then covers
-every cycle, and the filename says so.
+`pad_days=6` widens the window by six days on each side. One file per product then covers every cycle, and the filename says so.
 
 !!! note
-`copernicusmarine` writes `name_(1).nc` rather than overwriting when the target exists. `download_obs` deletes first when `force=True`, but a file downloaded by hand into the same name will silently leave you reading the old one. Check the timestamp if a re-download seems to have changed nothing.
+    `copernicusmarine` writes `name_(1).nc` rather than overwriting when the target exists. `download_obs` deletes first when `force=True`, but a file downloaded by hand into the same name will silently leave you reading the old one. Check the timestamp if a re-download seems to have changed nothing.
 
 ## 3. Changing the region
 
-Nothing changes but the paths. The functions read the grid from the file, so the domain,
-the resolution and the coastline all follow:
+Nothing changes but the paths. The functions read the grid from the file, so the domain, the resolution and the coastline all follow:
 
 ```bash
 cd ~/seaforward
@@ -97,13 +93,9 @@ PYEOF
 Two things to check for a new region.
 
 **Coverage.** A gappy product may see much less of a cloudy domain than of a clear one.
-`scorecard` prints the percentage per day; below about 50% the numbers rest on half the
-map.
+`scorecard` prints the percentage per day; below about 50% the numbers rest on half the map.
 
-**And whether the reference suits the region.** ARMOR3D over a wide shelf is unreliable
-for the reasons the references page gives, and GlobCurrent at 0.25° over a small domain
-may leave too few cells to be meaningful — the Canary domain has 2643, which is already
-few.
+**And whether the reference suits the region.** ARMOR3D over a wide shelf is unreliable for the reasons the references page gives, and GlobCurrent at 0.25° over a small domain may leave too few cells to be meaningful the Canary domain has 2643, which is already few.
 
 ## 4. Validating a hindcast
 
@@ -127,15 +119,11 @@ vo.compare(HIS, ost, 'temp', daily_mean=True, Yorig=1993, out='hcast_sst.png')
 PYEOF
 ```
 
-`track='my'` selects the reprocessed twin of each product — the same split as Mercator and
-GLORYS, and for the same reason: the near-real-time series is produced quickly and revised
-later, the multi-year one is the settled version.
+`track='my'` selects the reprocessed twin of each product the same split as Mercator and GLORYS, and for the same reason: the near-real-time series is produced quickly and revised later, the multi-year one is the settled version.
 
-`Yorig=1993` because that is what the hindcast track uses. Passing the forecast's 2000
-would put the run three decades from the observations, and the date guard would raise.
+`Yorig=1993` because that is what the hindcast track uses. Passing the forecast's 2000 would put the run three decades from the observations, and the date guard would raise.
 
-Not every product has both. `duacs` is near-real-time only in this registry; asking for
-`track='my'` says so rather than failing obscurely.
+Not every product has both. `duacs` is near-real-time only in this registry; asking for `track='my'` says so rather than failing obscurely.
 
 ## 5. Adding a reference
 
@@ -175,8 +163,7 @@ copernicusmarine describe --contains "<product ID>" | grep '"dataset_id"'
 copernicusmarine describe --contains "<dataset ID>" | grep '"short_name"'
 ```
 
-Then download a single day and look at what arrived — units and dimensions included, since
-those decide `offset` and `has_depth`:
+Then download a single day and look at what arrived — units and dimensions included, since those decide `offset` and `has_depth`:
 
 ```bash
 cd ~/seaforward
@@ -194,11 +181,10 @@ for v in d.data_vars:
 "
 ```
 
-Finally, `identify()` needs a line so the new product is recognised from its variables —
-that is what lets every function take a bare path without being told which product it is.
+Finally, `identify()` needs a line so the new product is recognised from its variables that is what lets every function take a bare path without being told which product it is.
 
 !!! warning
-**Check the units.** A kelvin product compared without the offset gives a bias of −273, which is obvious. A product in cm rather than m gives a bias that looks plausible and is wrong by a factor of a hundred. The `offset` and `scale` fields exist for this, and the one-day download above is how to find out which are needed.
+    **Check the units.** A kelvin product compared without the offset gives a bias of −273, which is obvious. A product in cm rather than m gives a bias that looks plausible and is wrong by a factor of a hundred. The `offset` and `scale` fields exist for this, and the one-day download above is how to find out which are needed.
 
 ## What the module gives you
 
@@ -214,8 +200,7 @@ that is what lets every function take a bare path without being told which produ
 | `three_way`, `skill_panels`          | the model, the parent and persistence together      |
 | `composite`, `composite_panels`      | several cycles pooled by lead time                  |
 
-Sections and profiles live in `sftools.validation` — `compare_section`, `compare_profile`,
-`error_vs_depth` — and are covered on the previous page.
+Sections and profiles live in `sftools.validation` `compare_section`, `compare_profile`, `error_vs_depth` — and are covered on the previous page.
 
-!!! Important
-This section is not about how to handle all the observations, more examples can be found in the validation notebooks: `02_validation.ipynb` and `03_composite_validation.ipynb`.
+!!! important
+    This section is not about how to handle all the observations, more examples can be found in the validation notebooks: `02_validation.ipynb` and `03_composite_validation.ipynb`.
