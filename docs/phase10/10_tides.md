@@ -22,7 +22,7 @@ Here is where each tide action lands relative to the Phase 2 steps:
 
 | Phase 2 step | what you did there (tide-free) | what tides change |
 |---|---|---|
-| Step 4 — `crocotools_param.py` | wrote the Mercator ini/bry params | **add** a second param file, `crocotools_param_tides.py`, for TPXO (Step 2) |
+| Step 4 — `crocotools_param.py` | wrote the Mercator ini/bry params | **add** a second `crocotools_param.py`, holding the TPXO settings, in the tide gen directory (Step 2) |
 | Step 5 — prepare data | ran make_ini and make_bry | **add** a `make_tides` run to build `croco_frc.nc` (Step 3) |
 | Step 8 — `cppdefs.h` | left `TIDES` **undef** | **flip to** `# define TIDES` plus the SSH/UV/POT block (Step 4) |
 | Step 10 — `croco.in` | set title, sponge | **point** `forcing:` at `croco_frc.nc` (Step 4) — often already correct |

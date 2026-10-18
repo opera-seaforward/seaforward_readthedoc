@@ -4,9 +4,21 @@ Set up a gen directory (grid + tide params), then run the tool:
 cd ~/seaforward/forecast/scratch/Canary_12
 TGEN=$PWD/tide_gen/CROCO_FILES
 mkdir -p "$TGEN"
-cp CROCO_FILES/croco_grd.nc              "$TGEN/"
-cp CROCO_FILES/crocotools_param.py "$TGEN/crocotools_param_tides.py"
+cp CROCO_FILES/croco_grd.nc "$TGEN/"
+```
 
+Then write the TPXO10 param file into that directory **as** `crocotools_param.py` — its
+contents are in [Step 2](step2.md).
+
+!!! important
+    **The name is not free, and the Mercator file is not a starting point.**
+    `make_tides` imports a module called `crocotools_param`, so a file named
+    anything else is never read unless you pass `--param_file`. And the
+    `crocotools_param.py` already in `CROCO_FILES/` is the Mercator one — `inputdata =
+    'mercator'`, no `tides` list, no `cur`/`pot`, no file templates — so
+    `make_tides` has nothing to work with and stops on it.
+
+```bash
 cd ~/seaforward/sftools
 conda activate seaforward
 python seaforward.py make_tides \
