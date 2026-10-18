@@ -1,4 +1,28 @@
-**TPXO10 atlas** is the finer alternative — one NetCDF file per wave, split into
+## Which one to use
+
+| | TPXO7 | TPXO10 atlas |
+| --- | --- | --- |
+| where it comes from | ships with the CROCO datasets, Phase 1 | Oregon State University, on request |
+| layout | one `TPXO7.nc` | one `h_` + `u_` pair per wave |
+| param file | `multi_files = False` | `multi_files = True`, `waves_separated = True` |
+| constituents | the eight diurnal and semi-diurnal | ten, including the long-period `Mf` and `Mm` |
+| elevation and potential | complete | complete |
+| tidal currents | **fill values over the shelf and slope** | complete |
+| works with the driver | only after changing `TPXO_DIR` | yes |
+
+**Use the atlas.** On the Canary parent grid, TPXO7's current ellipse — `tide_Cmin`
+and `tide_Cmax` — comes back as fill values on 989 of 8391 ocean cells, the same
+cells in every wave, at depths from 50 to 2292 m: the shelf and the slope. Eighteen
+of them sit on the south and north open-boundary rows, which is where `SSH_TIDES`
+and `UV_TIDES` read the harmonics. Elevation and potential are complete. The atlas
+on the same grid has three fill cells, all `Mm`, none on a boundary.
+
+TPXO7 is good for one thing: it ships with the CROCO datasets, so you can prove the
+tool runs before requesting the atlas. The driver in [Step 7](step7.md) has `TPXO_DIR` fixed to
+`data/DATASETS_CROCOTOOLS/TPXO10`, so driving a cycle from TPXO7 means changing that one
+line of the driver — the param file it reads is already per-config.
+
+**TPXO10 atlas** is what this chapter uses — one NetCDF file per wave, split into
 elevation (`h_`) and transport (`u_`) files:
 
 ``` { .text .no-copy }
@@ -12,8 +36,8 @@ DATASETS_CROCOTOOLS/TPXO10/
 The atlas format means `multi_files = True`, `waves_separated = True`, and filename
 templates with `<tides>` where the wave name goes.
 
-Everything else is exactly [Step 1](step1.md) — same generation directory, same
-command. Only the param file's contents change:
+The generation directory is the one from [Step 1](step1.md). Only the param file's
+contents change:
 
 ```bash
 TGEN=~/seaforward/forecast/scratch/Canary_12/tide_gen/CROCO_FILES
@@ -57,33 +81,20 @@ Check what you have before running:
 ls ~/seaforward/data/DATASETS_CROCOTOOLS/TPXO10/
 ```
 
-## Which one to use
-
-| | TPXO7 | TPXO10 atlas |
-| --- | --- | --- |
-| where it comes from | ships with the CROCO datasets, Phase 1 | Oregon State University, on request |
-| layout | one `TPXO7.nc` | one `h_` + `u_` pair per wave |
-| param file | `multi_files = False` | `multi_files = True`, `waves_separated = True` |
-| constituents | the eight diurnal and semi-diurnal | more, including the long-period `Mf` and `Mm` |
-
-TPXO7 is enough to get tidal forcing working and is already on your machine, so start
-there. TPXO10 is finer and carries the long-period constituents, which matter if you
-care about fortnightly and monthly signals. The rest of this chapter is the same
-whichever you use.
-
 !!! tip
     **Keeping both.** `make_tides` imports a module named `crocotools_param`, so only
-    one can live in a directory under that name. To hold both, write each block under its own
-    name — the TPXO7 one from [Step 1](step1.md) as
-    `crocotools_param_tpxo7.py`, the one above as `crocotools_param_tpxo10.py` — then
-    name the one you want:
+    one can live in a directory under that name. Give each a name of its own and pass
+    `--param_file`:
+
     ```bash
+    cp "$TGEN/crocotools_param.py" "$TGEN/crocotools_param_tpxo10.py"   # the block above
+
     cd ~/seaforward/sftools
     python seaforward.py make_tides \
-    --input_dir ~/seaforward/data/DATASETS_CROCOTOOLS/TPXO10/ \
-    --output_dir "$TGEN" \
-    --run_date "$(date -u +'%Y-%m-%d') 00:00:00" \
-    --Yorig 2000 \
-    --fname_out croco_frc.nc \
-    --param_file crocotools_param_tpxo10.py
+        --input_dir ~/seaforward/data/DATASETS_CROCOTOOLS/TPXO10/ \
+        --output_dir "$TGEN" \
+        --run_date "$(date -u +'%Y-%m-%d') 00:00:00" \
+        --Yorig 2000 \
+        --fname_out croco_frc.nc \
+        --param_file crocotools_param_tpxo10.py
     ```
