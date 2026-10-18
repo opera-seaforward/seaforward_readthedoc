@@ -45,11 +45,17 @@ EOF
 !!! important
     **Two values here are not free choices.**
 
-    `inputdata` must be a tag the reader knows `tpxo7_croco`, `tpxo9`, `tpxo9_lowres` or `tpxo10`, listed in `croco_pytools/prepro/Readers/tides_reader.py`. Anything else, including the plausible-looking `'tpxo7'`, stops with *"No 'tpxo7' dico available"*. (That message names `Modules/tides_readers.py`, which does not exist the file is
+    `inputdata` must be a tag the reader knows — `tpxo7_croco`, `tpxo9`, `tpxo9_lowres` or `tpxo10`, listed in `croco_pytools/prepro/Readers/tides_reader.py`. Anything else, including the plausible-looking `'tpxo7'`, stops with *"No 'tpxo7' dico available"*. (That message names `Modules/tides_readers.py`, which does not exist — the file is
     `Readers/tides_reader.py`.)
 
     `tides` must only list waves the file actually contains. **TPXO7 carries the eight diurnal and semi-diurnal constituents above and no long-period ones**,
-    so asking for `Mf` or `Mm` stops with *"Did not find wave Mf in input file"* after the first eight have already been written. The atlas products do carry them see [Step 2](step2.md).
+    so asking for `Mf` or `Mm` stops with *"Did not find wave Mf in input file"* after the first eight have already been written. The atlas products do carry them — see [Step 2](step2.md).
+
+!!! note
+    **This worked example uses the shipped `TPXO7.nc`, which proves the tool runs
+    with data you already have.** For a real configuration use the TPXO10 atlas: TPXO7's
+    tidal currents carry fill values over the shelf and slope, and the driver's `TPXO_DIR`
+    points at the atlas. [Step 2](step2.md) has the comparison.
 
 **Then run it:**
 

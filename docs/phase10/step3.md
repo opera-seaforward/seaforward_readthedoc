@@ -4,9 +4,21 @@ Set up a gen directory (grid + tide params), then run the tool:
 cd ~/seaforward/forecast/scratch/Canary_12
 TGEN=$PWD/tide_gen/CROCO_FILES
 mkdir -p "$TGEN"
-cp CROCO_FILES/croco_grd.nc              "$TGEN/"
-cp CROCO_FILES/crocotools_param.py "$TGEN/crocotools_param_tides.py"
+cp CROCO_FILES/croco_grd.nc "$TGEN/"
+```
 
+Then write the TPXO10 param file into that directory **as** `crocotools_param.py` — its
+contents are in [Step 2](step2.md).
+
+!!! important
+    **The name is not free, and the Mercator file is not a starting point.**
+    `make_tides` imports a module called `crocotools_param`, so a file named
+    anything else is never read unless you pass `--param_file`. And the
+    `crocotools_param.py` already in `CROCO_FILES/` is the Mercator one — `inputdata =
+    'mercator'`, no `tides` list, no `cur`/`pot`, no file templates — so
+    `make_tides` has nothing to work with and stops on it.
+
+```bash
 cd ~/seaforward/sftools
 conda activate seaforward
 python seaforward.py make_tides \
@@ -49,22 +61,31 @@ found nothing; several metres would mean something is wrong with the atlas paths
 
 ### A fill-value check worth doing once
 
-`tide_Cmin` — the current-ellipse minor axis, a signed quantity — can carry the NetCDF
-fill value `9.969e+36` on some cells. Check where they are:
+Any of the eight variables can carry the NetCDF fill value `9.969e+36`, and in
+practice it is the current ellipse that does. Count them per variable:
 
 ```bash
 python3 -c "
 import xarray as xr, numpy as np
 d = xr.open_dataset('$TGEN/croco_frc.nc', decode_times=False)
 g = xr.open_dataset('$TGEN/croco_grd.nc')
-cmin = d.tide_Cmin.values; fill = cmin > 1e30
-mask = np.broadcast_to(g.mask_rho.values.astype(bool), cmin.shape)
-print('fill on ocean: %d   fill on land: %d' % ((fill&mask).sum(), (fill&~mask).sum()))
+mask = g.mask_rho.values.astype(bool)
+for n in d.data_vars:
+    v = d[n].values; fill = v > 1e30
+    m = np.broadcast_to(mask, v.shape)
+    print('%-12s ocean %6d   land %6d' % (n, (fill&m).sum(), (fill&~m).sum()))
 "
 ```
 
 ``` { .text .no-copy }
-fill on ocean: 3   fill on land: 492
+tide_Ephase  ocean      0   land      0
+tide_Eamp    ocean      0   land      0
+tide_Cmin    ocean      3   land    492
+tide_Cmax    ocean      0   land      0
+tide_Cangle  ocean      0   land      0
+tide_Cphase  ocean      0   land      0
+tide_Pamp    ocean      0   land      0
+tide_Pphase  ocean      0   land      0
 ```
 
 The 492 on land are cosmetic — CROCO masks those cells. The three on ocean are worth
@@ -95,6 +116,11 @@ Mm is the weakest constituent in the set and the nine that carry the tidal energ
 clean, so this is not worth stopping for.
 
 **What would be worth stopping for** is fills scattered across the main semidiurnal or
-diurnal waves, or in open water away from the coast. That is the same class of bug as
-fill values in an initial condition, which [Phase 8](../phase8/08_agrif.md) Step 3b documents, and it would
-poison the run.
+diurnal waves, or in open water away from the coast. It is the same defect as
+fill values in an initial condition, which [Phase 8](../phase8/08_agrif.md) Step 3b documents: the model reads 9.969e+36 as a physical amplitude.
+
+The shipped TPXO7 is that case: on this grid it fills `tide_Cmin` and
+`tide_Cmax` on 989 of 8391 ocean cells, the same cells in every wave, at
+depths from 50 to 2292 m — the shelf and the slope. Eighteen of them sit on the
+south and north open-boundary rows, which is where `SSH_TIDES` and `UV_TIDES` read
+the harmonics. [Step 2](step2.md) has the comparison against the atlas.
