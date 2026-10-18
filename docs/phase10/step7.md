@@ -69,7 +69,7 @@ which is the name `make_tides` imports.
     ```
 
 !!! warning
-    **`--tides` requires the TPXO10 atlas.** The driver's `TPXO_DIR` is fixed to
+    **`--tides` points at the TPXO10 atlas.** The driver's `TPXO_DIR` is fixed to
     `data/DATASETS_CROCOTOOLS/TPXO10`, so a TPXO7 setup has to change that
     line; left as shipped it stops with `ERROR: TPXO dir not found`. TPXO7 is for the
     hand run in Steps 1 to 3 only.

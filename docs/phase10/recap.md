@@ -5,7 +5,7 @@ Mapped onto the [Phase 2](../phase2/02_forecast_config.md) build, so you know wh
    `inputdata` clash with the Mercator param.
 2. **Data** — the TPXO10 atlas in `DATASETS_CROCOTOOLS/`, with a
    param file whose filename templates match the download. The shipped TPXO7 proves the tool
-   runs, but it carries no tidal currents on the shelf and the driver cannot read it.
+   runs, but it carries no tidal currents on the shelf and the driver's `TPXO_DIR` points at the atlas.
 3. **Param file** *(extends Phase 2 Step 4)* — `crocotools_param_tides.py` beside the
    Mercator `crocotools_param.py` in the config's `CROCO_FILES/`, which is where the
    driver reads it (Step 7), plus
