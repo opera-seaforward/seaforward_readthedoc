@@ -20,6 +20,60 @@ You only build the ones you use. Following this documentation through gives you
 `croco_1way` and `croco_2way` in the AGRIF one — the tidal nest combinations are the
 same recipe with both switches on.
 
+### What the driver needs in place
+
+Besides the binaries, `--tides` reads a tide param file from the config's
+`CROCO_FILES/` and stops if it is missing:
+
+``` { .text .no-copy }
+ERROR: crocotools_param_tides.py not found
+```
+
+It holds the TPXO settings from [Step 2](step2.md) under the name the driver expects.
+Write it once per config:
+
+```bash
+cd ~/seaforward/forecast/scratch/Canary_12/CROCO_FILES
+
+cat > crocotools_param_tides.py << 'EOF'
+# crocotools_param_tides.py — TPXO10 atlas
+inputdata       = 'tpxo10'
+input_file      = ''
+input_type      = 'Re_Im'
+multi_files     = True
+waves_separated = True
+elev_file       = 'h_<tides>_tpxo10_atlas_30_v2.nc'
+u_file          = 'u_<tides>_tpxo10_atlas_30_v2.nc'
+v_file          = 'u_<tides>_tpxo10_atlas_30_v2.nc'
+croco_grd       = 'croco_grd.nc'
+tides           = ['M2','S2','N2','K2','K1','O1','P1','Q1','Mf','Mm']
+cur             = True
+pot             = True
+Correction_ssh  = True
+Correction_uv   = True
+EOF
+```
+
+This one sits beside the Mercator `crocotools_param.py`, and the two do not clash:
+the driver copies it into each cycle's gen directory **as** `crocotools_param.py`,
+which is the name `make_tides` imports.
+
+!!! important
+    **With `--child`, a second file is required.** The driver reads
+    `crocotools_param_tides_child.py` from the same directory and stops without
+    it. The contents are identical — the driver copies the child grid in as
+    `croco_grd.nc`, so `croco_grd` needs no change:
+
+    ```bash
+    cp crocotools_param_tides.py crocotools_param_tides_child.py
+    ```
+
+!!! warning
+    **`--tides` requires the TPXO10 atlas.** The driver's `TPXO_DIR` is fixed to
+    `data/DATASETS_CROCOTOOLS/TPXO10`, so the shipped `TPXO7.nc` cannot drive a
+    cycle — it stops with `ERROR: TPXO dir not found`. TPXO7 is for the
+    hand run in Steps 1 to 3 only.
+
 ```bash
 ./run_forecast_cycle.sh                        # parent only, no tide
 ./run_forecast_cycle.sh --tides                # parent only, with tide

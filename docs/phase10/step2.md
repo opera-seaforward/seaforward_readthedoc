@@ -36,19 +36,7 @@ Correction_uv   = True
 EOF
 ```
 
-Then the same command as Step 1, pointed at the atlas directory:
-
-```bash
-cd ~/seaforward/sftools
-conda activate seaforward
-
-python seaforward.py make_tides \
-    --input_dir ~/seaforward/data/DATASETS_CROCOTOOLS/TPXO10/ \
-    --output_dir "$TGEN" \
-    --run_date "$(date -u +'%Y-%m-%d') 00:00:00" \
-    --Yorig 2000 \
-    --fname_out croco_frc.nc
-```
+Generating and checking is [Step 3](step3.md) — one command, for either atlas.
 
 Three things that catch people:
 
@@ -85,12 +73,12 @@ whichever you use.
 
 !!! tip
     **Keeping both.** `make_tides` imports a module named `crocotools_param`, so only
-    one can live in a directory under that name. To hold both, name them differently
-    and say which to use:
+    one can live in a directory under that name. To hold both, write each block under its own
+    name — the TPXO7 one from [Step 1](step1.md) as
+    `crocotools_param_tpxo7.py`, the one above as `crocotools_param_tpxo10.py` — then
+    name the one you want:
     ```bash
-    cp tpxo7_params.py  "$TGEN/crocotools_param_tpxo7.py"
-    cp tpxo10_params.py "$TGEN/crocotools_param_tpxo10.py"
-
+    cd ~/seaforward/sftools
     python seaforward.py make_tides \
     --input_dir ~/seaforward/data/DATASETS_CROCOTOOLS/TPXO10/ \
     --output_dir "$TGEN" \

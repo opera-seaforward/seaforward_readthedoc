@@ -55,7 +55,7 @@ Each wave carries three things:
 - **Potential** — `tide_Pamp` and `tide_Pphase`, the astronomical forcing acting on the
   water column directly rather than through the boundaries.
 
-The last two are there because Step 3 generates with `cur=True` and `pot=True`. Eight
+The last two are there because the param file sets `cur=True` and `pot=True`. Eight
 variables in all, on the model grid, for each of the ten waves below.
 
 The waves we request:
