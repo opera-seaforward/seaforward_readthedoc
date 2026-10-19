@@ -29,9 +29,7 @@ Cosmetic, but keeps configs identifiable.
 ```
 
 Three numbers — `theta_s`, `theta_b`, `hc` — that shape the **vertical grid**. CROCO does
-not use fixed depth levels; it uses terrain-following sigma levels, which stretch from the
-surface to the sea floor so every column has the same number of levels whether the water
-is 20 m or 4000 m deep. These three control how that stretching is distributed.
+not use fixed depth levels; it uses terrain-following sigma levels, which stretch from the sea floor to the surface so every column has the same number of levels whether the water is 20 m or 4000 m deep. These three control how that stretching is distributed.
 
 |                   |                                                                                                                                          |
 | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
