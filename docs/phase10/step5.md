@@ -14,11 +14,7 @@ history NWRT = 3600/300  = 12     (hourly)
 average NAVG = 86400/300 = 288    (daily)
 ```
 
-The daily average is not just a size convenience — it is the physically correct way to
-see the *ocean* underneath the tide. With tides in the model, the raw 3D fields slosh
-back and forth twice a day. Average over 24 hours and the semidiurnals, all near 12 h,
-and the diurnals cancel, leaving the upwelling front, the coastal jet and the eddies —
-the part you can compare against Mercator.
+The daily average is not just a size convenience — it is the physically correct way to see the *ocean* underneath the tide. With tides in the model, the raw 3D fields slosh back and forth twice a day. Average over 24 hours and the semidiurnals, all near 12 h, and the diurnals cancel, leaving the upwelling front, the coastal jet and the eddies the part you can compare against Mercator.
 
 In the driver this is automatic (see Step 7). By hand, edit `croco.in`:
 
@@ -34,12 +30,9 @@ grep -n -A1 "^history:\|^averages:" croco.in
 43-            1      288    0
 ```
 
-Both numbers start at 72 in a tide-free config — 6 hours at `dt = 300`. Change them to
-12 and 288.
+Both numbers start at 72 in a tide-free config 6 hours at `dt = 300`. Change them to 12 and 288.
 
-Set `NTIMES` for the run while you are here. A one-day run shows the oscillation; a
-seven-day run also shows the **spring–neap cycle**, as M2 and S2 drift in and out of
-phase, and gives the daily average more than one record to work with:
+Set `NTIMES` for the run while you are here. A one-day run shows the oscillation; a seven-day run also shows the **spring–neap cycle**, as M2 and S2 drift in and out of phase, and gives the daily average more than one record to work with:
 
 ``` { .text .no-copy }
 time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO

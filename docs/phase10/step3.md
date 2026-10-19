@@ -11,12 +11,7 @@ Then write the TPXO10 param file into that directory **as** `crocotools_param.py
 contents are in [Step 2](step2.md).
 
 !!! important
-    **The name is not free, and the Mercator file is not a starting point.**
-    `make_tides` imports a module called `crocotools_param`, so a file named
-    anything else is never read unless you pass `--param_file`. And the
-    `crocotools_param.py` already in `CROCO_FILES/` is the Mercator one — `inputdata =
-    'mercator'`, no `tides` list, no `cur`/`pot`, no file templates — so
-    `make_tides` has nothing to work with and stops on it.
+    **The name is not free, and the Mercator file is not a starting point.** `make_tides` imports a module called `crocotools_param`, so a file named anything else is never read unless you pass `--param_file`. And the `crocotools_param.py` already in `CROCO_FILES/` is the Mercator one `inputdata = 'mercator'`, no `tides` list, no `cur`/`pot`, no file templates so `make_tides` has nothing to work with and stops on it.
 
 ```bash
 cd ~/seaforward/sftools

@@ -69,8 +69,7 @@ cp $TGEN/croco_frc.nc ~/seaforward/forecast/scratch/Canary_12/CROCO_FILES/
 
 ### Recompile
 
-Tides pull in extra source (`tides.F` and friends), so the link line grows;
-`CROCO is OK` at the end means it built.
+Tides pull in extra source (`tides.F` and friends), so the link line grows; `CROCO is OK` at the end means it built.
 
 ```bash
 conda deactivate
@@ -80,5 +79,4 @@ which nf-config          # must be .../opt_seq/bin/nf-config
 cp croco croco_plain_tides
 ```
 
-The driver selects its binary by name — `croco_plain_tides` for a tidal run without a
-nest, `croco_1way_tides` with one. Skip the rename and it reports `binary not found`.
+The driver selects its binary by name — `croco_plain_tides` for a tidal run without a nest, `croco_1way_tides` with one. Skip the rename and it reports `binary not found`.

@@ -15,22 +15,17 @@ child 1-way     croco_1way         croco_1way_tides
 child 2-way     croco_2way         croco_2way_tides
 ```
 
-You only build the ones you use. Following this documentation through gives you
-`croco_plain` and `croco_plain_tides` in the parent's config directory, and
-`croco_1way` and `croco_2way` in the AGRIF one — the tidal nest combinations are the
-same recipe with both switches on.
+You only build the ones you use. Following this documentation through gives you `croco_plain` and `croco_plain_tides` in the parent's config directory, and `croco_1way` and `croco_2way` in the AGRIF one the tidal nest combinations are the same recipe with both switches on.
 
 ### What the driver needs in place
 
-Besides the binaries, `--tides` reads a tide param file from the config's
-`CROCO_FILES/` and stops if it is missing:
+Besides the binaries, `--tides` reads a tide param file from the config's `CROCO_FILES/` and stops if it is missing:
 
 ``` { .text .no-copy }
 ERROR: crocotools_param_tides.py not found
 ```
 
-It holds the TPXO settings from [Step 2](step2.md) under the name the driver expects.
-Write it once per config:
+It holds the TPXO settings from [Step 2](step2.md) under the name the driver expects. Write it once per config:
 
 ```bash
 cd ~/seaforward/forecast/scratch/Canary_12/CROCO_FILES
@@ -54,25 +49,17 @@ Correction_uv   = True
 EOF
 ```
 
-This one sits beside the Mercator `crocotools_param.py`, and the two do not clash:
-the driver copies it into each cycle's gen directory **as** `crocotools_param.py`,
-which is the name `make_tides` imports.
+This one sits beside the Mercator `crocotools_param.py`, and the two do not clash: the driver copies it into each cycle's gen directory **as** `crocotools_param.py`, which is the name `make_tides` imports.
 
 !!! important
-    **With `--child`, a second file is required.** The driver reads
-    `crocotools_param_tides_child.py` from the same directory and stops without
-    it. The contents are identical — the driver copies the child grid in as
-    `croco_grd.nc`, so `croco_grd` needs no change:
+    **With `--child`, a second file is required.** The driver reads `crocotools_param_tides_child.py` from the same directory and stops without it. The contents are identical — the driver copies the child grid in as `croco_grd.nc`, so `croco_grd` needs no change:
 
     ```bash
     cp crocotools_param_tides.py crocotools_param_tides_child.py
     ```
 
 !!! warning
-    **`--tides` points at the TPXO10 atlas.** The driver's `TPXO_DIR` is fixed to
-    `data/DATASETS_CROCOTOOLS/TPXO10`, so a TPXO7 setup has to change that
-    line; left as shipped it stops with `ERROR: TPXO dir not found`. TPXO7 is for the
-    hand run in Steps 1 to 3 only.
+    **`--tides` points at the TPXO10 atlas.** The driver's `TPXO_DIR` is fixed to `data/DATASETS_CROCOTOOLS/TPXO10`, so a TPXO7 setup has to change that line; left as shipped it stops with `ERROR: TPXO dir not found`. TPXO7 is for the hand run in Steps 1 to 3 only.
 
 ```bash
 ./run_forecast_cycle.sh                        # parent only, no tide
@@ -87,13 +74,11 @@ The driver also takes `--rivers`, which extends the same scheme —
 
 ### What `--tides` does inside the driver
 
-1. **Generates the tide file(s) per cycle** at the spin-up start date. Parent grid →
-   `croco_frc.nc`. When a child is present, a *second* generation on the child grid →
-   `croco_frc.nc.1`. These run before the ICs, in their own gen directories, exactly
+1. **Generates the tide file(s) per cycle** at the spin-up start date. Parent grid → `croco_frc.nc`. When a child is present, a *second* generation on the child grid → `croco_frc.nc.1`. These run before the ICs, in their own gen directories, exactly
    like the child IC.
 
 2. **Stages** the frc file(s) into both the spin-up and forecast run dirs. The *same*
-   file serves both phases — the harmonics are time-independent and the phase epoch is
+   file serves both phases the harmonics are time-independent and the phase epoch is
    set at generation, so there is no need to regenerate between them.
 
 3. **Retimes the output** to hourly history and daily average, as Step 5 requires.
@@ -108,14 +93,11 @@ The guards are flag-aware: the TPXO directory and tide param file are only check
 ### Why the child needs its own tide file
 
 Under AGRIF each grid reads its own forcing files, with `.1` appended for the child.
-CROCO sets the tide file name from the `forcing:` keyword — confirmed in `read_inp.F` —
-and the child's `SSH_TIDES` and `UV_TIDES` boundary code needs the harmonic
-constituents **on the child grid** to apply them at its own open edges.
+CROCO sets the tide file name from the `forcing:` keyword confirmed in `read_inp.F` and the child's `SSH_TIDES` and `UV_TIDES` boundary code needs the harmonic constituents **on the child grid** to apply them at its own open edges.
 
 So `--tides --child` builds two tide files:
 
 - `croco_frc.nc` — parent grid
 - `croco_frc.nc.1` — child grid
 
-parallel to the two initial conditions. The child is a full tidal model on its own
-grid, not a passive recipient of the parent's tide.
+parallel to the two initial conditions. The child is a full tidal model on its own grid, not a passive recipient of the parent's tide.
