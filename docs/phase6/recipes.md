@@ -200,7 +200,7 @@ Finally, `identify()` needs a line so the new product is recognised from its var
 | `three_way`, `skill_panels`          | the model, the parent and persistence together      |
 | `composite`, `composite_panels`      | several cycles pooled by lead time                  |
 
-Sections and profiles live in `sftools.validation` `compare_section`, `compare_profile`, `error_vs_depth` — and are covered on the previous page.
+Sections and profiles live in `sftools.validation` `compare_section`, `compare_profile`, `error_vs_depth` and are covered on the previous page.
 
 !!! important
     This section is not about how to handle all the observations, more examples can be found in the validation notebooks: `02_validation.ipynb` and `03_composite_validation.ipynb`.

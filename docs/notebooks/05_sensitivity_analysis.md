@@ -12,8 +12,7 @@ Upstream forcing  --->  Core Forecasting  --->  Downstream diagnostic
                           perturbed forcing)        computed here)
 ```
 
-A change made at **U2** (the wind field edited below) only becomes visible at **D1** (the SST/upwelling diagnostics at the end) *by passing through* **C1** -- you cannot skip the model run. This is why Step 5.3 requires an actual CROCO re-run between the two halves of this notebook, rather than
-just perturbing a diagnostic directly.
+A change made at **U2** (the wind field edited below) only becomes visible at **D1** (the SST/upwelling diagnostics at the end) *by passing through* **C1** -- you cannot skip the model run. This is why Step 5.3 requires an actual CROCO re-run between the two halves of this notebook, rather than just perturbing a diagnostic directly.
 
 **Demo mode.** A real CROCO re-run needs HPC access and takes far longerthan a notebook cell -- there's no honest way to fake that. So: Part A and Part C below run for real either way (against a small synthetic stand-in for what a re-run *would* produce, in demo mode, clearly labelled); Part B
 (the actual re-run) is a genuine external step that this notebook cannot skip in real-data mode -- see the assert-gate in that section.
@@ -24,8 +23,7 @@ just perturbing a diagnostic directly.
 
 ## Part A -- Perturb the wind forcing (U2)
 
-We scale the 10 m wind components in `croco_blk.nc` by a fixed amplitude factor (**x1.5**, per Technical Specification Step 5.3) and write a new bulk-forcing file. Wind *stress* in bulk-flux formulations scales roughly with the square of wind speed, so a 1.5x wind-*speed* perturbation is a
-substantially stronger forcing change than it first appears -- worth keeping in mind when you look at the SST response in Part C.
+We scale the 10 m wind components in `croco_blk.nc` by a fixed amplitude factor (**x1.5**, per Technical Specification Step 5.3) and write a new bulk-forcing file. Wind *stress* in bulk-flux formulations scales roughly with the square of wind speed, so a 1.5x wind-*speed* perturbation is a substantially stronger forcing change than it first appears -- worth keeping in mind when you look at the SST response in Part C.
 
 ```python
 import sys, os
@@ -200,8 +198,8 @@ This notebook closed the loop from **U2** (perturbed wind forcing) through **C1*
 *Reminder:* results above are DEMO DATA unless you completed Part B with a real CROCO re-run -- check the `IS_DEMO` flag printed near the top of this notebook before drawing any scientific conclusions.
 
 <div style="display:flex; justify-content:center; margin:10px 0 14px 0;">
-   <a href="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/04_sensitivity.ipynb" data-download-url="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/04_sensitivity.ipynb" data-download-filename="04_sensitivity.ipynb" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 10px 24px rgba(0,0,0,0.18)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';" style="display:inline-flex; align-items:center; justify-content:center; gap:16px; min-width: 80px; padding:20px 20px; border-radius:10px; background:linear-gradient(to bottom, #ffffcc 0%, #f4f797de 100%); color:#000000; text-decoration:none; font-size:1.2rem; line-height:1.1; text-align:center; transition:transform 0.18s ease, box-shadow 0.18s ease; transform-origin:center;">
+   <a href="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/05_sensitivity.ipynb" data-download-url="https://raw.githubusercontent.com/opera-seaforward/seaforward_readthedoc/main/docs/notebooks/05_sensitivity.ipynb" data-download-filename="05_sensitivity.ipynb" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 10px 24px rgba(0,0,0,0.18)';" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';" style="display:inline-flex; align-items:center; justify-content:center; gap:16px; min-width: 80px; padding:20px 20px; border-radius:10px; background:linear-gradient(to bottom, #ffffcc 0%, #f4f797de 100%); color:#000000; text-decoration:none; font-size:1.2rem; line-height:1.1; text-align:center; transition:transform 0.18s ease, box-shadow 0.18s ease; transform-origin:center;">
       <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/download.svg" alt="" aria-hidden="true" style="width:25px; height:25px; color:#000000; font-weight:bold filter:invert(1);" />
-      <span>Download notebook 04_sensitivity.ipynb</span>
+      <span>Download notebook 05_sensitivity.ipynb</span>
    </a>
 </div>
